@@ -32,7 +32,7 @@ class Top(tk.Frame):
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=5)
+        self.grid_columnconfigure(1, weight=40)
 
     def show_frame(self, context):
         frame = self.frames[context]
