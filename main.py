@@ -21,6 +21,8 @@ class Container(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     root.title('TK-Player')
+    app_icon = tk.PhotoImage(file=r".\Images\app_64.png")
+    root.iconphoto(False, app_icon)
 
     container = Container(root)
     container.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
