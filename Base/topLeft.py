@@ -7,11 +7,10 @@ from tkinter.ttk import *
 
 
 class IconButton(tk.Button):
-	def __init__(self, master, controller, text, image, page,  *args, **kwargs):
-		tk.Button.__init__(self, master, *args, **kwargs)
+    def __init__(self, master, controller, text, image, page, *args, **kwargs):
+        tk.Button.__init__(self, master, *args, **kwargs)
 
-		self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')
-
+        self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')
 		self['foreground'] = '#a8a8a8'
 		self['background'] = '#121212'
 		self['border'] = 0
@@ -28,28 +27,29 @@ class IconButton(tk.Button):
 
 
 class NormalButton(tk.Button):
-	def __init__(self, master, controller, text, page, *args, **kwargs):
-		tk.Button.__init__(self, master, *args, **kwargs)
+    def __init__(self, master, controller, text, page, *args, **kwargs):
+        tk.Button.__init__(self, master, *args, **kwargs)
 
-		self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')
+        self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')
 
-		self['foreground'] = '#a8a8a8'
-		self['background'] = '#121212'
-		self['border'] = 0
-		self['activebackground'] = '#121212'
-		self['activeforeground'] = 'white'
-		self['padx'] = 10
-		self['pady'] = 5
-		self['text'] = text
-		self['anchor'] = tk.W
-		self['font'] = self.appHighlightFont
-		self['command'] = lambda: controller.show_frame(page)
+        self['foreground'] = '#a8a8a8'
+        self['background'] = '#121212'
+        self['border'] = 0
+        self['activebackground'] = '#121212'
+        self['activeforeground'] = 'white'
+        self['padx'] = 10
+        self['pady'] = 5
+        self['text'] = text
+        self['anchor'] = tk.W
+        self['font'] = self.appHighlightFont
+        self['command'] = lambda: controller.show_frame(page)
+
 
 class TopLeft(tk.Frame):
-	def __init__(self, master, *args, **kwargs):
-		tk.Frame.__init__(self, master, *args, **kwargs)
-		self['background'] = '#121212'
-		self.master = master
+    def __init__(self, master, *args, **kwargs):
+        tk.Frame.__init__(self, master, *args, **kwargs)
+        self['background'] = '#121212'
+        self.master = master
 
 		#font
 		self.appHighlightFont = font.Font(family='lineto circular', size=12, weight='bold')
