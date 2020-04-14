@@ -1,64 +1,125 @@
 import tkinter as tk
-import tkinter.font as tkfont
 import pyglet
+import tkinter.font as tkfont
+from Pages.Resource.HorizontalScrollableFrame import HorizontalScrollableFrame
 
 
-class MyButton:
-    def __init__(self, frame, image, text):
-        self.Button = tk.Button(frame,
-                                image=image,
-                                text=text,
-                                height=300,
-                                width=300,
-                                border=0,
-                                compound=tk.TOP,
-                                font='play',
-                                background='black',
-                                activebackground='black',
-                                foreground='white',
-                                activeforeground='white',
-                                padx=10)
+class HorizontalFrame(tk.Frame):
+    def __init__(self, master, text, *args, **kwargs):
+        tk.Frame.__init__(self, master, *args, **kwargs)
+        self['background'] = '#181818'
+        self['padx'] = 20
+        self['pady'] = 20
 
-    def grid(self, row=0, column=0):
-        self.Button.grid(row=row, column=column)
+        self.upper = Upper(self, text)
+        self.line = tk.Frame(self, background='#ffffff')
+        self.lower = Lower(self)
+
+        self.upper.grid(row=0, column=0, sticky=tk.N+tk.S+tk.E+tk.W)
+        self.line.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.lower.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure((0, 1, 2), weight=1)
+
+    def right(self):
+        self.lower.scrollable.right()
+
+    def left(self):
+        self.lower.scrollable.left()
 
 
-class HorizontalFrame:
-    def __init__(self, master, text, content, row):
+class Upper(tk.Frame):
+    def __init__(self, master, text, *args, **kwargs):
+        tk.Frame.__init__(self, master, *args, **kwargs)
+        self['background'] = '#181818'
+        self.master = master
+
         pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
-        play = tkfont.Font(family="Play", size=16, weight="bold")
+        play = tkfont.Font(family="Play", size=15, weight="bold")
 
-        horizontal_frame = tk.Frame(master, background='#181818')
+        self.left = tk.PhotoImage(file=r'.\images\left_arrow.png')
+        self.right = tk.PhotoImage(file=r'.\images\right_arrow.png')
 
-        frame1 = tk.Frame(horizontal_frame)
-        frame2 = tk.Frame(horizontal_frame)
+        self.label = tk.Label(self,
+                              text=text,
+                              font=play,
+                              anchor=tk.W,
+                              background='#181818',
+                              foreground='white')
 
-        frame1.grid(row=0, column=0, sticky='w')
-        frame2.grid(row=1, column=0)
+        self.left_button = ArrowButton(self, image=self.left, command=master.left)
+        self.right_button = ArrowButton(self, image=self.right, command=master.right)
 
-        label = tk.Label(frame1,
-                         text=text,
-                         background='black',
-                         foreground='white',
-                         font=play,
-                         anchor=tk.W,
-                         justify=tk.RIGHT,
-                         pady=10,
-                         padx=10
-                         )
-        label.grid(row=0)
-        column = 0
-        for i in content:
-            button = MyButton(frame2,
-                              image=i['image'],
-                              text=i['text'])
-            button.grid(row=0, column=column)
-            column += 1
+        self.left_button.grid(row=0, column=1, sticky=tk.N+tk.S+tk.E+tk.W)
+        self.right_button.grid(row=0, column=2, sticky=tk.N + tk.S + tk.E + tk.W)
 
-        horizontal_frame.grid(row=row,
-                              column=0,
-                              sticky='ew',
-                              pady=(0, 10))
-        horizontal_frame.grid_rowconfigure(0, weight=1)
-        horizontal_frame.grid_rowconfigure(1, weight=1)
+        self.label.grid(row=0, column=0, sticky=tk.N+tk.S+tk.E+tk.W)
 
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=100)
+        self.grid_columnconfigure((1, 2), weight=1)
+
+
+class Lower(tk.Frame):
+    def __init__(self, master, *args, **kwargs):
+        tk.Frame.__init__(self, master, *args, **kwargs)
+        self['background'] = '#181818'
+        self['pady'] = 10
+        self.bind('<Configure>', self.size)
+        self.Ed_sheeran = tk.PhotoImage(file='images/Ed_sheeran.png')
+
+        self.scrollable = HorizontalScrollableFrame(self)
+        self.frame = tk.Frame(self.scrollable.scrollable_frame, bg='#181818')
+
+        for i in range(9):
+            self.button1 = CardButton(self.frame, text='{} \n hello'.format(i),
+                                      image=self.Ed_sheeran
+                                      )
+            self.button1.grid(row=0, column=i, padx=(0, 10))
+
+        self.frame.grid(row=0, column=0, sticky='nsew')
+
+        self.scrollable.grid(row=0, column=0, sticky=tk.W + tk.E)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+    def size(self, event):
+        global width
+        width = event.width
+        print(width)
+
+
+class ArrowButton(tk.Button):
+    def __init__(self, master, *args, **kwargs):
+        tk.Button.__init__(self, master, *args, **kwargs)
+        self['relief'] = tk.FLAT
+        self['background'] = '#181818'
+        self['foreground'] = 'white'
+        self['activebackground'] = '#181818'
+        self['activeforeground'] = 'white'
+        self['borderwidth'] = 0
+
+
+class CardButton(tk.Button):
+    def __init__(self, master, *args, **kwargs):
+        tk.Button.__init__(self, master, *args, **kwargs)
+
+        self.bind('<Configure>', self.size)
+
+        pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
+        play = tkfont.Font(family="Play", size=15, weight="bold")
+        # print(width)
+        self['background'] = '#181818'
+        self['height'] = 350
+        self['border'] = 0
+        self['font'] = play
+        self['compound'] = tk.TOP
+        self['activebackground'] = '#181818'
+        self['foreground'] = 'white'
+        self['activeforeground'] = 'white'
+
+    def size(self, event):
+        global width
+        self.configure(width=width/4 -14)
