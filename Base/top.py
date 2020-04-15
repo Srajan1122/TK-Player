@@ -3,6 +3,7 @@ from .topLeft import TopLeft
 from .topRight import TopRight
 from Pages.HomePage.Home import Home
 from Pages.Browse.browse import Browse
+from Pages.MusicPage.main import Main
 
 
 class Top(tk.Frame):
@@ -13,7 +14,6 @@ class Top(tk.Frame):
 
         self.topleft = TopLeft(self)
         self.topRight = TopRight(self)
-
         # --------------------------------------------------------------------------
         # Loading all the frames
 
@@ -36,4 +36,15 @@ class Top(tk.Frame):
 
     def show_frame(self, context):
         frame = self.frames[context]
+        if context == Main:
+            frame.__setattr__('data', 'hello')
+            # frame.__setitem__('data', 'hello')
         frame.tkraise()
+
+    def show_frame_Main(self, data):
+
+        frame = Main(self.topRight.topRightBottom, self, data=data)
+        self.frames[Main] = frame
+        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
+        frame.tkraise()
+

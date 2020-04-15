@@ -19,5 +19,5 @@ class Header(tk.Frame):
                               foreground='white')
         self.label.grid(row=0, column=0)
 
-        self.grid_columnconfigure(0, weight=1)
+        # self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
