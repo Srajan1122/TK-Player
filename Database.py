@@ -1,11 +1,6 @@
 from config import *
 import traceback; 
-from decouple import config
-from twilio.rest import Client as TwilioClient
-account_sid = config('account_sid')
-auth_token = config('auth_token')
-twilio_phone = config("twilio_phone")
-client = TwilioClient(account_sid, auth_token)
+
 
 
 
@@ -284,12 +279,91 @@ def get_tracks_by_genre(**kwargs):
                 traceback.print_exc();    
             return False 
                 
-                
-        
-user_phone_number = "+919967025541"
-client.messages.create(
-                     body="Your verification code is "+'123456',
-                     from_=twilio_phone,
-                     to=user_phone_number
-                 )
+def get_user(uid):
+    # [START get_user]
+    from firebase_admin import auth
+    try:
+        user = auth.get_user(uid)
+        print('Successfully fetched user data: {0}'.format(user.uid))
+        doc = db.collection(u'users').document(user.uid)
+        doc = doc.get().to_dict()
+        return doc
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if(y == '1'):
+            traceback.print_exc();    
+        return False
 
+    # [END get_user]
+
+def get_user_by_email(email):
+    
+    # [START get_user_by_email]
+    from firebase_admin import auth
+    try:
+        
+        user = auth.get_user_by_email(email)
+        doc = db.collection(u'users').document(user.uid)
+        doc = doc.get().to_dict()
+        return doc
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if(y == '1'):
+            traceback.print_exc();    
+        return False 
+    # [END get_user_by_email]
+
+
+def get_user_by_phone_number(phone):
+    
+    from firebase_admin import auth
+    try:
+        user = auth.get_user_by_phone_number(phone)
+        doc = db.collection(u'users').document(user.uid)
+        doc = doc.get().to_dict()
+        return doc
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if(y == '1'):
+            traceback.print_exc();    
+        return False 
+
+    # [END get_user_by_phone]
+
+
+def sign_in_with_email_and_password(email,password):
+
+    '''
+    Returns boolean True if user is signed in succesfully
+
+    '''
+    try:
+        from firebase_admin import auth
+        user = auth.get_user_by_email(email)
+        doc = get_user_by_email(email)
+        if(doc['email'] == email and doc['password'] == password):
+           f  = open('user',"w+")
+           f.write(user.uid)
+           return True
+        else:
+            raise Exception('Credentials invalid')
+            return False 
+    except Exception as ex:
+            print('Exception Occured which is of type :', ex.__class__.__name__)
+            y = input('If you want to see Traceback press 1 : ')
+            if(y == '1'):
+                traceback.print_exc();    
+            return False 
+
+def sign_out():
+    import os
+    os.remove("user")
+    
+
+
+# sign_in_with_email_and_password('dkhoche70@gmail.com','15412342')
+sign_out()
+# myuser = register_user('devdatta','dkhoche70@gmail.com','9145253235','15412342')
