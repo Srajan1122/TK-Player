@@ -347,6 +347,7 @@ def get_user_by_phone_number(phone):
     
     from firebase_admin import auth
     try:
+        ifg
         user = auth.get_user_by_phone_number(phone)
         doc = db.collection(u'users').document(user.uid)
         doc = doc.get().to_dict()
@@ -369,14 +370,21 @@ def sign_in_with_email_and_password(email,password):
     else false
 
     '''
+    from os import path
+   
+
     try:
+        if(path.exists('user')):
+            f = open('user','r')
+            doc = get_user(f.readline())
+            return doc
         from firebase_admin import auth
         user = auth.get_user_by_email(email)
         doc = get_user_by_email(email)
         if(doc['email'] == email and doc['password'] == password):
            f  = open('user',"w+")
            f.write(user.uid)
-           return True
+           return doc
         else:
             raise Exception('Credentials invalid')
             return False 
@@ -409,6 +417,7 @@ def sign_out():
     
 
 
-# sign_in_with_email_and_password('dkhoche70@gmail.com','15412342')
+x = sign_in_with_email_and_password('dkhoche70@gmail.com','15412342')
+print(x)
 # sign_out()
 # myuser = register_user('devdatta','dkhoche70@gmail.com','9145253235','15412342')
