@@ -8,6 +8,7 @@ def set_artist(track_title,track_genre,track_location,track_artist):
     '''
     Function to set only artist details
     Returns boolean True if set else False
+    gets invoked in the get song function 
     '''
     
     try:
@@ -51,6 +52,7 @@ def Check_artist(artist):
 def get_artist_tracks(artist):
     '''
     Returns a list of the objects of tracks
+    if the artist exist or else returns False
 
     '''
     try:
@@ -67,11 +69,6 @@ def get_artist_tracks(artist):
         return False
 
 
-
-'''
-All tracks CRUD Functions
-
-'''
 
 def set_track(track_title,track_genre,track_location,track_artist):
     '''
@@ -105,6 +102,9 @@ def set_track(track_title,track_genre,track_location,track_artist):
 def get_track(trackName):
     '''
     Fetch particular track for user 
+    returns dictitonary with the keys as 
+    artist, genre, location , title
+    if failed returns false
 
     '''
     try:
@@ -120,6 +120,12 @@ def get_track(trackName):
         return False
 
 def register_user(Username,email,phone_number,password):
+
+    '''
+    Returns user uid if successfully registered
+    else returns false
+
+    '''
     from firebase_admin import auth
     try:
         if(Username == ''or email== '' or phone_number == ''):
@@ -229,6 +235,7 @@ def get_album(**kwargs):
 def get_all_tracks():
     '''
     Returns a list of all track objects
+    if failed returns a false
 
     '''
     try:
@@ -247,6 +254,7 @@ def get_tracks_by_genre(**kwargs):
     Returns a list of songs with particular genre 
     kwarg : genre = 'required genre'
     else return the list of all genres
+    if failed returns false
 
     '''
     if 'genre' in kwargs:
@@ -280,6 +288,14 @@ def get_tracks_by_genre(**kwargs):
             return False 
                 
 def get_user(uid):
+    '''
+
+    Returns a user object that is dictionary 
+    of the user with attributes: 
+    display_name , email , password, phone_number
+
+
+    '''
     # [START get_user]
     from firebase_admin import auth
     try:
@@ -298,7 +314,12 @@ def get_user(uid):
     # [END get_user]
 
 def get_user_by_email(email):
-    
+    '''
+    Returns a user object that is dictionary 
+    of the user with attributes: 
+    display_name , email , password, phone_number
+
+    '''
     # [START get_user_by_email]
     from firebase_admin import auth
     try:
@@ -317,6 +338,12 @@ def get_user_by_email(email):
 
 
 def get_user_by_phone_number(phone):
+    '''
+    Returns a user object that is dictionary 
+    of the user with attributes: 
+    display_name , email , password, phone_number
+
+    '''
     
     from firebase_admin import auth
     try:
@@ -333,11 +360,13 @@ def get_user_by_phone_number(phone):
 
     # [END get_user_by_phone]
 
-
+def sign_in_with_phone():
+    pass
 def sign_in_with_email_and_password(email,password):
 
     '''
     Returns boolean True if user is signed in succesfully
+    else false
 
     '''
     try:
@@ -352,18 +381,34 @@ def sign_in_with_email_and_password(email,password):
             raise Exception('Credentials invalid')
             return False 
     except Exception as ex:
-            print('Exception Occured which is of type :', ex.__class__.__name__)
-            y = input('If you want to see Traceback press 1 : ')
-            if(y == '1'):
-                traceback.print_exc();    
-            return False 
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if(y == '1'):
+            traceback.print_exc();    
+        return False 
 
 def sign_out():
+
+    '''
+
+    returns True
+    if signed out else false
+    also remove the user files 
+
+    '''
     import os
-    os.remove("user")
+    try : 
+        os.remove("user")
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if(y == '1'):
+            traceback.print_exc();    
+        return False 
+
     
 
 
 # sign_in_with_email_and_password('dkhoche70@gmail.com','15412342')
-sign_out()
+# sign_out()
 # myuser = register_user('devdatta','dkhoche70@gmail.com','9145253235','15412342')
