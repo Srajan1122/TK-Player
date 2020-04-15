@@ -2,10 +2,16 @@ import tkinter as tk
 import pyglet
 import tkinter.font as tkfont
 from Pages.Resource.HorizontalScrollableFrame import HorizontalScrollableFrame
+from Pages.MusicPage.main import Main
+
+
+def wid():
+    global w
+    return w
 
 
 class HorizontalFrame(tk.Frame):
-    def __init__(self, master, text, *args, **kwargs):
+    def __init__(self, master, controller, data, text, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self['padx'] = 20
@@ -13,9 +19,9 @@ class HorizontalFrame(tk.Frame):
 
         self.upper = Upper(self, text)
         self.line = tk.Frame(self, background='#ffffff')
-        self.lower = Lower(self)
+        self.lower = Lower(self, controller, data)
 
-        self.upper.grid(row=0, column=0, sticky=tk.N+tk.S+tk.E+tk.W)
+        self.upper.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.line.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.lower.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
@@ -51,10 +57,10 @@ class Upper(tk.Frame):
         self.left_button = ArrowButton(self, image=self.left, command=master.left)
         self.right_button = ArrowButton(self, image=self.right, command=master.right)
 
-        self.left_button.grid(row=0, column=1, sticky=tk.N+tk.S+tk.E+tk.W)
+        self.left_button.grid(row=0, column=1, sticky=tk.N + tk.S + tk.E + tk.W)
         self.right_button.grid(row=0, column=2, sticky=tk.N + tk.S + tk.E + tk.W)
 
-        self.label.grid(row=0, column=0, sticky=tk.N+tk.S+tk.E+tk.W)
+        self.label.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=100)
@@ -62,7 +68,7 @@ class Upper(tk.Frame):
 
 
 class Lower(tk.Frame):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, controller, data, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self['pady'] = 10
@@ -71,12 +77,16 @@ class Lower(tk.Frame):
 
         self.scrollable = HorizontalScrollableFrame(self)
         self.frame = tk.Frame(self.scrollable.scrollable_frame, bg='#181818')
+        self.name = [x for x in range(len(data))]
+        self.value = [x for x in range(len(data))]
 
-        for i in range(9):
-            self.button1 = CardButton(self.frame, text='{} \n hello'.format(i),
-                                      image=self.Ed_sheeran
-                                      )
-            self.button1.grid(row=0, column=i, padx=(0, 10))
+        for i, j in enumerate(data):
+            self.button = CardButton(self.frame, text=j['text'],
+                                     image=self.Ed_sheeran,
+                                     url=j['url'],
+                                     command=lambda d=self.value[i]: controller.show_frame_Main(data=d)
+                                     )
+            self.button.grid(row=0, column=i, padx=(0, 10))
 
         self.frame.grid(row=0, column=0, sticky='nsew')
 
@@ -87,8 +97,9 @@ class Lower(tk.Frame):
 
     def size(self, event):
         global width
+        global w
         width = event.width
-        print(width)
+        w = event.width / 5 - 14
 
 
 class ArrowButton(tk.Button):
@@ -103,8 +114,9 @@ class ArrowButton(tk.Button):
 
 
 class CardButton(tk.Button):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, url, *args, **kwargs):
         tk.Button.__init__(self, master, *args, **kwargs)
+        self.url = url
 
         self.bind('<Configure>', self.size)
 
@@ -112,7 +124,7 @@ class CardButton(tk.Button):
         play = tkfont.Font(family="Play", size=15, weight="bold")
         # print(width)
         self['background'] = '#181818'
-        self['height'] = 350
+        self['height'] = 300
         self['border'] = 0
         self['font'] = play
         self['compound'] = tk.TOP
@@ -122,4 +134,12 @@ class CardButton(tk.Button):
 
     def size(self, event):
         global width
-        self.configure(width=width/4 -14)
+        w = width / 5 - 14
+        self.configure(width=w)
+        # print(self.url)
+
+    # image = io.imread(url)
+    # image = cv2.resize(image, (w,250), interpolation = cv2.INTER_AREA)
+    # image = Image.fromarray(image)
+    # image = ImageTk.PhotoImage(image)
+    # self.configure(image = image)
