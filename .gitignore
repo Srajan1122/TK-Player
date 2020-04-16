@@ -76,10 +76,6 @@ instance/
 docs/_build/
 
 # PyBuilder
-<<<<<<< HEAD
-.pybuilder/
-=======
->>>>>>> origin/develop
 target/
 
 # Jupyter Notebook

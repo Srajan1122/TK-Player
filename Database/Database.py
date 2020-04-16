@@ -1,4 +1,4 @@
-from config import *
+from Database.config import *
 import traceback; 
 
 
@@ -263,8 +263,8 @@ def get_tracks_by_genre(**kwargs):
             snapshots = list(doc_ref.where(u'genre', u'==',kwargs['genre']).stream())
             if len(snapshots):
                 object_list = list(map(lambda x : x.to_dict(),snapshots))
-                print(object_list)
-                return
+                # print(object_list)
+                return object_list
         except Exception as ex:
             print('Exception Occured which is of type :', ex.__class__.__name__)
             y = input('If you want to see Traceback press 1 : ')
@@ -276,10 +276,22 @@ def get_tracks_by_genre(**kwargs):
             doc_ref = db.collection('Tracks').stream()
             object_list = list(map(lambda x : x.to_dict(),doc_ref))
             genre_list = []
+            # print(object_list)
+            image_list = []
             for i in object_list:
                 if i['genre'] not in genre_list:
-                    genre_list.append(i['genre'])
-            return genre_list
+                    genre_list. append(i['genre'])
+            for i in object_list:
+                if i['genre_image'] not in image_list:
+                    image_list. append(i['genre_image'])
+            all_dicts = []
+            for i in range(len(genre_list)):
+                my_dict = {
+                    'text':genre_list[i],
+                    'url':image_list[i]
+                }
+                all_dicts.append(my_dict)
+            return all_dicts
         except Exception as ex:
             print('Exception Occured which is of type :', ex.__class__.__name__)
             y = input('If you want to see Traceback press 1 : ')
@@ -347,7 +359,6 @@ def get_user_by_phone_number(phone):
     
     from firebase_admin import auth
     try:
-        ifg
         user = auth.get_user_by_phone_number(phone)
         doc = db.collection(u'users').document(user.uid)
         doc = doc.get().to_dict()
@@ -417,7 +428,6 @@ def sign_out():
     
 
 
-x = sign_in_with_email_and_password('dkhoche70@gmail.com','15412342')
-print(x)
+
 # sign_out()
 # myuser = register_user('devdatta','dkhoche70@gmail.com','9145253235','15412342')
