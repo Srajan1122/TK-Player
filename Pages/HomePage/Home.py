@@ -30,17 +30,14 @@ class Home(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
 
     def data(self):
-        title = 'Popular playlist'
+        from Database import HomePagedata
+        title = ['Listen to your favourite Artist', 'Get your mood on']
         data = [
-            {'text': '1 \n Hello', 'url': 'url'},
-            {'text': '2 \n Hello', 'url': 'url'},
-            {'text': '3 \n Hello', 'url': 'url'},
-            {'text': '4 \n Hello', 'url': 'url'},
-            {'text': '5 \n Hello', 'url': 'url'},
-            {'text': '6 \n Hello', 'url': 'url'},
+            HomePagedata.artist_data, HomePagedata.genre_data
         ]
         info = [
-            {'title': title, 'data': data}
+            {'title': title[0], 'data': data[0]},
+            {'title': title[1], 'data': data[1]}
         ]
 
         return info
