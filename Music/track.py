@@ -31,9 +31,10 @@ class Track(tk.Frame):
         self.endTime = None
 
         self.byteAudio=self.get_audio_from_url(trackUrl)
+        self.byteAudio2=self.get_audio_from_url(trackUrl)
         self.track = self.byteAudio
-        # self.get_duration(self.byteAudio)
         self.load_music()
+        self.get_duration(self.byteAudio2)
         self.make_ui()
 
     def get_audio_from_url(self , trackUrl ):
@@ -47,17 +48,15 @@ class Track(tk.Frame):
         # self.track = byteAudio
         return byteAudio
 
-    # def get_duration(self,byteAudio):
-    #     song = MP3(byteAudio)
-    #     duration = song.info.length
-    #     print(duration)
+    def get_duration(self,byteAudio):
+        song = MP3(byteAudio)
+        duration = song.info.length
+        self.songDuration = duration
+        print(duration)
 
     def load_music(self):
         player = mixer
         player.init()
-        # song = player.Sound(self.track)
-        # duration = song.get_length()
-        # print(duration)
         player.music.load(self.track)
         player.music.set_volume( .70 )
 
@@ -81,7 +80,8 @@ class Track(tk.Frame):
         self.currentTime = tk.Label(self,text="--/--",foreground='white' , background='#000000' )
         self.currentTime.pack()
         #end time label
-        self.endTime = tk.Label(self,text="--/--",foreground='white' , background='#000000' )
+        endTime = self.convertTime(self.songDuration)
+        self.endTime = tk.Label(self,text=endTime,foreground='white' , background='#000000' )
         self.endTime.pack()
 
         #slider
@@ -96,7 +96,7 @@ class Track(tk.Frame):
         self.volume.set(70)
         self.volumeSlider = tk.Scale(self , to = 100 , orient =tk.VERTICAL ,length = 350,
                                     resolution = 0.5 , showvalue = False , variable = self.volume,
-                                    command = self.UpdateVolume) 
+                                    command = self.UpdateVolume , troughcolor = 'green') 
         self.volumeSlider.pack()
 
     def Play(self):
