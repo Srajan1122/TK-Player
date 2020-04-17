@@ -22,7 +22,7 @@ class AuthFrame(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
 
         canvas = tk.Canvas(self, width=1920, height=1280, bd=0)
-        self.bg = tk.PhotoImage(file=r"C:\Users\adity\PycharmProjects\TK-Player\images\bg4.png")
+        self.bg = tk.PhotoImage(file=r"images\bg4.png")
         canvas.create_image(0, 0, anchor=tk.NW, image=self.bg)
         canvas.grid(row=0, column=0)
 
@@ -53,6 +53,7 @@ class AuthFrame(tk.Frame):
         framee.tkraise()
 
     def login(self):
+        from main import Root
         """
             Check different condition for authentication
         """
@@ -64,6 +65,6 @@ class AuthFrame(tk.Frame):
             'age': 18
         }
 
-        # main = Main(data=self.user)
-        # self.master.destroy()
-        # main.mainloop()
+        self.master.destroy()
+        main = Root(data=self.user)
+        main.mainloop()

@@ -19,20 +19,25 @@ class Container(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
 
 
-if __name__ == '__main__':
-    if False:
-        root = tk.Tk()
-        root.title('TK-Player')
-        app_icon = tk.PhotoImage(file=r".\Images\app_64.png")
-        root.iconphoto(False, app_icon)
+class Root(tk.Tk):
+    def __init__(self, data, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
+        print(data)
+        self.title('TK-Player')
+        app_icon = tk.PhotoImage(file=r"images\app_64.png")
+        self.iconphoto(False, app_icon)
 
-        container = Container(root)
+        container = Container(self)
         container.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
-        root.grid_columnconfigure(0, weight=1)
-        root.grid_rowconfigure(0, weight=1)
-        root.state('zoomed')
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.state('zoomed')
 
+
+if __name__ == '__main__':
+    if False:
+        root = Root(data='')
         root.mainloop()
     else:
         login = AuthBase()

@@ -7,12 +7,12 @@ class Frame1(tk.Frame):
 
         self.container = tk.Frame(self, bg='#121212', padx=80, pady=100)
 
-        self.logo = tk.PhotoImage(file=r'C:\Users\adity\PycharmProjects\TK-Player\Pages\UserAuthentication\images\head5.png', height=225, width=360)
+        self.logo = tk.PhotoImage(file=r'images\head5.png', height=225, width=360)
         self.labelLogo = tk.Label(self.container, image=self.logo, bd=0)
         self.labelLogo.grid(row=0, column=0)
 
-        self.btnimg = tk.PhotoImage(file=r'C:\Users\adity\PycharmProjects\TK-Player\Pages\UserAuthentication\images\signup6.png')
-        self.btnimg2 = tk.PhotoImage(file=r'C:\Users\adity\PycharmProjects\TK-Player\Pages\UserAuthentication\images\login.png')
+        self.btnimg = tk.PhotoImage(file=r'images\signup6.png')
+        self.btnimg2 = tk.PhotoImage(file=r'images\login.png')
 
         from .Frame3 import Frame3
         self.login = tk.Button(

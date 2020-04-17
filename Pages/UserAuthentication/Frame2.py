@@ -146,7 +146,7 @@ class Frame2(tk.Frame):
         self.container = tk.Frame(self, bg='#121212', padx=80, pady=30)
 
         # signup_logo
-        self.logo = tk.PhotoImage(file=r'C:\Users\adity\PycharmProjects\TK-Player\Pages\UserAuthentication\images\signup_head.png', height=225, width=360)
+        self.logo = tk.PhotoImage(file=r'images\signup_head.png', height=225, width=360)
         self.labelLogo = tk.Label(self.container, image=self.logo, bd=0)
         self.labelLogo.grid(row=0, column=0)
 
@@ -335,7 +335,7 @@ class Frame2(tk.Frame):
         )
         self.result.grid(row=5, column=0)
 
-        self.btnimg = tk.PhotoImage(file=r'C:\Users\adity\PycharmProjects\TK-Player\Pages\UserAuthentication\images\register.png')
+        self.btnimg = tk.PhotoImage(file=r'images\register.png')
         self.register = tk.Button(
             self.container,
             border=0,

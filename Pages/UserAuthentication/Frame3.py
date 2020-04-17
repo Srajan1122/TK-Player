@@ -2,11 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import font
 
+
 class UserEntry(tk.Entry):
 	def __init__(self, master, placeholder, *args, **kwargs):
 		tk.Entry.__init__(self, master, *args, **kwargs)
 
 		self.placeholder = placeholder
+
 		def default_placeholder(self):
 			self.insert(0,self.placeholder)
 		
@@ -48,13 +50,14 @@ class UserEntry(tk.Entry):
 
 		default_placeholder(self)
 
+
 class Frame3(tk.Frame):
 	def __init__(self, master, *args, **kwargs):
 		tk.Frame.__init__(self, master, *args, **kwargs)
 
 		self.container = tk.Frame(self, bg='#121212', padx=80, pady=80)
 
-		self.logo = tk.PhotoImage(file=r'C:\Users\adity\PycharmProjects\TK-Player\Pages\UserAuthentication\images\login_head2.png',height=150,width=360)
+		self.logo = tk.PhotoImage(file=r'images\login_head2.png',height=150,width=360)
 		self.labelLogo = tk.Label(self.container, image=self.logo,bd=0)
 		self.labelLogo.grid(row=0, column=0, pady=25)
 
@@ -114,7 +117,7 @@ class Frame3(tk.Frame):
 						ipady=10
 						)
 
-		self.btnimg = tk.PhotoImage(file=r'C:\Users\adity\PycharmProjects\TK-Player\Pages\UserAuthentication\images\login.png')
+		self.btnimg = tk.PhotoImage(file=r'images\login.png')
 
 		self.login = tk.Button(
 						self.container,
