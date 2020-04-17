@@ -16,8 +16,8 @@ class HorizontalFrame(tk.Frame):
         self['padx'] = 20
         self['pady'] = 20
 
-        self.upper = Upper(self, text)
-        self.line = tk.Frame(self, background='#ffffff')
+        self.upper = Upper(self, text, data)
+        self.line = tk.Frame(self, background='#333333')
         self.lower = Lower(self, controller, data)
 
         self.upper.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -35,7 +35,7 @@ class HorizontalFrame(tk.Frame):
 
 
 class Upper(tk.Frame):
-    def __init__(self, master, text, *args, **kwargs):
+    def __init__(self, master, text, data, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self.master = master
@@ -53,11 +53,12 @@ class Upper(tk.Frame):
                               background='#181818',
                               foreground='white')
 
-        self.left_button = ArrowButton(self, image=self.left, command=master.left)
-        self.right_button = ArrowButton(self, image=self.right, command=master.right)
+        if len(data) > 5:
+            self.left_button = ArrowButton(self, image=self.left, command=master.left)
+            self.right_button = ArrowButton(self, image=self.right, command=master.right)
 
-        self.left_button.grid(row=0, column=1, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.right_button.grid(row=0, column=2, sticky=tk.N + tk.S + tk.E + tk.W)
+            self.left_button.grid(row=0, column=1, sticky=tk.N + tk.S + tk.E + tk.W)
+            self.right_button.grid(row=0, column=2, sticky=tk.N + tk.S + tk.E + tk.W)
 
         self.label.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
