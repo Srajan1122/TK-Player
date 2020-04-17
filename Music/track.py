@@ -66,7 +66,8 @@ class Track(tk.Frame):
     def make_ui(self):
         
         #Title
-        self.title = tk.Label(self , text=self.TrackName , foreground = 'white')
+        self.title = tk.Label(self , text=self.TrackName , background='#000000' ,foreground = 'white')
+        self.title.pack()
     
         #play Button
         self.playButton = tk.Button(self,text = 'Play' , command = self.Play)
@@ -77,12 +78,11 @@ class Track(tk.Frame):
         self.stopButton.pack()
 
         #currentTime Label
-        self.currentTime = tk.Label(self,text="--/--",foreground='white')
-        self.pack(side = 'left' )
-
+        self.currentTime = tk.Label(self,text="--/--",foreground='white' , background='#000000' )
+        self.currentTime.pack()
         #end time label
-        self.endTime = tk.Label(self,text="--/--",foreground='white')
-        self.pack(side = 'right' )
+        self.endTime = tk.Label(self,text="--/--",foreground='white' , background='#000000' )
+        self.endTime.pack()
 
         #slider
         self.sliderValue = tk.DoubleVar()
@@ -107,6 +107,8 @@ class Track(tk.Frame):
     def TrackPlay(self , currentTime):
         if self.player.music.get_busy():
             self.sliderValue.set( currentTime )
+            time = self.convertTime( currentTime )
+            self.currentTime.config(text=time)
             currentTime += 1
             self.loopID = self.after(1000,lambda:self.TrackPlay( currentTime ))
         else:
@@ -128,6 +130,11 @@ class Track(tk.Frame):
     def UpdateVolume(self , value):
         percentValue = float(value)/100
         self.player.music.set_volume(percentValue)
+
+    def convertTime(self, currentTime):
+        mins, sec = divmod(currentTime,60)
+        time = str(int(mins)).zfill(2) +":" + str(int(sec)).zfill(2)
+        return time
 
 def ask_quit():
     '''Confirmation to quit application.'''
