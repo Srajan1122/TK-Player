@@ -61,10 +61,6 @@ class HorizontalScrollableFrame(tk.Frame):
             func(1, "units")
 
     def size(self, event):
-        from Pages.HomePage.Components.HorizontalFrame import wid
-        print(wid())
-        width = event.width
-        height = event.height
         self.canvas.create_window((0, 0),
                                   window=self.scrollable_frame,
                                   anchor="nw",

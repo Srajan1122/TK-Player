@@ -4,6 +4,7 @@ from .topRight import TopRight
 from Pages.HomePage.Home import Home
 from Pages.Browse.browse import Browse
 from Pages.MusicPage.main import Main
+from .listOfPage import *
 
 
 class Top(tk.Frame):
@@ -34,17 +35,33 @@ class Top(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=40)
 
+    def show_frame_directly(self, frame):
+        if frame == self.frames[Home]:
+            if len(pages) == 0:
+                if frame == pages[len(pages) - 1]:
+                    pass
+                else:
+                    pages.append(frame)
+        frame.tkraise()
+
     def show_frame(self, context):
         frame = self.frames[context]
-        if context == Main:
-            frame.__setattr__('data', 'hello')
-            # frame.__setitem__('data', 'hello')
+        if len(pages) > 1:
+            if pages[len(pages) - 1] == frame:
+                return
+        rightPage.clear()
+        resetCount()
+        pages.append(frame)
         frame.tkraise()
 
     def show_frame_Main(self, data):
-
         frame = Main(self.topRight.topRightBottom, self, data=data)
         self.frames[Main] = frame
         frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
-        frame.tkraise()
 
+        if pages[len(pages) - 1] == frame:
+            return
+        rightPage.clear()
+        resetCount()
+        pages.append(frame)
+        frame.tkraise()

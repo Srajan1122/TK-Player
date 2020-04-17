@@ -2,7 +2,6 @@ import tkinter as tk
 import pyglet
 import tkinter.font as tkfont
 from Pages.Resource.HorizontalScrollableFrame import HorizontalScrollableFrame
-from Pages.MusicPage.main import Main
 
 
 def wid():
