@@ -8,6 +8,7 @@ class Home(tk.Frame):
     def __init__(self, master, controller, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
+        self.bind('<Configure>', self.size)
         self.main = tk.Frame(self, bg='#181818')
         self.scrollable = ScrollableFrame(self.main)
 
@@ -41,3 +42,6 @@ class Home(tk.Frame):
         ]
 
         return info
+
+    def size(self, event):
+        pass

@@ -54,8 +54,12 @@ class Top(tk.Frame):
         pages.append(frame)
         frame.tkraise()
 
-    def show_frame_Main(self, data):
-        frame = Main(self.topRight.topRightBottom, self, data=data)
+    def show_frame_Main(self, data, image, text):
+        frame = Main(self.topRight.topRightBottom,
+                     self,
+                     data=data,
+                     image=image,
+                     text=text)
         self.frames[Main] = frame
         frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
