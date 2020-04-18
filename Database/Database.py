@@ -12,7 +12,8 @@ def set_artist(track_title, track_genre, track_location, track_artist):
     try:
         collection = db.collection(u'artist').document(track_artist)
         collection.set({
-            'name': track_artist
+            'name': track_artist,
+            'image_url':''
         })
         artistTracks = db.collection(u'artist/' + track_artist + '/tracks').document(track_title)
         artistTracks.set({
@@ -87,6 +88,7 @@ def set_track(track_title, track_genre, track_location, track_artist):
         })
         print('Track added successfully')
         set_artist(track_title, track_genre, track_location, track_artist)
+        set_genre(track_genre)
         return True
     except Exception as ex:
         print('Exception Occurred which is of type :', ex.__class__.__name__)
@@ -238,7 +240,31 @@ def get_all_tracks():
             traceback.print_exc()
         return False
 
+def set_genre(genre):
+    '''
 
+
+    :param genre:
+    This is the name of the genre
+
+    :return:
+    Bool if success
+
+    '''
+    try:
+        doc_ref = db.collection(u'genres').document(genre)
+        doc_ref.set({
+            'genre_name' : genre,
+            'genre_image':'',
+
+        })
+        return True
+    except Exception as ex:
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
 def get_tracks_by_genre(**kwargs):
     """
     Returns a list of songs with particular genre
@@ -262,24 +288,17 @@ def get_tracks_by_genre(**kwargs):
             return False
     else:
         try:
-            doc_ref = db.collection('Tracks').stream()
+            doc_ref = db.collection(u'genres').stream()
             object_list = list(map(lambda x: x.to_dict(), doc_ref))
-            genre_list = []
             # print(object_list)
-            image_list = []
-            for i in object_list:
-                if i['genre'] not in genre_list:
-                    genre_list.append(i['genre'])
-            for i in object_list:
-                if i['genre_image'] not in image_list:
-                    image_list.append(i['genre_image'])
             all_dicts = []
-            for i in range(len(genre_list)):
+            for i in range(len(object_list)):
                 my_dict = {
-                    'text': genre_list[i],
-                    'url': image_list[i]
+                    'text': object_list[i]['genre_name'],
+                     'url': object_list[i]['genre_image'],
                 }
                 all_dicts.append(my_dict)
+            # print(all_dicts)
             return all_dicts
         except Exception as ex:
             print('Exception Occurred which is of type :', ex.__class__.__name__)

@@ -13,7 +13,7 @@ def get_artist_row():
         print('Exception Occured which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
-            traceback.print_exc();
+            traceback.print_exc()
         return False
 
 
@@ -28,7 +28,9 @@ def get_artist_data():
             'url': data[i]['image_url'],
             'tracks': my_data[i]
         }
+
         artist_data.append(my_dict)
+
     return artist_data
 
 
@@ -45,3 +47,4 @@ def get_genre_data():
 
 genre_data = get_genre_data()
 artist_data = get_artist_data()
+print(genre_data)
