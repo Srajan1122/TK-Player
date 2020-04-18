@@ -15,11 +15,11 @@ data = {
 
 # Class for input field: contact number
 class NumberEntry(tk.Entry):
-    def __init__(self, master, placeholder, *args, **kwargs):
+    def __init__(self, master, placeholder, id, *args, **kwargs):
         tk.Entry.__init__(self, master, *args, **kwargs)
 
-        self.placeholder = placeholder
-
+        # self.placeholder = placeholder
+        self['textvariable'] = placeholder
         self.appHighlightFont = font.Font(
             family='lineto circular',
             size=12,
@@ -37,7 +37,7 @@ class NumberEntry(tk.Entry):
         def default_placeholder(self):
             print("placeholder:", self.get())
             # self.delete(0,100)
-            self.insert(0, self.placeholder)
+            self.insert(0, placeholder)
 
         def only_numbers(char):
             return char.isdigit()
@@ -52,17 +52,29 @@ class NumberEntry(tk.Entry):
             self['validate'] = 'key'
             self['validatecommand'] = (validation, '%S')
             self['foreground'] = 'white'
+            self['textvariable'] = textvariable
 
         def foc_out(event):
-            print(self.get())
+            # print(self.get())
+            lambda e: enter_details(e)
             self['foreground'] = self.default_fg
+            if (id == 'phone'):
+                data["phone"] = self.get()
+            print(data)
+
             if not self.get():
                 default_placeholder(self)
             else:
-                self.insert(0, self.placeholder)
+                self.insert(0, self['textvariable'])
+
+        def enter_details(event):
+            if (id == 'phone'):
+                data["phone"] = self.get()
+            print(data)
 
         self.bind("<FocusIn>", lambda e: foc_in(e))
         self.bind("<FocusOut>", lambda e: foc_out(e))
+        self.bind("<Return>", lambda e: enter_details(e))
 
         default_placeholder(self)
 
@@ -73,12 +85,10 @@ class UserEntry(tk.Entry):
         tk.Entry.__init__(self, master, *args, **kwargs)
 
         # self.placeholder = placeholder
-        self['textvariable'] = placeholder
+        # self['textvariable'] = placeholder
 
         def default_placeholder(self):
             self.insert(0, placeholder)
-
-        default_placeholder(self)
 
         self.appHighlightFont = font.Font(
             family='lineto circular',
@@ -106,6 +116,7 @@ class UserEntry(tk.Entry):
             self['textvariable'] = textvariable
 
         def foc_out(event):
+            lambda e: enter_details(e)
             self['foreground'] = self.default_fg
             if (id == 'username'):
                 data["username"] = self.get()
@@ -135,6 +146,8 @@ class UserEntry(tk.Entry):
         self.bind("<FocusIn>", lambda e: foc_in(e))
         self.bind("<FocusOut>", lambda e: foc_out(e))
         self.bind("<Return>", lambda e: enter_details(e))
+
+        default_placeholder(self)
 
 
 # Frame Class
@@ -221,7 +234,8 @@ class Frame2(tk.Frame):
         # contact number
         self.phone = NumberEntry(
             self.container,
-            placeholder="  Contact Number"
+            placeholder="  Contact Number",
+            id="phone"
         )
         self.phone.grid(
             row=3,
@@ -262,67 +276,46 @@ class Frame2(tk.Frame):
             # print("pass: ",password_check)
             email_check = data.get("email")
             # print()
-
-            count = 0
+            phone_check = data.get("phone")
 
             print("user: ", username_check)
             print("pass: ", password_check)
             print("email: ", email_check)
-            if (username_check != "" and password_check != "" and email_check != ""):
+            print("phone: ", phone_check)
+            if (username_check != "" and password_check != "" and email_check != "" and phone_check != ""):
                 print("first block")
-                change()
+
+                def phoneCheck(s):
+                    Pattern = re.compile("(0/91)?[7-9][0-9]{9}")
+                    return Pattern.match(s)
+
+                def emailCheck(s):
+                    Pattern = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
+                    return Pattern.match(s)
+
+                def passwordCheck(s):
+                    if (len(s) in range(8, 20)):
+                        return True
+                    else:
+                        return False
+
+                if (passwordCheck(password_check)):
+                    if (phoneCheck(phone_check)):
+                        if (emailCheck(email_check)):
+                            change()
+                            self.result['text'] = "Account was succesfully created"
+                        else:
+                            self.result['text'] = "Invalid Email ID"
+                    else:
+                        self.result['text'] = "Invalid Contact Number"
+                else:
+                    self.result['text'] = "Password must be atleast 8 characters long"
+                # change()
+            # else:
+            # 	self.result['text'] = "Invalid Phone number"
             else:
                 print("last block")
                 self.result['text'] = "Invalid Credentials"
-
-        # if(username_check=="" or password_check!="" or email_check!=""):
-        # 	print("0 done")
-        # 	self.result['text'] = "Invalid Credentials"
-        # elif(username_check!=""):
-        # 	result_text = username_check
-        # 	print("1 done")
-        # 	print(data)
-        # 	print(password_check)
-        # 	#print(result_text)
-        # 	#self.result['text'] = result_text
-        # 	count += 1
-        # elif(password_check!=""):
-        # 	print("2 done")
-        # 	result_text = password_check
-        # 	#print(result_text)
-        # 	#self.result['text'] = result_text
-        # 	count += 1
-        # elif(email_check!=""):
-        # 	print("3 done")
-        # 	result_text = email_check
-        # 	#print(result_text)
-        # 	#self.result['text'] = result_text
-        # 	count += 1
-        # elif(username_check!="" and password_check!="" and email_check!=""):
-        # 	print("last block")
-        # 	print(count)
-        # 	lambda: self.master.show_frame(Frame1)
-
-        # if(count==3):
-
-        # if(username_check!=""):
-        # 	result_text = username_check
-        # 	print(result_text)
-        # 	self.result['text'] = result_text
-        # else:
-        # 	print("else block")
-        # 	self.result['text'] = "Invalid Username"
-        # if(len(username_check)==0):
-        # 	result_text = "Invalid Username"
-        # 	print(result_text)
-        # 	self.result['text'] = result_text
-        # else:
-        # 	print(result_text)
-        # 	print("reached")
-        # 	result_text = data.get("username")
-        # 	self.result['text'] = result_text
-
-        # lambda:self.master.show_frame(Frame1)
 
         self.result = tk.Label(
             self.container,
@@ -350,3 +343,4 @@ class Frame2(tk.Frame):
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
+

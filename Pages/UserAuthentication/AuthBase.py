@@ -54,6 +54,7 @@ class AuthFrame(tk.Frame):
 
     def login(self):
         from main import Root
+        print('help')
         """
             Check different condition for authentication
         """
