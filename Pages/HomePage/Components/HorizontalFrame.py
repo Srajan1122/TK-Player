@@ -3,9 +3,8 @@ import pyglet
 import tkinter.font as tkfont
 from Pages.Resource.HorizontalScrollableFrame import HorizontalScrollableFrame
 from skimage import io
-import urllib
-import cv2
 from PIL import ImageTk, Image
+
 
 def wid():
     global w
@@ -90,7 +89,7 @@ class Lower(tk.Frame):
         for i, j in enumerate(data):
             self.button = CardButton(self.frame, text=j['text'],
                                      url=self.images[i],
-                                     command=lambda d=j['tracks']: controller.show_frame_Main(data=d)
+                                     command=lambda d=j['tracks'], img=self.images[i], txt=j['text']: controller.show_frame_Main(data=d, image=img, text=txt)
                                      )
             self.button.grid(row=0, column=i, padx=(0, 10))
 
@@ -142,6 +141,6 @@ class CardButton(tk.Button):
         w = width / 5 - 14
         self.configure(width=int(round(w)))
         self.image = self.url
-        self.image = self.image.resize((int(round(w)), 250), Image.ANTIALIAS )
+        self.image = self.image.resize((int(round(w)), 250), Image.ANTIALIAS)
         self.image = ImageTk.PhotoImage(self.image)
         self.config(image=self.image)

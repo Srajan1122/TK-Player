@@ -139,5 +139,3 @@ class TopLeft(tk.Frame):
         self.grid_rowconfigure(2, weight=2)
         self.grid_rowconfigure(3, weight=2)
         self.grid_rowconfigure(4, weight=10)
-
-
