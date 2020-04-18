@@ -47,4 +47,3 @@ def get_genre_data():
 
 genre_data = get_genre_data()
 artist_data = get_artist_data()
-print(genre_data)
