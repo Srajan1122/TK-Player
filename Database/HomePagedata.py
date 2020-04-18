@@ -28,7 +28,9 @@ def get_artist_data():
             'url': data[i]['image_url'],
             'tracks': my_data[i]
         }
+
         artist_data.append(my_dict)
+
     return artist_data
 
 
@@ -45,3 +47,4 @@ def get_genre_data():
 
 genre_data = get_genre_data()
 artist_data = get_artist_data()
+print(genre_data)

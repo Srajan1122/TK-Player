@@ -288,24 +288,17 @@ def get_tracks_by_genre(**kwargs):
             return False
     else:
         try:
-            doc_ref = db.collection('Tracks').stream()
+            doc_ref = db.collection(u'genres').stream()
             object_list = list(map(lambda x: x.to_dict(), doc_ref))
-            genre_list = []
             # print(object_list)
-            image_list = []
-            for i in object_list:
-                if i['genre'] not in genre_list:
-                    genre_list.append(i['genre'])
-            # for i in object_list:
-            #     if i['genre_image'] not in image_list:
-            #         image_list.append(i['genre_image'])
             all_dicts = []
-            for i in range(len(genre_list)):
+            for i in range(len(object_list)):
                 my_dict = {
-                    'text': genre_list[i],
-                     'url': ""
+                    'text': object_list[i]['genre_name'],
+                     'url': object_list[i]['genre_image'],
                 }
                 all_dicts.append(my_dict)
+            # print(all_dicts)
             return all_dicts
         except Exception as ex:
             print('Exception Occurred which is of type :', ex.__class__.__name__)
