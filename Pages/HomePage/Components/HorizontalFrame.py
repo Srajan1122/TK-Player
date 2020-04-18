@@ -139,8 +139,8 @@ class CardButton(tk.Button):
     def size(self, event):
         global width
         w = width / 5 - 14
-        self.configure(width=int(round(w)))
+        self.configure(width=int(round(w)), height=int(round(w))+50)
         self.image = self.url
-        self.image = self.image.resize((int(round(w)), 250), Image.ANTIALIAS)
+        self.image = self.image.resize((int(round(w)), int(round(w))), Image.ANTIALIAS)
         self.image = ImageTk.PhotoImage(self.image)
         self.config(image=self.image)

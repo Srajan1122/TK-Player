@@ -10,7 +10,7 @@ class HorizontalScrollableFrame(tk.Frame):
                                 borderwidth=0,
                                 highlightthickness=0,
                                 bg='#181818',
-                                height=300
+                                # height=300
                                 )
 
         # self.scrollbar = ttk.Scrollbar(self,
@@ -61,10 +61,13 @@ class HorizontalScrollableFrame(tk.Frame):
             func(1, "units")
 
     def size(self, event):
+        from Pages.HomePage.Components.HorizontalFrame import wid
         self.canvas.create_window((0, 0),
                                   window=self.scrollable_frame,
                                   anchor="nw",
                                   )
+        self.canvas.configure(height=wid()+50)
+
 
     def left(self):
         func = self.canvas.xview_scroll(-10, 'units')
