@@ -21,6 +21,10 @@ class Container(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     root.title('TK-Player')
+    import os
+    # print(os.getcwd()[:-8])
+    os.chdir((os.getcwd()[:-8]))
+
     app_icon = tk.PhotoImage(file=r".\Images\app_64.png")
     root.iconphoto(False, app_icon)
 

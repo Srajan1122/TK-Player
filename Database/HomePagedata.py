@@ -13,7 +13,7 @@ def get_artist_row():
         print('Exception Occured which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
-            traceback.print_exc();
+            traceback.print_exc()
         return False
 
 
