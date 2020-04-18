@@ -13,6 +13,7 @@ class Track(tk.Frame):
         self.pack()
         self['background'] = '#000000'
         self['padx'] = 25
+        self['pady'] = 25
 
         self.master = master
         self.track = None
@@ -29,6 +30,7 @@ class Track(tk.Frame):
         self.volume = None
         self.currentTime = None
         self.endTime = None
+        self.repeatButton = None
 
         self.byteAudio=self.get_audio_from_url(trackUrl)
         self.byteAudio2=self.get_audio_from_url(trackUrl)
@@ -52,7 +54,7 @@ class Track(tk.Frame):
         song = MP3(byteAudio)
         duration = song.info.length
         self.songDuration = duration
-        print(duration)
+        # print(duration)
 
     def load_music(self):
         player = mixer
@@ -84,6 +86,10 @@ class Track(tk.Frame):
         self.endTime = tk.Label(self,text=endTime,foreground='white' , background='#000000' )
         self.endTime.pack()
 
+        #repeat button
+        self.repeatButton = tk.Button(self,text="Repeat",foreground = 'white',background="#000000",command=self.Toggle)
+        self.repeatButton.pack()
+
         #slider
         self.sliderValue = tk.DoubleVar()
         self.slider = tk.Scale( self, to=self.songDuration, orient=tk.HORIZONTAL, length=700,
@@ -105,22 +111,31 @@ class Track(tk.Frame):
         self.TrackPlay( currentTime )
 
     def TrackPlay(self , currentTime):
-        if self.player.music.get_busy():
+        if self.player.music.get_busy() and (currentTime < self.songDuration) :
             self.sliderValue.set( currentTime )
             time = self.convertTime( currentTime )
             self.currentTime.config(text=time)
             currentTime += 1
             self.loopID = self.after(1000,lambda:self.TrackPlay( currentTime ))
-        else:
+        elif currentTime >= int(self.songDuration):
             print('Track has ended')
+            if(self.repeatButton.config('text')[-1] == "Repeat"):
+                self.sliderValue.set(0)
+                self.Play()
+        else:
+            print("Track Not Playing (TrackPlay)")
 
     def UpdateSlider( self, value ):
         if self.player.music.get_busy():
             self.after_cancel( self.loopID )
+            time = self.convertTime( value )
+            self.currentTime.config(text=time)
             self.sliderValue.set( value )
             self.Play( )
         else:
-            print("Track Not Playing")
+            print("Track Not Playing (UpdateSlider)")
+            time = self.convertTime( value )
+            self.currentTime.config(text=time)
             self.sliderValue.set( value )
 
     def Stop(self):
@@ -132,9 +147,15 @@ class Track(tk.Frame):
         self.player.music.set_volume(percentValue)
 
     def convertTime(self, currentTime):
-        mins, sec = divmod(currentTime,60)
+        mins, sec = divmod(float(currentTime),60)
         time = str(int(mins)).zfill(2) +":" + str(int(sec)).zfill(2)
         return time
+
+    def Toggle(self):
+        if (self.repeatButton.config('text')[-1] == "Repeat"):
+            self.repeatButton.config(text='No Repeat')
+        else:
+            self.repeatButton.config(text = 'Repeat')
 
 def ask_quit():
     '''Confirmation to quit application.'''
