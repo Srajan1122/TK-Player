@@ -302,6 +302,9 @@ class Frame2(tk.Frame):
                 if (passwordCheck(password_check)):
                     if (phoneCheck(phone_check)):
                         if (emailCheck(email_check)):
+                            from Database.Database import register_user
+                            register_user(username_check,email_check,phone_check,password_check)
+
                             change()
                             self.result['text'] = "Account was succesfully created"
                         else:

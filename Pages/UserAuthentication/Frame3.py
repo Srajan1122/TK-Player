@@ -7,10 +7,12 @@ import re
 global data2
 data2 = {
 	"email": "",
-	"password": ""
+	"password": "",
 }
-
-
+global state
+state = {
+	'user_object': None
+}
 class UserEntry(tk.Entry):
 	def __init__(self, master, placeholder, show, textvariable, id, *args, **kwargs):
 		tk.Entry.__init__(self, master, *args, **kwargs)
@@ -238,8 +240,16 @@ class Frame3(tk.Frame):
 		if not self.passwordCheck(password):
 			self.result['text'] = "Password must be atleast 8 characters long"
 			return
-
-		self.master.login()
+		from Database.Database import sign_in_with_email_and_password
+		print('i am in there')
+		user_object = sign_in_with_email_and_password(email,password)
+		if(user_object):
+			# global state
+			# print(user_object)
+			# state['user_object'] = user_object
+			self.master.login(user_object)
+		else:
+			self.result['text'] = "Login Failed"
 
 
 

@@ -2,6 +2,7 @@ import tkinter as tk
 from .Frame1 import Frame1
 from .Frame2 import Frame2
 from .Frame3 import Frame3
+from main import Root
 
 
 class AuthBase(tk.Tk):
@@ -52,8 +53,8 @@ class AuthFrame(tk.Frame):
         framee = self.frames[context]
         framee.tkraise()
 
-    def login(self):
-        from main import Root
+    def login(self,user_object):
+
         print('help')
         """
             Check different condition for authentication
@@ -61,11 +62,12 @@ class AuthFrame(tk.Frame):
         if False:
             return
 
-        self.user = {
-            'name': 'srajan',
-            'age': 18
-        }
+        # self.user = {
+        #     'name': 'srajan',
+        #     'age': 18
+        # }
+        # global state
 
         self.master.destroy()
-        main = Root(data=self.user)
+        main = Root(data=user_object)
         main.mainloop()

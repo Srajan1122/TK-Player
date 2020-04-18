@@ -393,6 +393,7 @@ def sign_in_with_email_and_password(email, password):
         if path.exists('user'):
             f = open('user', 'r')
             doc = get_user(f.readline())
+            f.close()
             return doc
         from firebase_admin import auth
         user = auth.get_user_by_email(email)
