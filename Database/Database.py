@@ -496,4 +496,4 @@ def send_email_verification_otp(email):
             traceback.print_exc()
         return False
 
-send_email_verification_otp('dkhoche2000@gmail.com')
+# send_email_verification_otp('dkhoche2000@gmail.com')
