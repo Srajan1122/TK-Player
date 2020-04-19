@@ -19,7 +19,8 @@ def set_artist(track_title, track_genre, track_location, track_artist):
         artistTracks.set({
             'title': track_title,
             'genre': track_genre,
-            'location': track_location
+            'location': track_location,
+            'artist':track_artist
 
         })
         print('artist added')
@@ -497,3 +498,81 @@ def send_email_verification_otp(email):
         return False
 
 # send_email_verification_otp('dkhoche2000@gmail.com')
+def user_create_playlist(uid,playlist_name):
+    '''
+
+
+    :param uid: Unique Identification of the user which is saved in the user file in the root directory
+    :param playlist_name: Name of the playlist to be created
+    :return: Bool;
+    '''
+    try:
+        collection = db.collection(u'users/'+uid+'/playlists').document(playlist_name)
+        collection.set({
+            'name':playlist_name
+        })
+        print('playlist created successfully')
+        return True
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+# user_create_playlist('1DXAOpIfWdYLylWaGe1Hmm1O6vh2','myplalist')
+def add_song_to_playlist(uid,playlist_name,track_name):
+    '''
+
+    :param uid: unique identification of the user
+    :param playlist_name: name of the particular playlist
+    :param track_name: track_title which is to be added
+    :return: bool
+    '''
+    try:
+        collection = db.collection(u'users/' + uid + '/playlists/'+playlist_name+'/Tracks').document(track_name)
+        track_object = get_track(track_name)
+        collection.set(track_object)
+        return True
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+def get_playlists(uid,**kwargs):
+    '''
+
+    :param uid: unique identification of the user
+    :param kwargs: playlist = 'required Playlist'
+    :return: if mentioned playlist as kwarg then return a list of the all tracks of the particular playlist.
+            elseif left no kwarg is passed gives the names aof all the playlist
+            else returns false
+            If there are no songs then returns a empty list
+
+    '''
+    try:
+        if 'playlist' in kwargs :
+            doc_ref = db.collection(u'users/'+uid+'/playlists/'+kwargs['playlist']+'/Tracks')
+            snapshots = list(doc_ref.stream())
+            if len(snapshots):
+                tracks = list(map(lambda x: x.to_dict(), snapshots))
+                return tracks
+            return []
+        else:
+            doc_ref = db.collection(u'users/'+uid+'/playlists').stream()
+            object_list = list(map(lambda x: x.to_dict(), doc_ref))
+            return object_list
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+
+
+
+
+# get_playlists('1DXAOpIfWdYLylWaGe1Hmm1O6vh2',playlist = 'myplalist')
