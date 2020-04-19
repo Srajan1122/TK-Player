@@ -433,3 +433,67 @@ def sign_out():
 
     # sign_out()
 # myuser = register_user('devdatta','dkhoche70@gmail.com','9145253235','15412342')
+def generate_otp(uid):
+    import string
+    import random
+
+    # Takes random choices from
+    # ascii_letters and digits
+    try:
+        generate_pass = ''.join([random.choice(string.ascii_uppercase +
+                                               string.ascii_lowercase +
+                                               string.digits)
+                                 for n in range(6)])
+
+        doc_ref = db.collection(u'users').document(uid)
+        doc_ref.set({
+            'verification_code'  : generate_pass
+        })
+        print(generate_pass)
+        return generate_pass
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+
+
+
+def send_email_verification_otp(email):
+    '''
+
+    :param otp:
+           email: email of the user
+    :return: bool
+
+
+    '''
+    try:
+        from firebase_admin import auth
+        import smtplib
+        user = auth.get_user_by_email(email)
+        otp = generate_otp(user.uid)
+        fromaddr = 'amplifyteam1234@gmail.com.'
+        toaddrs = email
+        Text = 'Hello '+ user.display_name  +   ' !!, \nThis mail sent by amplify team. \n Your verification code is verification code is '+otp
+        subject = 'Email Verification'
+        username = 'amplifyteam1234@gmail.com'
+        password = '15412342'
+
+        message = 'Subject: {}\n\n{}'.format(subject, Text)
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.login(username, password)
+        server.sendmail(fromaddr, toaddrs, message)
+        server.quit()
+    except Exception as ex:
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+# send_email_verification_otp('dkhoche2000@gmail.com')
