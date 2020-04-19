@@ -77,9 +77,11 @@ class TextFrame(tk.Frame):
                                     width=37)
 
         self.play_button.grid(row=0, column=0, sticky='nsew')
-        self.liked_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
         self.like_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
+        self.liked_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
         self.menu_button.grid(row=0, column=2, sticky='nsew')
+
+        self.like_button.tkraise()
 
         self.button_region.grid_rowconfigure(0, weight=1)
         self.button_region.grid_propagate(False)
