@@ -4,6 +4,7 @@ import tkinter as tk
 from .Frame1 import Frame1
 from .Frame2 import Frame2
 from .Frame3 import Frame3
+from .Frame4 import Frame4
 from main import Root
 
 #Layout of Base
@@ -33,7 +34,7 @@ class AuthFrame(tk.Frame):
         #Frames
         self.frames = {}
 
-        for F in (Frame1, Frame2, Frame3):
+        for F in (Frame1, Frame2, Frame3, Frame4):
             frame = F(self)
             self.frames[F] = frame
             frame.grid(row=0, column=0)

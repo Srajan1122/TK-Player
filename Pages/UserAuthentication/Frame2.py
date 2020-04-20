@@ -86,28 +86,31 @@ class UserEntry(tk.Entry):
 	def __init__(self, master, placeholder, show, textvariable, id, *args, **kwargs):
 		tk.Entry.__init__(self, master, *args, **kwargs)
 
-		# self.placeholder = placeholder
-		# self['textvariable'] = placeholder
-
+		#placeholder function
 		def default_placeholder(self):
 			self.insert(0, placeholder)
 
+		default_placeholder(self)		
+
+		#font size, style
 		self.appHighlightFont = font.Font(
 			family='lineto circular',
 			size=12,
 		)
 
+		#font color
 		self.default_fg = '#867f7a'
 		self.input_fg = 'white'
 
+		#properties of Entry widget
 		self['background'] = '#404040'
 		self['foreground'] = self.default_fg
 		self['insertbackground'] = 'white'
 		self['font'] = self.appHighlightFont
 		self['border'] = 0
 
+		#function called on focusing
 		def foc_in(event):
-			# self['foreground'] = 'white'
 			if (show == 1):
 				self['show'] = '*'
 			if self['foreground'] == self.default_fg:
@@ -117,64 +120,44 @@ class UserEntry(tk.Entry):
 			self['foreground'] = 'white'
 			self['textvariable'] = textvariable
 
+		#function called when not focusing
 		def foc_out(event):
-			lambda e: enter_details(e)
 			self['foreground'] = self.default_fg
-			if (id == 'username'):
-				data["username"] = self.get()
-			elif (id == 'password'):
-				data["password"] = self.get()
-			elif (id == 'email'):
-				data["email"] = self.get()
-			print(data)
-
 			print(self.get())
 			if not self.get():
 				if (show == 1):
 					self['show'] = ''
 				default_placeholder(self)
 			else:
-				insert(0, self['textvariable'])
+				self.insert(0, self['textvariable'])
 
-		def enter_details(event):
-			if (id == 'username'):
-				data["username"] = self.get()
-			elif (id == 'password'):
-				data["password"] = self.get()
-			elif (id == 'email'):
-				data["email"] = self.get()
-			print(data)
-
+		#def key(events)	
 		self.bind("<FocusIn>", lambda e: foc_in(e))
 		self.bind("<FocusOut>", lambda e: foc_out(e))
-		self.bind("<Return>", lambda e: enter_details(e))
 
-		default_placeholder(self)
-
-
-# Frame Class
+# Frame of Signup/Register Page
 class Frame2(tk.Frame):
 	def __init__(self, master, *args, **kwargs):
 		tk.Frame.__init__(self, master, *args, **kwargs)
 
-		# frame size
+		#Frame
 		self.container = tk.Frame(self, bg='#121212', padx=80, pady=30)
 
-		# signup_logo
+		#Signup/Register head
 		self.logo = tk.PhotoImage(file=r'images\signup_head.png', height=225, width=360)
 		self.labelLogo = tk.Label(self.container, image=self.logo, bd=0)
 		self.labelLogo.grid(row=0, column=0)
 
-		# fields : username, password, contact number, email
+		#For Back button
 		from .Frame1 import Frame1
 
-		# font
+		#Font style, size
 		self.appHighlightFont = font.Font(
 			family='lineto circular',
 			size=14,
 		)
 
-		# back button
+		#Bck button
 		self.back = tk.Button(
 			self.container,
 			border=0,
@@ -196,13 +179,13 @@ class Frame2(tk.Frame):
 			ipady=10
 		)
 
-		# username
+		#Username Entry
 		self.username_input = tk.StringVar()
 		self.username = UserEntry(
 			self.container,
 			placeholder="  Username",
 			show=0,
-			textvariable=self.username_input,
+			textvariable=None,
 			id="username"
 		)
 		self.username.grid(
@@ -215,7 +198,7 @@ class Frame2(tk.Frame):
 			ipady=10
 		)
 
-		# password
+		#Password Entry
 		self.password = UserEntry(
 			self.container,
 			placeholder="  Password",
@@ -233,11 +216,13 @@ class Frame2(tk.Frame):
 			ipady=10
 		)
 
-		# contact number
-		self.phone = NumberEntry(
+		#Contact Number Entry
+		self.phone = UserEntry(
 			self.container,
 			placeholder="  Contact Number",
-			id="phone"
+			show=0,
+			textvariable=None,
+			id="phone",
 		)
 		self.phone.grid(
 			row=3,
@@ -249,7 +234,7 @@ class Frame2(tk.Frame):
 			ipady=10
 		)
 
-		# email
+		#Email Entry
 		self.email = UserEntry(
 			self.container,
 			placeholder="  Email ID",
@@ -267,6 +252,7 @@ class Frame2(tk.Frame):
 			ipady=10
 		)
 
+		#Result/Stataus Display
 		self.result = tk.Label(
 			self.container,
 			border=0,
@@ -278,7 +264,9 @@ class Frame2(tk.Frame):
 		)
 		self.result.grid(row=5, column=0)
 
+		#Signup/Register Button
 		self.btnimg = tk.PhotoImage(file=r'images\register.png')
+		
 		self.register = tk.Button(
 			self.container,
 			border=0,
@@ -289,28 +277,30 @@ class Frame2(tk.Frame):
 		)
 		self.register.grid(row=6, column=0, pady=10)
 
+		#Frame grid and configurations
 		self.container.grid(row=0, column=0)
 
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)
 
-	def change():
-		return self.master.show_frame(Frame1)
-
+	#Validaiton funtion for contact number
 	def phoneCheck(self,s):
 		Pattern = re.compile("(0/91)?[7-9][0-9]{9}")
 		return Pattern.match(s)
 
+	#Validation function for email
 	def emailCheck(self,s):
 		Pattern = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
 		return Pattern.match(s)
 
+	#Validation function for password
 	def passwordCheck(self,s):
 		if (len(s) in range(8, 20)):
 			return True
 		else:
 			return False
 
+	#Validation for signup/register
 	def registerNow(self):
 
 		global data
@@ -322,8 +312,18 @@ class Frame2(tk.Frame):
 		data["username"] = username
 		data["password"] = password
 		data["phone"] = phone
-		data["emaail"] = email
+		data["email"] = email
 		print(data)
+
+		#placeholders
+		username_placeholder = "  Username"
+		password_placeholder = "  Password"
+		phone_placeholder = "  Contact Number"
+		email_placeholder = "  Email ID"
+
+		if username==username_placeholder or password==password_placeholder or phone==phone_placeholder or email==email_placeholder:
+			self.result['text'] = "Please enter all fields"
+			return
 
 		if username.strip(' ')=='' or password.strip(' ')=='' or phone.strip(' ')=='' or email.strip(' ')=='' :
 			self.result['text'] = "Invalid Credentials" 
@@ -341,11 +341,36 @@ class Frame2(tk.Frame):
 			self.result['text'] = "Invalid Email ID"
 			return
 
-		from Database.Database import register_user
-		register_user(username,email,phone,password)
+		# from Database.Database import register_user
+		# register_user(username,email,phone,password)
 		self.result['text'] = "Account created successfully"
 		return self.master.show_frame(Frame1)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+	def change():
+		return self.master.show_frame(Frame1)
 		def register():
 			# print(data)
 			username_check = data.get("username")
@@ -397,6 +422,6 @@ class Frame2(tk.Frame):
 			else:
 				print("last block")
 				self.result['text'] = "Invalid Credentials"
-
+'''
 		
 

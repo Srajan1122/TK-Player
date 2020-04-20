@@ -15,6 +15,7 @@ class Frame1(tk.Frame):
         self.btnimg2 = tk.PhotoImage(file=r'images\login.png')
 
         from .Frame3 import Frame3
+        from .Frame4 import Frame4
         self.login = tk.Button(
             self.container,
             border=0,
