@@ -12,7 +12,7 @@ class TextFrame(tk.Frame):
         pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
         self.head = tkfont.Font(family="Pragatic Narrow", size=28, weight="bold")
         self.support = tkfont.Font(family="Play", size=10, weight="bold")
-        #
+
         self.button_heart_raw = Image.open('images/button_heart.png')
         self.button_heart = self.button_heart_raw.resize((35, 35), Image.ANTIALIAS)
         self.button_heart_active = self.button_heart_raw.resize((37, 37), Image.ANTIALIAS)
@@ -56,10 +56,7 @@ class TextFrame(tk.Frame):
                                      )
         self.button_region = tk.Frame(self, bg='#000000', height=38)
 
-        self.play_button = HeadIcon(self.button_region,
-                                    image=self.play,
-                                    active_image=self.play_active,
-                                    width=105, )
+        self.play_button = PlayHeadIcon(self.button_region)
 
         self.like_button = HeadIcon(self.button_region,
                                     image=self.button_heart,
@@ -122,3 +119,84 @@ class HeadIcon(tk.Button):
 
     def leave(self, event):
         self.config(image=self.image)
+
+
+class PlayHeadIcon(tk.Button):
+    def __init__(self, master, *args, **kwargs):
+        tk.Button.__init__(self, master, *args, **kwargs)
+
+        self.isPlaying = False
+
+        self.play_raw = Image.open('images/play.png')
+        self.play = self.play_raw.resize((100, 35), Image.ANTIALIAS)
+        self.play_active = self.play_raw.resize((103, 38), Image.ANTIALIAS)
+        self.play = ImageTk.PhotoImage(self.play)
+        self.play_active = ImageTk.PhotoImage(self.play_active)
+
+        self.pause_raw = Image.open('images/pause.png')
+        self.pause = self.pause_raw.resize((100, 35), Image.ANTIALIAS)
+        self.pause_active = self.pause_raw.resize((103, 38), Image.ANTIALIAS)
+        self.pause = ImageTk.PhotoImage(self.pause)
+        self.pause_active = ImageTk.PhotoImage(self.pause_active)
+
+        self['background'] = '#000000'
+        self['activebackground'] = '#000000'
+        self['bd'] = 0
+        self['width'] = 105
+        self['image'] = self.play
+
+        self.bind('<Enter>', self.enter)
+        self.bind('<Leave>', self.leave)
+        self.bind('<Button-1>', self.click)
+
+        self.grid_propagate(False)
+        # self.after(100, self.ifPlaying)
+
+    def ifPlaying(self):
+        if self.isPlaying:
+            self.config(image=self.pause)
+        else:
+            self.config(image=self.play)
+
+    def enter(self, event):
+        if self.isPlaying:
+            self.config(image=self.pause_active)
+            return
+
+        self.config(image=self.play_active)
+
+    def leave(self, event):
+        if self.isPlaying:
+            self.config(image=self.pause)
+            return
+        self.config(image=self.play)
+
+    def click(self, event):
+        from Base.listOfPage import current_playing
+        from Base.listOfPage import musicList
+        # print(self.master.master.master.master)
+        if self.isPlaying:
+            self.config(image=self.play)
+            if len(current_playing) != 0:
+                current_playing[0].play_button.click()
+        else:
+            from Base.listOfPage import focusCard
+            if len(focusCard) != 0:
+                previous_focus = focusCard.pop()
+                previous_focus.isPlaying = False
+                previous_focus.ifPlaying()
+            focusCard.append(self)
+            self.config(image=self.pause)
+            if len(current_playing) != 0:
+                if current_playing[0].master.master.master.master.master == self.master.master.master.master:
+                    current_playing[0].play_button.click()
+                else:
+                    for i in musicList:
+                        for k, v in i.items():
+                            if k == self.master.master.master.master:
+                                v[0].play_button.click()
+            elif len(current_playing) == 0:
+                for i in musicList:
+                    for k, v in i.items():
+                        if k == self.master.master.master.master:
+                            v[0].play_button.click()

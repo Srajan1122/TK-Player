@@ -70,7 +70,11 @@ class Upper(tk.Frame):
 
 
 class Lower(tk.Frame):
+    count = 0
+
     def __init__(self, master, controller, data, *args, **kwargs):
+        from Base.listOfPage import musicPages
+        musicPages.append([])
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self['pady'] = 10
@@ -87,9 +91,18 @@ class Lower(tk.Frame):
             self.images.append(self.image)
 
         for i, j in enumerate(data):
+            musicPages[Lower.count].append(0)
             self.button = CardButton(self.frame, text=j['text'],
                                      url=self.images[i],
-                                     command=lambda d=j['tracks'], img=self.images[i], txt=j['text']: controller.show_frame_Main(data=d, image=img, text=txt)
+                                     command=lambda d=j['tracks'],
+                                                    img=self.images[i],
+                                                    txt=j['text'],
+                                                    r=Lower.count,
+                                                    c=i:
+                                     controller.show_frame_Main(data=d,
+                                                                image=img,
+                                                                text=txt,
+                                                                r=r, c=c)
                                      )
             self.button.grid(row=0, column=i, padx=(0, 10))
 
@@ -99,6 +112,7 @@ class Lower(tk.Frame):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        Lower.count += 1
 
     def size(self, event):
         global width
@@ -139,7 +153,7 @@ class CardButton(tk.Button):
     def size(self, event):
         global width
         w = width / 5 - 14
-        self.configure(width=int(round(w)), height=int(round(w))+50)
+        self.configure(width=int(round(w)), height=int(round(w)) + 50)
         self.image = self.url
         self.image = self.image.resize((int(round(w)), int(round(w))), Image.ANTIALIAS)
         self.image = ImageTk.PhotoImage(self.image)
