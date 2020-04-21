@@ -54,12 +54,18 @@ class Top(tk.Frame):
         pages.append(frame)
         frame.tkraise()
 
-    def show_frame_Main(self, data, image, text):
-        frame = Main(self.topRight.topRightBottom,
-                     self,
-                     data=data,
-                     image=image,
-                     text=text)
+    def show_frame_Main(self, data, image, r, c, text):
+        from Base.listOfPage import musicPages
+        if musicPages[r][c] == 0:
+            frame = Main(self.topRight.topRightBottom,
+                         self,
+                         data=data,
+                         image=image,
+                         text=text)
+            musicPages[r][c] = frame
+        else:
+            frame = musicPages[r][c]
+
         self.frames[Main] = frame
         frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
@@ -68,4 +74,5 @@ class Top(tk.Frame):
         rightPage.clear()
         resetCount()
         pages.append(frame)
+        frame.update()
         frame.tkraise()

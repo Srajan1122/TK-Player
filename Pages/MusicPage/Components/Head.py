@@ -25,12 +25,12 @@ class Head(tk.Frame):
         self.image_frame.grid_columnconfigure(0, weight=1)
         self.image_frame.grid_rowconfigure(0, weight=1)
 
-        self.image_frame.grid(row=0, column=0, sticky='nsew', padx=(50, 0), pady=30)
+        self.image_frame.grid(row=0, column=0, sticky='nsew', padx=(30, 0), pady=30)
         self.text_frame.grid(row=0, column=1, sticky='nsew', padx=(10, 0), pady=(30, 30))
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1000)
+        self.grid_columnconfigure(1, weight=10000)
 
     def frame_size(self, event):
         pass

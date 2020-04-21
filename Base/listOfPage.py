@@ -1,5 +1,9 @@
 pages = []
 rightPage = []
+current_playing = []
+musicPages = []
+focusCard = []
+musicList = []
 
 c = 1
 
