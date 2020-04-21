@@ -19,6 +19,8 @@ class AuthBase(tk.Tk):
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
+        
+      
 
 #Frame of Base
 class AuthFrame(tk.Frame):
@@ -80,3 +82,12 @@ class AuthFrame(tk.Frame):
         self.master.destroy()
         main = Root(data=user_object)
         main.mainloop()
+
+    def openFrame4(self):
+        framee = self.frames[Frame4]
+        framee.tkraise()
+    def openFrame3(self):
+        framee = self.frames[Frame3]
+        framee.tkraise()
+
+

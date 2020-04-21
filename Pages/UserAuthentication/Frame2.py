@@ -1,9 +1,14 @@
 #-----Signup/Register Page
-
+import traceback
 import tkinter as tk
 from tkinter import ttk
 from tkinter import font
 import re
+from tkinter import messagebox  
+
+from .Frame4 import Frame4
+from .Frame4 import data3
+
 
 # data for registration and passing them
 global data
@@ -302,7 +307,7 @@ class Frame2(tk.Frame):
 
 	#Validation for signup/register
 	def registerNow(self):
-
+		
 		global data
 		username = self.username.get()
 		password = self.password.get()
@@ -320,7 +325,7 @@ class Frame2(tk.Frame):
 		password_placeholder = "  Password"
 		phone_placeholder = "  Contact Number"
 		email_placeholder = "  Email ID"
-
+	
 		if username==username_placeholder or password==password_placeholder or phone==phone_placeholder or email==email_placeholder:
 			self.result['text'] = "Please enter all fields"
 			return
@@ -340,11 +345,21 @@ class Frame2(tk.Frame):
 		if not self.emailCheck(email):
 			self.result['text'] = "Invalid Email ID"
 			return
-
-		# from Database.Database import register_user
-		# register_user(username,email,phone,password)
-		self.result['text'] = "Account created successfully"
-		return self.master.show_frame(Frame1)
+		data3['email'] = email
+		try:
+			self.result['text'] = "Account created successfully"
+			from Database.Database import register_user
+			register_user(username,email,phone,password)
+			
+			from Database.Database import send_email_verification_otp
+			send_email_verification_otp(data3['email'])
+		except Exception as ex:
+			print('Exception Occured which is of type :', ex.__class__.__name__)
+			messagebox.showerror('Error',ex.__class__.__name__)  
+			self.result['text'] = ex.__class__.__name__
+			return
+		
+		return self.master.show_frame(Frame4)
 
 
 

@@ -135,6 +135,8 @@ def register_user(username, email, phone_number, password):
             phone_number='+91' + phone_number,
             password=password,
             display_name=username,
+            email_verified = False,
+
         )
         doc_ref = db.collection(u'users').document(user.uid)
         doc_ref.set({
@@ -142,6 +144,7 @@ def register_user(username, email, phone_number, password):
             'phone_number': '+91' + phone_number,
             'password': password,
             'display_name': username,
+            'email_verified':False
         })
         print('Successfully created new user: {0}'.format(user.uid))
         return user.uid
@@ -441,13 +444,12 @@ def generate_otp(uid):
     # Takes random choices from
     # ascii_letters and digits
     try:
-        generate_pass = ''.join([random.choice(string.ascii_uppercase +
-                                               string.ascii_lowercase +
+        generate_pass = ''.join([random.choice(
                                                string.digits)
                                  for n in range(6)])
 
         doc_ref = db.collection(u'users').document(uid)
-        doc_ref.set({
+        doc_ref.update({
             'verification_code'  : generate_pass
         })
         print(generate_pass)
@@ -460,6 +462,9 @@ def generate_otp(uid):
         return False
 
 
+def check_verification(email):
+    user  = get_user_by_email(email)
+    return user['email_verified']
 
 
 def send_email_verification_otp(email):
@@ -473,16 +478,17 @@ def send_email_verification_otp(email):
     '''
     try:
         from firebase_admin import auth
+        
         import smtplib
         user = auth.get_user_by_email(email)
         otp = generate_otp(user.uid)
         fromaddr = 'amplifyteam1234@gmail.com.'
         toaddrs = email
-        Text = 'Hello '+ user.display_name  +   ' !!, \nThis mail sent by amplify team. \n Your verification code is verification code is '+otp
+        Text = 'Hello '+ user.display_name  +   ' !!, \nThis mail sent by amplify team. \nYour verification code is verification code is '+otp
         subject = 'Email Verification'
         username = 'amplifyteam1234@gmail.com'
         password = '15412342'
-
+        print('i ma in the funtion')
         message = 'Subject: {}\n\n{}'.format(subject, Text)
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.ehlo()
@@ -495,6 +501,22 @@ def send_email_verification_otp(email):
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
             traceback.print_exc()
+        return False
+
+
+
+def verify_email_database(email,entered_otp):
+    from firebase_admin import auth
+    user = auth.get_user_by_email(email)
+    db_user = get_user_by_email(email)
+    if entered_otp == db_user['verification_code']:
+        auth.update_user(user.uid, email_verified = True)
+        doc_ref = db.collection(u'users').document(user.uid)
+        doc_ref.update({
+            'email_verified': True
+        })
+        return True
+    else:
         return False
 
 # send_email_verification_otp('dkhoche2000@gmail.com')

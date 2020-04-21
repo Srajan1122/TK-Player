@@ -1,10 +1,12 @@
 #-----Login Page-----
-
+from .Frame2 import data3
 import tkinter as tk
 from tkinter import ttk
 from tkinter import font
 import re
-
+from Database.Database import check_verification
+# from .Frame2 import data3
+# check_verification('dkhoche70@gmail.com')
 # data2 for checking credentials and passing them
 global data2
 data2 = {
@@ -108,7 +110,7 @@ class Frame3(tk.Frame):
 			command=lambda: self.master.show_frame(Frame1)
 		)
 		self.back.grid(
-			row=5,
+			row=6,
 			column=0,
 			sticky='news',
 			padx=2,
@@ -116,7 +118,8 @@ class Frame3(tk.Frame):
 			ipadx=20,
 			ipady=10
 		)
-
+		
+		
 		#Email entry
 		self.email = UserEntry(
 			self.container,
@@ -226,17 +229,42 @@ class Frame3(tk.Frame):
 		if not self.passwordCheck(password):
 			self.result['text'] = "Password must be atleast 8 characters long"
 			return
-		from Database.Database import sign_in_with_email_and_password
-		print('i am in there')
-		user_object = sign_in_with_email_and_password(email,password)
-		if(user_object):
-			# global state
-			# print(user_object)
-			# state['user_object'] = user_object
-			self.result['text'] = "Please have patience"
-			self.master.login(user_object)
+		
+		data3['email'] = email
+		print(data3['email'])
+		if check_verification(data2['email']):
+			from Database.Database import sign_in_with_email_and_password
+			print('i am in there')
+			user_object = sign_in_with_email_and_password(email,password)
+			if(user_object):
+				# global state
+				# print(user_object)
+				# state['user_object'] = user_object
+				self.result['text'] = "Please have patience"
+				self.master.login(user_object)
 		else:
-			self.result['text'] = "Login Failed"
+			from Database.Database import send_email_verification_otp
+			send_email_verification_otp(data3['email'])
+			self.verify = tk.Button(
+			self.container,
+			border=0,
+			text="You haven't verified your email.\nPlease Verify First.",
+			background='#121212',
+			activebackground='#121212',
+			foreground='white',
+			activeforeground='white',
+			font=self.appHighlightFont,
+			command=lambda: self.master.openFrame4()
+			)
+			self.verify.grid(
+			row=6,
+			column=0,
+			sticky='news',
+			padx=2,
+			pady=5,
+			ipadx=20,
+			ipady=10
+			)
 
 
 

@@ -5,10 +5,11 @@ from tkinter import ttk
 from tkinter import font
 import re
 
+
 # data2 for checking credentials and passing them
 global data3
 data3 = {
-	"email": "",
+	# "email": "",
 	"otp": "",
 }
 
@@ -89,7 +90,7 @@ class Frame4(tk.Frame):
 
 		#For Back buttton
 		from .Frame1 import Frame1
-
+	
 		#Font style, size
 		self.appHighlightFont = font.Font(
 			family='lineto circular',
@@ -107,7 +108,7 @@ class Frame4(tk.Frame):
 			activeforeground='white',
 			font=self.appHighlightFont,
 			command=lambda: self.master.show_frame(Frame1)
-		)
+		) 
 		self.back.grid(
 			row=5,
 			column=0,
@@ -118,50 +119,34 @@ class Frame4(tk.Frame):
 			ipady=10
 		)
 		#Forget password button
-		self.back = tk.Button(
-			self.container,
-			border=0,
-			text='Forget Password',
-			background='#121212',
-			activebackground='#121212',
-			foreground='white',
-			activeforeground='white',
-			font=self.appHighlightFont,
-			#command=lambda: self.master.show_frame(Frame1)
-		)
-		self.back.grid(
-			row=6,
-			column=0,
-			sticky='news',
-			padx=2,
-			pady=5,
-			ipadx=20,
-			ipady=10
-		)
+		# self.back = tk.Button(
+		# 	self.container,
+		# 	border=0,
+		# 	text='Verify',
+		# 	background='#121212',
+		# 	activebackground='#121212',
+		# 	foreground='white',
+		# 	activeforeground='white',
+		# 	font=self.appHighlightFont,
+		# 	#command=lambda: self.master.show_frame(Frame1)
+		# )
+		# self.back.grid(
+		# 	row=6,
+		# 	column=0,
+		# 	sticky='news',
+		# 	padx=2,
+		# 	pady=5,
+		# 	ipadx=20,
+		# 	ipady=10
+		# )
 
-		#Email entry
-		self.email = UserEntry(
-			self.container,
-			placeholder="  Email ID",
-			show=0,
-			textvariable=None,
-			id="email"
-		)
-		self.email.grid(
-			row=1,
-			column=0,
-			sticky=tk.N + tk.S + tk.E + tk.W,
-			padx=2,
-			pady=4,
-			ipadx=20,
-			ipady=10
-		)
+		
 
 		#otp Entry
 		self.otp = UserEntry(
 			self.container,
 			placeholder="  OTP",
-			show=1,
+			show=0,
 			textvariable=None,
 			id="otp"
 		)
@@ -207,10 +192,7 @@ class Frame4(tk.Frame):
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)
 
-	#Validation function for email
-	def emailCheck(self, s):
-		pattern = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
-		return pattern.match(s)
+
 
 	#Validation function for otp
 	def otpCheck(self, s):
@@ -218,47 +200,45 @@ class Frame4(tk.Frame):
 			return True
 		else:
 			return False 
-
+	
 	#Validation for login
 	def verifyNow(self):
 		
 		global data2
 		otp = self.otp.get()
-		email = self.email.get()
-		data3['email'] = email
+		
+		# data3['email'] = email
 		data3['otp'] = otp 
 		print(data3)
 
 		#placeholders
-		email_placeholder = "  Email ID"
+		
 		otp_placeholder = "  OTP"
 
-		if email == email_placeholder or otp == otp_placeholder:
-			self.result['text'] = "Please enter all fields"
-			return
+		# if email == email_placeholder or otp == otp_placeholder:
+		# 	self.result['text'] = "Please enter all fields"
+		# 	return
 
-		if otp.strip(' ') == '' or email.strip(' ') == '':
+		if otp.strip(' ') == '' :
 			self.result['text'] = "Invalid Credentials"
 			return
 
-		if not self.emailCheck(email):
-			self.result['text'] = "Invalid Email"
-			return
+		# if not self.emailCheck(email):
+		# 	self.result['text'] = "Invalid Email"
+		# 	return
 
 		if not self.otpCheck(otp):
 			self.result['text'] = "otp must be atleast 6 characters long"
 			return
-		# from Database.Database import sign_in_with_email_and_password
-		# print('i am in there')
-		# user_object = sign_in_with_email_and_password(email,password)
-		# if(user_object):
-		# 	# global state
-		# 	# print(user_object)
-		# 	# state['user_object'] = user_object
-		# 	self.result['text'] = "Please have patience"
-		# 	self.master.login(user_object)
-		# else:
-		self.result['text'] = "Verification Successful"
+		from Database.Database import verify_email_database
+		if verify_email_database(data3['email'],otp) : 
+			self.master.openFrame3()
+		else:
+			self.result['text'] = "Invalid OTP"
+			return
+ 
+		
+		
 
 
 
