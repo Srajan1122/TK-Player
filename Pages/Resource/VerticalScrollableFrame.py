@@ -3,6 +3,8 @@ from tkinter import ttk
 
 
 class ScrollableFrame(tk.Frame):
+    name = 1
+
     def __init__(self, container, *args, **kwargs):
         tk.Frame.__init__(self, container, *args, **kwargs)
 
@@ -11,24 +13,25 @@ class ScrollableFrame(tk.Frame):
                                 highlightthickness=0,
                                 bg='#181818')
         # -----------------------------------------------------------------------------
+        name_of_style = 'My'+str(ScrollableFrame.name)+'.Vertical.Scrollbar'
         self.style = ttk.Style()
 
-        self.style.element_create("My.Vertical.Scrollbar.trough", "from", "default")
-        self.style.element_create("My.Vertical.Scrollbar.uparrow", "from", "default")
-        self.style.element_create("My.Vertical.Scrollbar.downarrow", "from", "default")
-        self.style.element_create("My.Vertical.Scrollbar.thumb", "from", "default")
-        self.style.element_create("My.Vertical.Scrollbar.grip", "from", "default")
+        self.style.element_create(name_of_style+".trough", "from", "default")
+        self.style.element_create(name_of_style+".uparrow", "from", "default")
+        self.style.element_create(name_of_style+".downarrow", "from", "default")
+        self.style.element_create(name_of_style+".thumb", "from", "default")
+        self.style.element_create(name_of_style+".grip", "from", "default")
 
         self.style.layout("My.Vertical.TScrollbar",
-                          [('My.Vertical.Scrollbar.trough', {'children': [
-                              ('My.Vertical.Scrollbar.uparrow',
+                          [(name_of_style+'.trough', {'children': [
+                              (name_of_style+'.uparrow',
                                {'side': 'top', 'sticky': ''}),
-                              ('My.Vertical.Scrollbar.downarrow',
+                              (name_of_style+'.downarrow',
                                {'side': 'bottom', 'sticky': ''}),
-                              ('My.Vertical.Scrollbar.thumb',
+                              (name_of_style+'.thumb',
                                {
                                    'unit': '1',
-                                   'children': [('My.Vertical.Scrollbar.grip',
+                                   'children': [(name_of_style+'.grip',
                                                  {'sticky': ''})],
                                    'sticky': 'nswe'
                                })], 'sticky': 'ns', })])
@@ -54,6 +57,7 @@ class ScrollableFrame(tk.Frame):
                                        command=self.canvas.yview,
                                        style='My.Vertical.TScrollbar'
                                        )
+        ScrollableFrame.name += 1
         # ---------------------------------------------------------------------------
         self.scrollable_frame = tk.Frame(self.canvas, bg='#181818')
 

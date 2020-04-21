@@ -15,5 +15,5 @@ class TopRight(tk.Frame):
         self.topRightBottom.grid(row=1, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
         self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=15)
+        self.grid_rowconfigure(1, weight=40)
         self.grid_columnconfigure(0, weight=1)

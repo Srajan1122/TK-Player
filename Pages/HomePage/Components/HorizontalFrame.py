@@ -2,6 +2,8 @@ import tkinter as tk
 import pyglet
 import tkinter.font as tkfont
 from Pages.Resource.HorizontalScrollableFrame import HorizontalScrollableFrame
+from skimage import io
+from PIL import ImageTk, Image
 
 
 def wid():
@@ -68,23 +70,39 @@ class Upper(tk.Frame):
 
 
 class Lower(tk.Frame):
+    count = 0
+
     def __init__(self, master, controller, data, *args, **kwargs):
+        from Base.listOfPage import musicPages
+        musicPages.append([])
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self['pady'] = 10
         self.bind('<Configure>', self.size)
-        self.Ed_sheeran = tk.PhotoImage(file='images/Ed_sheeran.png')
 
         self.scrollable = HorizontalScrollableFrame(self)
         self.frame = tk.Frame(self.scrollable.scrollable_frame, bg='#181818')
-        self.name = [x for x in range(len(data))]
-        self.value = [x for x in range(len(data))]
+
+        self.images = []
+
+        for i in data:
+            self.image = io.imread(i['url'])
+            self.image = Image.fromarray(self.image)
+            self.images.append(self.image)
 
         for i, j in enumerate(data):
+            musicPages[Lower.count].append(0)
             self.button = CardButton(self.frame, text=j['text'],
-                                     image=self.Ed_sheeran,
-                                     url=j['url'],
-                                     command=lambda d=self.value[i]: controller.show_frame_Main(data=d)
+                                     url=self.images[i],
+                                     command=lambda d=j['tracks'],
+                                                    img=self.images[i],
+                                                    txt=j['text'],
+                                                    r=Lower.count,
+                                                    c=i:
+                                     controller.show_frame_Main(data=d,
+                                                                image=img,
+                                                                text=txt,
+                                                                r=r, c=c)
                                      )
             self.button.grid(row=0, column=i, padx=(0, 10))
 
@@ -94,6 +112,7 @@ class Lower(tk.Frame):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        Lower.count += 1
 
     def size(self, event):
         global width
@@ -122,7 +141,6 @@ class CardButton(tk.Button):
 
         pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
         play = tkfont.Font(family="Play", size=15, weight="bold")
-        # print(width)
         self['background'] = '#181818'
         self['height'] = 300
         self['border'] = 0
@@ -135,11 +153,8 @@ class CardButton(tk.Button):
     def size(self, event):
         global width
         w = width / 5 - 14
-        self.configure(width=w)
-        # print(self.url)
-
-    # image = io.imread(url)
-    # image = cv2.resize(image, (w,250), interpolation = cv2.INTER_AREA)
-    # image = Image.fromarray(image)
-    # image = ImageTk.PhotoImage(image)
-    # self.configure(image = image)
+        self.configure(width=int(round(w)), height=int(round(w)) + 50)
+        self.image = self.url
+        self.image = self.image.resize((int(round(w)), int(round(w))), Image.ANTIALIAS)
+        self.image = ImageTk.PhotoImage(self.image)
+        self.config(image=self.image)

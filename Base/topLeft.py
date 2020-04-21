@@ -1,9 +1,12 @@
 import tkinter as tk
+
+
 from Pages.HomePage.Home import Home
 from Pages.Browse.browse import Browse
 from tkinter import font
 from PIL import ImageTk, Image
 from tkinter.ttk import *
+
 
 
 class IconButton(tk.Button):
@@ -113,6 +116,8 @@ class TopLeft(tk.Frame):
 
         #frame5
 
+        self.logout = tk.Button(self.frame5,text = 'logout',command = self.logout)
+
         #grid - components
         self.menu2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
         self.home.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -124,7 +129,7 @@ class TopLeft(tk.Frame):
         self.albums.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.artists.grid(row=5, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-
+        self.logout.grid(row = 0, column = 0,sticky=tk.N + tk.S + tk.E + tk.W)
         #grid - frames
         self.frame1.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.frame2.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -140,4 +145,12 @@ class TopLeft(tk.Frame):
         self.grid_rowconfigure(3, weight=2)
         self.grid_rowconfigure(4, weight=10)
 
-
+    def logout(self):
+        import os
+        from Database.Database import sign_out
+        from Pages.UserAuthentication.AuthBase import AuthBase
+        sign_out()
+        print(os.getcwd())
+        self.master.master.master.destroy()
+        login = AuthBase()
+        login.mainloop()

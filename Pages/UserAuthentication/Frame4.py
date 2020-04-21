@@ -1,24 +1,23 @@
-#-----Login Page-----
-from .Frame2 import data3
+#-----Email Verification Page-----
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import font
 import re
-from Database.Database import check_verification
-# from .Frame2 import data3
-# check_verification('dkhoche70@gmail.com')
+
 # data2 for checking credentials and passing them
-global data2
-data2 = {
-	"email": "",
-	"password": "",
+global data3
+data3 = {
+	# "email": "",
+	"otp": "",
 }
 
 #passing user credentials to Homepage
-global state
-state = {
+global state2
+state2 = {
 	'user_object': None
 }
+
 
 #Class for Entry widget
 class UserEntry(tk.Entry):
@@ -75,22 +74,22 @@ class UserEntry(tk.Entry):
 		self.bind("<FocusIn>", lambda e: foc_in(e))
 		self.bind("<FocusOut>", lambda e: foc_out(e))
 
-#Frame of Login Page
-class Frame3(tk.Frame):
+#Frame of Email Verification Page
+class Frame4(tk.Frame):
 	def __init__(self, master, *args, **kwargs):
 		tk.Frame.__init__(self, master, *args, **kwargs)
 
 		#Frame
 		self.container = tk.Frame(self, bg='#121212', padx=80, pady=80)
 
-		#Login head
+		#Email Verification head
 		self.logo = tk.PhotoImage(file=r'images\login_head2.png', height=150, width=360)
 		self.labelLogo = tk.Label(self.container, image=self.logo, bd=0)
 		self.labelLogo.grid(row=0, column=0, pady=25)
 
 		#For Back buttton
 		from .Frame1 import Frame1
-
+	
 		#Font style, size
 		self.appHighlightFont = font.Font(
 			family='lineto circular',
@@ -108,9 +107,9 @@ class Frame3(tk.Frame):
 			activeforeground='white',
 			font=self.appHighlightFont,
 			command=lambda: self.master.show_frame(Frame1)
-		)
+		) 
 		self.back.grid(
-			row=6,
+			row=5,
 			column=0,
 			sticky='news',
 			padx=2,
@@ -118,35 +117,39 @@ class Frame3(tk.Frame):
 			ipadx=20,
 			ipady=10
 		)
+		#Forget password button
+		# self.back = tk.Button(
+		# 	self.container,
+		# 	border=0,
+		# 	text='Verify',
+		# 	background='#121212',
+		# 	activebackground='#121212',
+		# 	foreground='white',
+		# 	activeforeground='white',
+		# 	font=self.appHighlightFont,
+		# 	#command=lambda: self.master.show_frame(Frame1)
+		# )
+		# self.back.grid(
+		# 	row=6,
+		# 	column=0,
+		# 	sticky='news',
+		# 	padx=2,
+		# 	pady=5,
+		# 	ipadx=20,
+		# 	ipady=10
+		# )
+
 		
-		
-		#Email entry
-		self.email = UserEntry(
+
+		#otp Entry
+		self.otp = UserEntry(
 			self.container,
-			placeholder="  Email ID",
+			placeholder="  OTP",
 			show=0,
 			textvariable=None,
-			id="email"
+			id="otp"
 		)
-		self.email.grid(
-			row=1,
-			column=0,
-			sticky=tk.N + tk.S + tk.E + tk.W,
-			padx=2,
-			pady=4,
-			ipadx=20,
-			ipady=10
-		)
-
-		#Password Entry
-		self.password = UserEntry(
-			self.container,
-			placeholder="  Password",
-			show=1,
-			textvariable=None,
-			id="password"
-		)
-		self.password.grid(
+		self.otp.grid(
 			row=2,
 			column=0,
 			sticky=tk.N + tk.S + tk.E + tk.W,
@@ -168,19 +171,19 @@ class Frame3(tk.Frame):
 		)
 		self.result.grid(row=3, column=0)
 
-		#Login Button
-		self.btnimg = tk.PhotoImage(file=r'images\login.png')
+		#Verify Button
+		self.btnimg = tk.PhotoImage(file=r'images\verify.png')
 
-		self.login = tk.Button(
+		self.Verify = tk.Button(
 			self.container,
 			border=0,
 			background='#121212',
 			activebackground='#121212',
 			image=self.btnimg,
 			# command=self.master.login
-			command=self.loginNow
+			command=self.verifyNow
 		)
-		self.login.grid(row=4, column=0, pady=10)
+		self.Verify.grid(row=4, column=0, pady=10)
 
 		#Frame grid and configurations
 		self.container.grid(row=0, column=0)
@@ -188,86 +191,85 @@ class Frame3(tk.Frame):
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)
 
-	#Validation function for email
-	def emailCheck(self, s):
-		pattern = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
-		return pattern.match(s)
+		self.appHighlightFont = font.Font( 
+			family='lineto circular',
+			size=14
+		)
 
-	#Validation function for password
-	def passwordCheck(self, s):
-		if len(s) in range(8, 20):
-			return True
-		return False
-
-	#Validation for login
-	def loginNow(self):
-		
-		global data2
-		password = self.password.get()
-		email = self.email.get()
-		data2['email'] = email
-		data2['password'] = password 
-		print(email)
-		print(password)
-
-		#placeholders
-		email_placeholder = "  Email ID"
-		password_placeholder = "  Password"
-
-		if email == email_placeholder or password == password_placeholder:
-			self.result['text'] = "Please enter all fields"
-			return
-
-		if password.strip(' ') == '' or email.strip(' ') == '':
-			self.result['text'] = "Invalid Credentials"
-			return
-
-		if not self.emailCheck(email):
-			self.result['text'] = "Invalid Email"
-			return
-
-		if not self.passwordCheck(password):
-			self.result['text'] = "Password must be atleast 8 characters long"
-			return
-		self.verify = tk.Button(
+		#resend button
+		self.resend = tk.Button(
 			self.container,
 			border=0,
-			text="",
+			text="Resend OTP",
 			background='#121212',
 			activebackground='#121212',
 			foreground='white',
 			activeforeground='white',
 			font=self.appHighlightFont,
-			command=lambda: self.master.openFrame4()
-			)
-		self.verify.grid(
-			row=6,
+			command=self.resend_OTP
+		) 
+		self.resend.grid(
+			row=5,
 			column=0,
 			sticky='news',
 			padx=2,
 			pady=5,
 			ipadx=20,
 			ipady=10
-			)
+		)
 
+	#Resend OTP
+	def resend_OTP(self):
+		from Database.Database import send_email_verification_otp
+		send_email_verification_otp(data3['email'])
 
-
-		data3['email'] = email
-		print(data3['email'])
-		if check_verification(data3['email']):
-			from Database.Database import sign_in_with_email_and_password
-			print('i am in there')
-			user_object = sign_in_with_email_and_password(email,password)
-			if(user_object):
-				# global state
-				# print(user_object)
-				# state['user_object'] = user_object
-				self.result['text'] = "Please have patience"
-				self.master.login(user_object)
+	#Validation function for otp
+	def otpCheck(self, s):
+		if len(s)==6 :
+			return True
 		else:
-			from Database.Database import send_email_verification_otp
-			send_email_verification_otp(data3['email'])
-			self.verify['text'] = "You haven't verified your email.\nPlease Verify First."
-			
+			return False 
+	
+	#Validation for login
+	def verifyNow(self):
+		
+		global data2
+		otp = self.otp.get()
+		
+		# data3['email'] = email
+		data3['otp'] = otp 
+		print(data3)
 
+		#placeholders
+		
+		otp_placeholder = "  OTP"
+
+		# if email == email_placeholder or otp == otp_placeholder:
+		# 	self.result['text'] = "Please enter all fields"
+		# 	return
+
+		if otp.strip(' ') == '' :
+			self.result['text'] = "Invalid Credentials"
+			return
+
+		# if not self.emailCheck(email):
+		# 	self.result['text'] = "Invalid Email"
+		# 	return
+
+		if not self.otpCheck(otp):
+			self.result['text'] = "otp must be atleast 6 characters long"
+			return
+		from Database.Database import verify_email_database
+		if verify_email_database(data3['email'],otp) : 
+			
+			self.master.openFrame3()
+		else:
+			self.result['text'] = "Invalid OTP"
+			return
  
+		
+		
+
+
+
+
