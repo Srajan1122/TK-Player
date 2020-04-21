@@ -254,7 +254,7 @@ class Frame3(tk.Frame):
 
 		data3['email'] = email
 		print(data3['email'])
-		if check_verification(data2['email']):
+		if check_verification(data3['email']):
 			from Database.Database import sign_in_with_email_and_password
 			print('i am in there')
 			user_object = sign_in_with_email_and_password(email,password)
