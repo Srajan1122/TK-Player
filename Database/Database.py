@@ -1,6 +1,7 @@
 from Database.config import *
 import traceback
-
+import tkinter as tk
+from tkinter import messagebox
 
 def set_artist(track_title, track_genre, track_location, track_artist):
     """
@@ -26,6 +27,8 @@ def set_artist(track_title, track_genre, track_location, track_artist):
         print('artist added')
         return True
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -44,6 +47,8 @@ def Check_artist(artist):
         print('Artist got successfully')
         return True
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -64,6 +69,8 @@ def get_artist_tracks(artist):
         tracks = list(map(lambda x: x.to_dict(), list(doc_ref.stream())))
         return tracks
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -92,6 +99,8 @@ def set_track(track_title, track_genre, track_location, track_artist):
         set_genre(track_genre)
         return True
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -112,6 +121,8 @@ def get_track(trackName):
             raise Exception("No such track found")
         return doc_ref.get().to_dict()
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -148,7 +159,21 @@ def register_user(username, email, phone_number, password):
         })
         print('Successfully created new user: {0}'.format(user.uid))
         return user.uid
+    except firebase_admin._auth_utils.EmailAlreadyExistsError as ex:
+        from Pages.UserAuthentication.Exceptions import Email_already_exists
+        Email_already_exists()
+        return False
+    except firebase_admin._auth_utils.PhoneNumberAlreadyExistsError as ex:
+        from Pages.UserAuthentication.Exceptions import Phone_already_exists
+        Phone_already_exists()
+        return False
+    except firebase_admin._auth_utils.UserNotFoundError as ex:
+        from Pages.UserAuthentication.Exceptions import User_not_Found
+        User_not_Found()
+        return False
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -173,6 +198,8 @@ def set_album(track_title, album_name, artist):
         print('Album Created Successfully')
         return True
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occured which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -196,6 +223,8 @@ def get_album(**kwargs):
                 tracks = list(map(lambda x: x.to_dict(), snapshots))
                 return tracks
         except Exception as ex:
+            messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+            
             print('Exception Occured which is of type :', ex.__class__.__name__)
             y = input('If you want to see Traceback press 1 : ')
             if y == '1':
@@ -212,6 +241,8 @@ def get_album(**kwargs):
             else:
                 raise Exception('No data with the give artist found')
         except Exception as ex:
+            messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+            
             print('Exception Occurred which is of type :', ex.__class__.__name__)
             y = input('If you want to see Traceback press 1 : ')
             if y == '1':
@@ -222,6 +253,8 @@ def get_album(**kwargs):
             collection = db.collection(u'albums')
             print(list(map(lambda x: x.to_dict(), collection.stream())))
         except Exception as ex:
+            messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+            
             print('Exception Occurred which is of type :', ex.__class__.__name__)
             y = input('If you want to see Traceback press 1 : ')
             if y == '1':
@@ -238,6 +271,8 @@ def get_all_tracks():
         collection = db.collection(u'Tracks')
         return list(map(lambda x: x.to_dict(), collection.stream()))
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -264,6 +299,8 @@ def set_genre(genre):
         })
         return True
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -285,6 +322,7 @@ def get_tracks_by_genre(**kwargs):
                 # print(object_list)
                 return object_list
         except Exception as ex:
+            messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
             print('Exception Occurred which is of type :', ex.__class__.__name__)
             y = input('If you want to see Traceback press 1 : ')
             if y == '1':
@@ -305,6 +343,8 @@ def get_tracks_by_genre(**kwargs):
             # print(all_dicts)
             return all_dicts
         except Exception as ex:
+            messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+            
             print('Exception Occurred which is of type :', ex.__class__.__name__)
             y = input('If you want to see Traceback press 1 : ')
             if y == '1':
@@ -326,7 +366,13 @@ def get_user(uid):
         doc = db.collection(u'users').document(user.uid)
         doc = doc.get().to_dict()
         return doc
+    except firebase_admin._auth_utils.UserNotFoundError as ex:
+        from Pages.UserAuthentication.Exceptions import User_not_Found
+        User_not_Found()
+        return False
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -343,20 +389,26 @@ def get_user_by_email(email):
     display_name , email , password, phone_number
     """
     # [START get_user_by_email]
-    from firebase_admin import auth
+    import firebase_admin
+    from firebase_admin import auth 
     try:
 
         user = auth.get_user_by_email(email)
         doc = db.collection(u'users').document(user.uid)
         doc = doc.get().to_dict()
         return doc
+    except firebase_admin._auth_utils.UserNotFoundError as ex:
+        from Pages.UserAuthentication.Exceptions import User_not_Found
+        User_not_Found()
+        return False
     except Exception as ex:
-        print('Exception Occured which is of type :', ex.__class__.__name__)
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
             traceback.print_exc()
         return False
-        # [END get_user_by_email]
 
 
 def get_user_by_phone_number(phone):
@@ -372,8 +424,15 @@ def get_user_by_phone_number(phone):
         doc = db.collection(u'users').document(user.uid)
         doc = doc.get().to_dict()
         return doc
+    
+    except firebase_admin._auth_utils.UserNotFoundError as ex:
+        from Pages.UserAuthentication.Exceptions import User_not_Found
+        User_not_Found()
+        return False
     except Exception as ex:
-        print('Exception occured which is of type :', ex.__class__.__name__)
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
             traceback.print_exc()
@@ -409,8 +468,14 @@ def sign_in_with_email_and_password(email, password):
         else:
             raise Exception('Credentials invalid')
             # return False
+    except firebase_admin._auth_utils.UserNotFoundError as ex:
+        from Pages.UserAuthentication.Exceptions import User_not_Found
+        User_not_Found()
+        return False
     except Exception as ex:
-        print('Exception Occured which is of type :', ex.__class__.__name__)
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
             traceback.print_exc()
@@ -429,6 +494,8 @@ def sign_out():
     try:
         os.remove("user")
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occured which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -454,8 +521,14 @@ def generate_otp(uid):
         })
         print(generate_pass)
         return generate_pass
+    except firebase_admin._auth_utils.UserNotFoundError as ex:
+        from Pages.UserAuthentication.Exceptions import User_not_Found
+        User_not_Found()
+        return False
     except Exception as ex:
-        print('Exception Occured which is of type :', ex.__class__.__name__)
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
             traceback.print_exc()
@@ -496,8 +569,14 @@ def send_email_verification_otp(email):
         server.login(username, password)
         server.sendmail(fromaddr, toaddrs, message)
         server.quit()
+    except firebase_admin._auth_utils.UserNotFoundError as ex:
+        from Pages.UserAuthentication.Exceptions import User_not_Found
+        User_not_Found()
+        return False
     except Exception as ex:
-        print('Exception Occured which is of type :', ex.__class__.__name__)
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
             traceback.print_exc()
@@ -506,6 +585,11 @@ def send_email_verification_otp(email):
 
 
 def verify_email_database(email,entered_otp):
+    '''
+    Verifies if the OTP is correct 
+    Returns bool depending on Success
+    '''
+    
     from firebase_admin import auth
     user = auth.get_user_by_email(email)
     db_user = get_user_by_email(email)
@@ -536,6 +620,8 @@ def user_create_playlist(uid,playlist_name):
         print('playlist created successfully')
         return True
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occured which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -557,6 +643,8 @@ def add_song_to_playlist(uid,playlist_name,track_name):
         collection.set(track_object)
         return True
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occured which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':
@@ -587,6 +675,8 @@ def get_playlists(uid,**kwargs):
             object_list = list(map(lambda x: x.to_dict(), doc_ref))
             return object_list
     except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
         print('Exception Occured which is of type :', ex.__class__.__name__)
         y = input('If you want to see Traceback press 1 : ')
         if y == '1':

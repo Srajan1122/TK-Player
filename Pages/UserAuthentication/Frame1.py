@@ -46,16 +46,16 @@ class Frame1(tk.Frame):
 			family='lineto circular',
 			size=14
 		)
-		self.verify = tk.Button(
+		self.verify = tk.Label(
 			self.container,
 			border=0,
-			text="Haven't verified your email?? \n Verify here!!",
+			text="Amplify team Welcomes you!",
 			background='#121212',
-			activebackground='#121212',
+			# activebackground='#121212',
 			foreground='white',
-			activeforeground='white',
+			# activeforeground='white',
 			font=self.appHighlightFont,
-			command=lambda: self.master.show_frame(Frame4)
+			
 		)
 		self.verify.grid(
 			row=6,

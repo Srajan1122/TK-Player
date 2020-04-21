@@ -5,7 +5,6 @@ from tkinter import ttk
 from tkinter import font
 import re
 
-
 # data2 for checking credentials and passing them
 global data3
 data3 = {
@@ -172,10 +171,10 @@ class Frame4(tk.Frame):
 		)
 		self.result.grid(row=3, column=0)
 
-		#Login Button
-		self.btnimg = tk.PhotoImage(file=r'images\login.png')
+		#Verify Button
+		self.btnimg = tk.PhotoImage(file=r'images\verify.png')
 
-		self.login = tk.Button(
+		self.Verify = tk.Button(
 			self.container,
 			border=0,
 			background='#121212',
@@ -184,7 +183,7 @@ class Frame4(tk.Frame):
 			# command=self.master.login
 			command=self.verifyNow
 		)
-		self.login.grid(row=4, column=0, pady=10)
+		self.Verify.grid(row=4, column=0, pady=10)
 
 		#Frame grid and configurations
 		self.container.grid(row=0, column=0)
@@ -192,7 +191,37 @@ class Frame4(tk.Frame):
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)
 
+		self.appHighlightFont = font.Font( 
+			family='lineto circular',
+			size=14
+		)
 
+		#resend button
+		self.resend = tk.Button(
+			self.container,
+			border=0,
+			text="Resend OTP",
+			background='#121212',
+			activebackground='#121212',
+			foreground='white',
+			activeforeground='white',
+			font=self.appHighlightFont,
+			command=self.resend_OTP
+		) 
+		self.resend.grid(
+			row=5,
+			column=0,
+			sticky='news',
+			padx=2,
+			pady=5,
+			ipadx=20,
+			ipady=10
+		)
+
+	#Resend OTP
+	def resend_OTP(self):
+		from Database.Database import send_email_verification_otp
+		send_email_verification_otp(data3['email'])
 
 	#Validation function for otp
 	def otpCheck(self, s):
@@ -232,6 +261,7 @@ class Frame4(tk.Frame):
 			return
 		from Database.Database import verify_email_database
 		if verify_email_database(data3['email'],otp) : 
+			
 			self.master.openFrame3()
 		else:
 			self.result['text'] = "Invalid OTP"

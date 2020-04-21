@@ -346,21 +346,25 @@ class Frame2(tk.Frame):
 			self.result['text'] = "Invalid Email ID"
 			return
 		data3['email'] = email
-		try:
-			self.result['text'] = "Account created successfully"
-			from Database.Database import register_user
-			register_user(username,email,phone,password)
+		
 			
+		from Database.Database import register_user
+		
+		if (register_user(username,email,phone,password)):
+			self.result['text'] = "Account created successfully"
 			from Database.Database import send_email_verification_otp
 			send_email_verification_otp(data3['email'])
-		except Exception as ex:
-			print('Exception Occured which is of type :', ex.__class__.__name__)
-			messagebox.showerror('Error',ex.__class__.__name__)  
-			self.result['text'] = ex.__class__.__name__
-			return
-		
-		return self.master.show_frame(Frame4)
+			return self.master.show_frame(Frame4)
+		else:
+			self.result['text'] = "Please try again."
+			
 
+
+		
+		
+		
+		
+		
 
 
 

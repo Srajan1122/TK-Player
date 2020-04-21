@@ -229,7 +229,29 @@ class Frame3(tk.Frame):
 		if not self.passwordCheck(password):
 			self.result['text'] = "Password must be atleast 8 characters long"
 			return
-		
+		self.verify = tk.Button(
+			self.container,
+			border=0,
+			text="",
+			background='#121212',
+			activebackground='#121212',
+			foreground='white',
+			activeforeground='white',
+			font=self.appHighlightFont,
+			command=lambda: self.master.openFrame4()
+			)
+		self.verify.grid(
+			row=6,
+			column=0,
+			sticky='news',
+			padx=2,
+			pady=5,
+			ipadx=20,
+			ipady=10
+			)
+
+
+
 		data3['email'] = email
 		print(data3['email'])
 		if check_verification(data2['email']):
@@ -245,27 +267,7 @@ class Frame3(tk.Frame):
 		else:
 			from Database.Database import send_email_verification_otp
 			send_email_verification_otp(data3['email'])
-			self.verify = tk.Button(
-			self.container,
-			border=0,
-			text="You haven't verified your email.\nPlease Verify First.",
-			background='#121212',
-			activebackground='#121212',
-			foreground='white',
-			activeforeground='white',
-			font=self.appHighlightFont,
-			command=lambda: self.master.openFrame4()
-			)
-			self.verify.grid(
-			row=6,
-			column=0,
-			sticky='news',
-			padx=2,
-			pady=5,
-			ipadx=20,
-			ipady=10
-			)
+			self.verify['text'] = "You haven't verified your email.\nPlease Verify First."
+			
 
-
-
-
+ 
