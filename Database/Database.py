@@ -557,12 +557,13 @@ def send_email_verification_otp(email):
         otp = generate_otp(user.uid)
         fromaddr = 'amplifyteam1234@gmail.com.'
         toaddrs = email
-        Text = 'Hello '+ user.display_name  +   ' !!, \nThis mail sent by amplify team. \nYour verification code is verification code is '+otp
+        Text = 'Hello '+ user.display_name  + ',\nEnter the following OTP to verify your email address. \nYour verification code is verification code is '+otp+'\nIf you didn’t ask to verify this address, you can ignore this email.\nThanks,\nYour AmplifyTeam'
         subject = 'Email Verification'
         username = 'amplifyteam1234@gmail.com'
         password = '15412342'
         print('i ma in the funtion')
         message = 'Subject: {}\n\n{}'.format(subject, Text)
+        message = message.encode()
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.ehlo()
         server.starttls()
