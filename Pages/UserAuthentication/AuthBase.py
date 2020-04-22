@@ -60,8 +60,10 @@ class AuthFrame(tk.Frame):
 
     #Function for displaying frames
     def show_frame(self, context):
-        framee = self.frames[context]
-        framee.tkraise()
+        frame  = context(self)
+        frame.grid(row=0, column=0)
+        # framee = self.frames[context]
+        frame.tkraise()
 
     #Function for entering Homepage
     def login(self,user_object):
