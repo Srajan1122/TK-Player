@@ -8,12 +8,8 @@ from mutagen.mp3 import MP3
 from mutagen import MutagenError
 
 
-class Track(tk.Frame):
+class Track:
     def __init__(self, master, trackName, trackUrl, *args, **kwargs):
-        super().__init__(master)
-        self.pack()
-        self['background'] = '#000000'
-        self['padx'] = 25
 
         self.master = master
         self.track = None
@@ -36,7 +32,6 @@ class Track(tk.Frame):
         self.track = self.byteAudio
         self.load_music()
         self.get_duration(self.byteAudio2)
-        # self.make_ui()
 
     def get_audio_from_url(self, trackUrl):
         req = urllib.request.Request(trackUrl)
@@ -53,7 +48,6 @@ class Track(tk.Frame):
         song = MP3(byteAudio)
         duration = song.info.length
         self.songDuration = duration
-        print(duration)
 
     def load_music(self):
         player = mixer
@@ -104,7 +98,7 @@ class Track(tk.Frame):
         # currentTime = self.sliderValue.get()
         currentTime = 0
         self.player.music.play(start=currentTime)
-        self.TrackPlay(currentTime)
+        # self.TrackPlay(currentTime)
 
     def TrackPlay(self, currentTime):
         if self.player.music.get_busy():

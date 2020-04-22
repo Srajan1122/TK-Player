@@ -55,10 +55,9 @@ class PlayButton(tk.Button):
             self.playing = False
             self.master.master.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
             self.master.master.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
-            self.play_music.Stop()
+            self.master.master.play_music.Stop()
         else:
             self.playing = True
             self.master.master.double_click(event='')
             self['image'] = self.play_icon
-            self.play_music = Track(self, trackName=title, trackUrl=url)
-            self.play_music.Play()
+

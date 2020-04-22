@@ -179,7 +179,10 @@ class PlayHeadIcon(tk.Button):
         if self.isPlaying:
             self.config(image=self.play)
             if len(current_playing) != 0:
-                current_playing[0].play_button.click()
+                from Base.listOfPage import currentTrack
+                url = currentTrack[0]['url']
+                title = currentTrack[0]['title']
+                current_playing[0].play_button.click(title=title, url=url)
         else:
             from Base.listOfPage import focusCard
             if len(focusCard) != 0:
@@ -190,7 +193,10 @@ class PlayHeadIcon(tk.Button):
             self.config(image=self.pause)
             if len(current_playing) != 0:
                 if current_playing[0].master.master.master.master.master == self.master.master.master.master:
-                    current_playing[0].play_button.click()
+                    from Base.listOfPage import currentTrack
+                    url = currentTrack[0]['url']
+                    title = currentTrack[0]['title']
+                    current_playing[0].play_button.click(title=title, url=url)
                 else:
                     for i in musicList:
                         for k, v in i.items():
