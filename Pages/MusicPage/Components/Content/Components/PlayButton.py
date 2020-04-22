@@ -1,9 +1,10 @@
 import tkinter as tk
 from PIL import ImageTk, Image
+from Music.track import Track
 
 
 class PlayButton(tk.Button):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, title, url, *args, **kwargs):
         tk.Button.__init__(self, master, *args, **kwargs)
 
         self.playing = False
@@ -20,7 +21,7 @@ class PlayButton(tk.Button):
         self['image'] = self.music_icon
         self['height'] = 23
         self['width'] = 23
-        self['command'] = lambda: self.click()
+        self['command'] = lambda: self.click(title, url)
 
         self.bind('<Button-1>', self.master.master.click)
         self.bind('<Enter>', self.enter)
@@ -48,13 +49,16 @@ class PlayButton(tk.Button):
                 if current_playing[0] == self.master.master:
                     self['image'] = self.green_music_icon
 
-    def click(self):
+    def click(self, title, url):
         if self.playing:
             self['image'] = self.pause_icon
             self.playing = False
             self.master.master.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
             self.master.master.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+            self.play_music.Stop()
         else:
             self.playing = True
             self.master.master.double_click(event='')
             self['image'] = self.play_icon
+            self.play_music = Track(self, trackName=title, trackUrl=url)
+            self.play_music.Play()

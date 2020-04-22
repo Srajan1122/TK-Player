@@ -32,7 +32,9 @@ class MusicFrame(tk.Frame):
         self.albumFrame.grid(row=0, column=3, sticky='nsew')
         self.menuFrame.grid(row=0, column=4, sticky='nsew')
 
-        self.play_button = PlayButton(self.iconFrame)
+        self.play_button = PlayButton(self.iconFrame,
+                                      title=self.title,
+                                      url=self.url)
         self.like_button = LikeButton(self.iconFrame)
 
         self.play_button.grid(row=0, column=0, sticky='nsew')
@@ -137,6 +139,7 @@ class MusicFrame(tk.Frame):
 
         if len(current_playing) == 0:
             current_playing.append(self)
+
         self.fg_config(self, fg='#1DB954')
         self.play_button.config(image=self.volume_icon)
         self.play_button.playing = True

@@ -5,7 +5,7 @@ import tkinter.font as tkfont
 
 
 class TextFrame(tk.Frame):
-    def __init__(self, master, text, *args, **kwargs):
+    def __init__(self, master, text, data, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#000000'
 
@@ -56,7 +56,7 @@ class TextFrame(tk.Frame):
                                      )
         self.button_region = tk.Frame(self, bg='#000000', height=38)
 
-        self.play_button = PlayHeadIcon(self.button_region)
+        self.play_button = PlayHeadIcon(self.button_region, data=data,)
 
         self.like_button = HeadIcon(self.button_region,
                                     image=self.button_heart,
@@ -122,10 +122,11 @@ class HeadIcon(tk.Button):
 
 
 class PlayHeadIcon(tk.Button):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, data, *args, **kwargs):
         tk.Button.__init__(self, master, *args, **kwargs)
 
         self.isPlaying = False
+        self.data = data
 
         self.play_raw = Image.open('images/play.png')
         self.play = self.play_raw.resize((100, 35), Image.ANTIALIAS)
@@ -194,9 +195,9 @@ class PlayHeadIcon(tk.Button):
                     for i in musicList:
                         for k, v in i.items():
                             if k == self.master.master.master.master:
-                                v[0].play_button.click()
+                                v[0].play_button.click(self.data[0]['title'], self.data[0]['location'])
             elif len(current_playing) == 0:
                 for i in musicList:
                     for k, v in i.items():
                         if k == self.master.master.master.master:
-                            v[0].play_button.click()
+                            v[0].play_button.click(self.data[0]['title'], self.data[0]['location'])

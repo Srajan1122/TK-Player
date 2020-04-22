@@ -4,7 +4,7 @@ from Pages.MusicPage.Components.TextFrame import TextFrame
 
 
 class Head(tk.Frame):
-    def __init__(self, master, image, text, *args, **kwargs):
+    def __init__(self, master, image, text, data, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, *kwargs)
         self['background'] = 'black'
         self.photo = image
@@ -13,7 +13,7 @@ class Head(tk.Frame):
         self.image_frame = tk.Frame(self, bg='#000000')
         self.image_frame.bind('<Configure>', self.frame_size)
 
-        self.text_frame = TextFrame(self, text)
+        self.text_frame = TextFrame(self, text, data)
 
         self.image_label = tk.Canvas(self.image_frame,
                                      bd=0,

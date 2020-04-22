@@ -12,6 +12,7 @@ class Content(tk.Frame):
         self['background'] = 'red'
         self.count = 0
         self.data = data
+        print(self.data)
 
         self.scrollable = ScrollableFrame(self)
         from Base.listOfPage import musicList
