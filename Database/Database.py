@@ -684,6 +684,44 @@ def get_playlists(uid,**kwargs):
             traceback.print_exc()
         return False
 
+def Following_artist(artist_name,uid):
+    '''
+
+    params : artist_name : The name of the artisit which is to be followed
+           : uid : unique Identification No. of the user
+    return artist name
+
+    '''
+    try:
+        collection = db.collection(u'users/'+uid+'/Following_Artist').document(artist_name)
+        collection.set({
+            'name' : artist_name
+        })
+        return artist_name
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+def get_user_artists(uid):
+    doc_ref = db.collection(u'users/'+uid+'/Following_Artist').stream()
+    object_list = list(map(lambda x: x.to_dict(), doc_ref))
+    return object_list
+
+
+    
+    
+
+    
+
+
+    
+
+
 
 
 

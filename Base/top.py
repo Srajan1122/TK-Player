@@ -4,6 +4,7 @@ from .topRight import TopRight
 from Pages.HomePage.Home import Home
 from Pages.Browse.browse import Browse
 from Pages.MusicPage.main import Main
+from Pages.UserPage.UserPage import UserPage
 from .listOfPage import *
 
 
@@ -19,7 +20,7 @@ class Top(tk.Frame):
         # Loading all the frames
 
         self.frames = {}
-        for F in (Home, Browse):
+        for F in (Home, Browse,UserPage):
             frame = F(self.topRight.topRightBottom, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
