@@ -3,7 +3,7 @@ import tkinter as tk
 import urllib.request
 from io import BytesIO
 import tkinter.messagebox as tkMessageBox
-from firebase.firebase import FirebaseApplication
+# from firebase.firebase import FirebaseApplication
 from mutagen.mp3 import MP3
 from mutagen import MutagenError
 

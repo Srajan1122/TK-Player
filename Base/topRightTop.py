@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from .listOfPage import pages, rightPage, incrementCount, getCount, resetCount
+from Pages.UserPage.UserPage import UserPage
 
 
 class TopRightTop(tk.Frame):
@@ -14,6 +15,8 @@ class TopRightTop(tk.Frame):
 		self.dropdown = tk.Frame(self, bg='pink')
 		self.button = tk.Frame(self, bg='green')
 
+		self.userButton = tk.Button(self.name, text='Username', command=lambda: self.master.master.show_frame(UserPage))
+		self.userButton.grid(row=0, column=0, sticky='nsew')
 		self.back.grid(row=0, column=0, sticky='nsew')
 		self.search.grid(row=0, column=1, sticky='nsew')
 		self.name.grid(row=0, column=2, sticky='nsew')
