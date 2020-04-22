@@ -4,6 +4,7 @@ current_playing = []
 musicPages = []
 focusCard = []
 musicList = []
+currentTrack = []
 
 c = 1
 

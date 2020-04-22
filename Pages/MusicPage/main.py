@@ -17,7 +17,7 @@ class Main(tk.Frame):
 
         self.bind('<Configure>', self.size)
 
-        self.head = Head(self, image=self.image, text=self.text)
+        self.head = Head(self, image=self.image, text=self.text, data=self.data)
         self.middle = tk.Frame(self, bg='#181818')
         self.filter_frame = FilterFrame(self.middle, data=self.data)
         self.title_frame = TitleFrame(self.middle)

@@ -4,6 +4,8 @@ from Pages.MusicPage.Components.Content.Components.LikeButton import LikeButton
 from Pages.MusicPage.Components.Content.Components.MenuFrame import MenuFrame
 from Pages.MusicPage.Components.Content.Components.PlayButton import PlayButton
 from PIL import Image, ImageTk
+from Music.track import Track
+
 
 
 class MusicFrame(tk.Frame):
@@ -32,7 +34,9 @@ class MusicFrame(tk.Frame):
         self.albumFrame.grid(row=0, column=3, sticky='nsew')
         self.menuFrame.grid(row=0, column=4, sticky='nsew')
 
-        self.play_button = PlayButton(self.iconFrame)
+        self.play_button = PlayButton(self.iconFrame,
+                                      title=self.title,
+                                      url=self.url)
         self.like_button = LikeButton(self.iconFrame)
 
         self.play_button.grid(row=0, column=0, sticky='nsew')
@@ -134,14 +138,33 @@ class MusicFrame(tk.Frame):
             frame.play_button.playing = False
             frame.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
             frame.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+            frame.play_music.Stop()
 
         if len(current_playing) == 0:
             current_playing.append(self)
+
         self.fg_config(self, fg='#1DB954')
         self.play_button.config(image=self.volume_icon)
         self.play_button.playing = True
         self.master.master.master.master.master.head.text_frame.play_button.isPlaying = True
         self.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+        from Base.listOfPage import currentTrack
+        if len(currentTrack) == 0:
+            currentTrack.append({})
+            currentTrack[0]['title'] = self.title
+            currentTrack[0]['url'] = self.url
+            self.play_music = Track(self, trackName=self.title, trackUrl=self.url)
+            currentTrack[0]['instance'] = self.play_music
+        else:
+            if currentTrack[0]['title'] == self.title:
+                self.play_music = currentTrack[0]['instance']
+            else:
+                currentTrack[0]['title'] = self.title
+                currentTrack[0]['url'] = self.url
+                self.play_music = Track(self, trackName=self.title, trackUrl=self.url)
+                currentTrack[0]['instance'] = self.play_music
+
+        self.play_music.Play()
 
     def title_size(self, event):
         from ...TitleFrame import title_size
