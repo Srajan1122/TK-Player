@@ -3,13 +3,15 @@ from Base import top
 from Base.bottom import Bottom
 
 
-
 class Container(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         tk.Frame.__init__(self, master, bg='white', *args, **kwargs)
 
         self.top = top.Top(self)
         self.bottom = Bottom(self)
+
+        from Base.listOfPage import bottomInstance
+        bottomInstance.append(self.bottom)
 
         self.top.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
         self.bottom.grid(row=1, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
