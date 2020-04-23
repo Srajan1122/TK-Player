@@ -7,7 +7,6 @@ from PIL import Image, ImageTk
 from Music.track import Track
 
 
-
 class MusicFrame(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         self.title = kwargs.pop('title')
@@ -81,7 +80,7 @@ class MusicFrame(tk.Frame):
 
     @staticmethod
     def prepare_icon(filename, size):
-        icon = Image.open('images/'+filename)
+        icon = Image.open('images/' + filename)
         icon = icon.resize((size, size), Image.ANTIALIAS)
         icon = ImageTk.PhotoImage(icon)
         return icon
@@ -148,20 +147,31 @@ class MusicFrame(tk.Frame):
         self.play_button.playing = True
         self.master.master.master.master.master.head.text_frame.play_button.isPlaying = True
         self.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+
         from Base.listOfPage import currentTrack
         if len(currentTrack) == 0:
             currentTrack.append({})
             currentTrack[0]['title'] = self.title
             currentTrack[0]['url'] = self.url
-            self.play_music = Track(self, trackName=self.title, trackUrl=self.url)
+            self.play_music = Track(self, trackName=self.title,
+                                    trackUrl=self.url,
+                                    artist=self.artist,
+                                    image=self.master.master.master.master.master.image)
+
             currentTrack[0]['instance'] = self.play_music
         else:
             if currentTrack[0]['title'] == self.title:
                 self.play_music = currentTrack[0]['instance']
             else:
+                from Base.listOfPage import bottomPage
+                _ = bottomPage.pop()
                 currentTrack[0]['title'] = self.title
                 currentTrack[0]['url'] = self.url
-                self.play_music = Track(self, trackName=self.title, trackUrl=self.url)
+                self.play_music = Track(self,
+                                        trackName=self.title,
+                                        trackUrl=self.url,
+                                        artist=self.artist,
+                                        image=self.master.master.master.master.master.image)
                 currentTrack[0]['instance'] = self.play_music
 
         self.play_music.Play()
