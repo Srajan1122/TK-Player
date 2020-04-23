@@ -16,7 +16,9 @@ class PlayButton(tk.Button):
         self.music_icon = self.prepare_image('music_icon.png', 16)
         self.green_music_icon = self.prepare_image('green_music_icon.png', 16)
         self.pause_icon = self.prepare_image('pause_icon.png', 25)
+        self.pause_icon2 = self.prepare_image('pause_icon2.png', 30)
         self.play_icon = self.prepare_image('play_icon.png', 25)
+        self.play_icon2 = self.prepare_image('play_icon2.png', 30)
         self.volume_icon = self.prepare_image('volume_icon.png', 25)
 
         self['background'] = '#181818'
@@ -61,12 +63,12 @@ class PlayButton(tk.Button):
             self.master.master.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
             self.master.master.play_music.Stop()
             from Base.listOfPage import bottomPage
-            bottomPage[0].button.config(bg='yellow')
-            bottomPage[0].playing = False
+            bottomPage[0].middle.button.config(image=self.pause_icon2)
+            bottomPage[0].middle.playing = False
         else:
             self.playing = True
             self.master.master.double_click(event='')
             self['image'] = self.play_icon
             from Base.listOfPage import bottomPage
-            bottomPage[0].button.config(bg='green')
-            bottomPage[0].playing = True
+            bottomPage[0].middle.button.config(image=self.play_icon2)
+            bottomPage[0].middle.playing = True

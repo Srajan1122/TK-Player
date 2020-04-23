@@ -67,11 +67,11 @@ class Track:
             bottomInstance[0].show_frame(self.title)
             currentTime = 0
         else:
-            currentTime = bottomPage[0].sliderValue.get()
+            currentTime = bottomPage[0].middle.sliderValue.get()
             bottom = bottomPage[0]
 
         self.player.music.play(start=currentTime)
-        bottom.TrackPlay(currentTime)
+        bottom.middle.TrackPlay(currentTime)
 
     def Stop(self):
         if self.player.music.get_busy():

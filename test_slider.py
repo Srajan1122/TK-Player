@@ -9,41 +9,47 @@ from mutagen import MutagenError
 from tkinter import ttk
 from ttkthemes import ThemedTk
 from ttkthemes import ThemedStyle
+from PIL import Image, ImageTk
 
 
 class Track(tk.Frame):
     def __init__(self, master, trackName, trackUrl, *args, **kwargs):
         super().__init__(master)
 
-        self.trough = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x02\x00\x00\x00\x90\x08\x06\x00\x00\x00"\x18\xbal\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00\tpHYs\x00\x00\n\xfc\x00\x00\n\xfc\x01\x99\xdb\xbb\xef\x00\x00\x00\x19tEXtSoftware\x00www.inkscape.org\x9b\xee<\x1a\x00\x00\x00\x1fIDAT8\x8dc\\\xb5j\xd5\x7f\x06\x06\x06\x06&\x06(\x18e\x8c2F\x19\xa3\x8c\x91\xc9\x00\x00\xf7\xe7\x04\x1dd\xcc\xbe\x83\x00\x00\x00\x00IEND\xaeB`\x82'
-        self.img_trough = tk.PhotoImage(master=self, data=self.trough)
-
-        self.label = tk.Label(self, image=self.img_trough, bg='red')
-        self.label.pack()
-
         style = ThemedStyle(self)
         style.set_theme("breeze")
 
-        style.element_create('custom.Horizontal.Scale.trough', 'from', 'default')
-        style.element_create('custom.Horizontal.Scale.slider', 'from', 'default')
+        self.trough = Image.open('images/green_trough.png')
+        self.trough = self.trough.resize((10, 4), Image.ANTIALIAS)
+        self.trough = ImageTk.PhotoImage(self.trough)
 
-        style.layout('Horizontal.TScale',
+        style.element_create('custom.Horizontal.Scale.trough', 'image', self.trough)
+        # style.element_create('custom.Horizontal.Scale.slider', 'from', 'default')
+
+        style.layout('custom.Horizontal.TScale',
                      [('custom.Horizontal.Scale.trough', {'sticky': 'ew'}),
                       ('Horizontal.Scale.slider',
                        {'side': 'left', 'sticky': '',
                         'children': [('Horizontal.Scale.label', {'sticky': ''})]
                         })])
 
+        style.theme_settings("breeze", {
+            "custom.Horizontal.TScale": {
+
+            }
+        })
+
+
         print(style.element_names())
-        print(style.element_options('custom.Scale.trough'))
-        print(style.element_options('custom.Scale.slider'))
+        print(style.element_options('custom.Horizontal.Scale.trough'))
+        # print(style.element_options('custom.Scale.slider'))
 
         print(style.theme_use())
         # style.configure("custom.Horizontal.TScale", style.configure("Horizontal.TScale"))
         # style.configure('custom.Horizontal.TScale')
 
         self.pack()
-        self['background'] = '#000000'
+        self['background'] = '#EEEEEE'
         self['padx'] = 25
 
         self.master = master
@@ -121,10 +127,10 @@ class Track(tk.Frame):
         # slider
         self.sliderValue = tk.DoubleVar()
         self.songDuration = self.get_duration(self.byteAudio2)
-        self.slider = ttk.Scale(self, to=self.songDuration, orient=tk.HORIZONTAL, length=700,
+        self.slider = ttk.Scale(self, to=self.songDuration, orient=tk.HORIZONTAL, length=1000,
                                 variable=self.sliderValue,
                                 command=self.UpdateSlider,
-                                style='Horizontal.TScale'
+                                style='custom.Horizontal.TScale'
                                 )
         self.slider.pack()
 
