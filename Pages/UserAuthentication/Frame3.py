@@ -1,7 +1,11 @@
 #-----Login Page-----
 from .Frame2 import data3
 import tkinter as tk
+from PIL import Image, ImageTk
+from itertools import count
 from tkinter import ttk
+
+# from ActivityIndicator import Activity
 from tkinter import font
 import re
 from Database.Database import check_verification
@@ -263,7 +267,20 @@ class Frame3(tk.Frame):
 				# print(user_object)
 				# state['user_object'] = user_object
 				self.result['text'] = "Please have patience"
+				import os 
+				print(os.getcwd())
+				from ActivityIndicator.Activity_Indicator import ImageLabel
+
+				# my_image = tk.PhotoImage(r'Images/Activity.gif')
+				root = tk.Tk()
+				lbl = ImageLabel(root)
+				lbl.pack()
+				lbl.load(r'Images/Activity.gif')
+				root.mainloop()
+				
 				self.master.login(user_object)
+				
+			
 		else:
 			from Database.Database import send_email_verification_otp
 			send_email_verification_otp(data3['email'])
