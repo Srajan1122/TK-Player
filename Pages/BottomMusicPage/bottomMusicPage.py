@@ -8,7 +8,7 @@ class BottomMusicPage(tk.Frame):
     def __init__(self, master, controller, title, artist, image, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
 
-        self['background'] = '#000000'
+        self['background'] = '#2c2c2c'
         self['height'] = 1
 
         self.left = Left(self, title, artist, image)

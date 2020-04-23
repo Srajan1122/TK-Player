@@ -10,10 +10,10 @@ class Middle(tk.Frame):
     def __init__(self, master, controller, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
 
-        self['bg'] = '#000000'
+        self['bg'] = '#2c2c2c'
 
-        self.upper = tk.Frame(self, bg='#000000')
-        self.lower = tk.Frame(self, bg='#000000')
+        self.upper = tk.Frame(self, bg='#2c2c2c')
+        self.lower = tk.Frame(self, bg='#2c2c2c')
 
         self.pause_icon2 = self.prepare_image('pause_icon2.png', 30)
         self.play_icon2 = self.prepare_image('play_icon2.png', 30)
@@ -50,8 +50,8 @@ class Middle(tk.Frame):
         style.theme_settings("vista", {
             "custom.Horizontal.TScale": {
                 'map':
-                    {'background': [("active", "#000000"),
-                                    ("!disabled", "#000000")],
+                    {'background': [("active", "#2c2c2c"),
+                                    ("!disabled", "#2c2c2c")],
                      }
             }})
         # ------------------------------------------------------
@@ -61,8 +61,8 @@ class Middle(tk.Frame):
 
         self.button = tk.Button(self.upper,
                                 image=self.play_icon2,
-                                background='#000000',
-                                activebackground='#000000',
+                                background='#2c2c2c',
+                                activebackground='#2c2c2c',
                                 bd=0,
                                 relief=tk.FLAT,
                                 command=self.click,
@@ -70,32 +70,32 @@ class Middle(tk.Frame):
                                 height=33)
         self.repeat = tk.Button(self.upper,
                                 image=self.repeat_icon,
-                                background='#000000',
-                                activebackground='#000000',
+                                background='#2c2c2c',
+                                activebackground='#2c2c2c',
                                 bd=0,
                                 relief=tk.FLAT,
                                 width=15,
                                 height=15)
         self.shuffle = tk.Button(self.upper,
                                  image=self.shuffle_icon,
-                                 background='#000000',
-                                 activebackground='#000000',
+                                 background='#2c2c2c',
+                                 activebackground='#2c2c2c',
                                  bd=0,
                                  relief=tk.FLAT,
                                  width=15,
                                  height=15)
         self.next = tk.Button(self.upper,
                               image=self.next_icon,
-                              background='#000000',
-                              activebackground='#000000',
+                              background='#2c2c2c',
+                              activebackground='#2c2c2c',
                               bd=0,
                               relief=tk.FLAT,
                               width=18,
                               height=18)
         self.previous = tk.Button(self.upper,
                                   image=self.previous_icon,
-                                  background='#000000',
-                                  activebackground='#000000',
+                                  background='#2c2c2c',
+                                  activebackground='#2c2c2c',
                                   bd=0,
                                   relief=tk.FLAT,
                                   width=18,
@@ -114,13 +114,13 @@ class Middle(tk.Frame):
         self.currentTime = tk.Label(self.lower,
                                     text="--/--",
                                     foreground='#999999',
-                                    background='#000000')
+                                    background='#2c2c2c')
 
         endTime = self.convertTime(currentTrack[0]['instance'].songDuration)
         self.endTime = tk.Label(self.lower,
                                 text=endTime,
                                 foreground='#999999',
-                                background='#000000')
+                                background='#2c2c2c')
 
         self.shuffle.grid(row=0, column=1, padx=12)
         self.previous.grid(row=0, column=2, padx=12)

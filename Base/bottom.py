@@ -4,7 +4,7 @@ import tkinter as tk
 class Bottom(tk.Frame):
 	def __init__(self, master, *args, **kwargs):
 		tk.Frame.__init__(self, master, *args, **kwargs)
-		self['bg'] = '#000000'
+		self['bg'] = '#2c2c2c'
 
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)

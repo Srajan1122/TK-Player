@@ -7,7 +7,7 @@ class Left(tk.Frame):
     def __init__(self, master, title, artist, image, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
 
-        self['bg'] = '#000000'
+        self['bg'] = '#2c2c2c'
 
         self.titleFont = tkfont.Font(family="Pragatic Narrow", size=10, weight="bold")
         self.artistFont = tkfont.Font(family="Pragatic Narrow", size=8, weight="bold")
@@ -19,7 +19,7 @@ class Left(tk.Frame):
         self.image = ImageTk.PhotoImage(self.image)
         self.imageLabel = tk.Label(self.imageFrame,
                                    image=self.image,
-                                   background='#000000')
+                                   background='#2c2c2c')
 
         self.imageLabel.grid(row=0, column=0, sticky='nsew')
 
@@ -27,14 +27,14 @@ class Left(tk.Frame):
                               text=title,
                               font=self.titleFont,
                               foreground='#ffffff',
-                              bg='#000000',
+                              bg='#2c2c2c',
                               anchor=tk.SW
                               )
         self.artistLabel = tk.Label(self.textFrame,
                                     text=artist,
                                     font=self.artistFont,
                                     foreground='#dddddd',
-                                    bg='#000000',
+                                    bg='#2c2c2c',
                                     anchor=tk.NW
                                     )
 

@@ -11,7 +11,7 @@ class Right(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
 
-        self['bg'] = '#000000'
+        self['bg'] = '#2c2c2c'
         self['width'] = 300
 
         style = ThemedStyle(self)
@@ -39,8 +39,8 @@ class Right(tk.Frame):
         style.theme_settings("vista", {
             "custom.Horizontal.TScale": {
                 'map':
-                    {'background': [("active", "#000000"),
-                                    ("!disabled", "#000000")],
+                    {'background': [("active", "#2c2c2c"),
+                                    ("!disabled", "#2c2c2c")],
                      }
             }})
 
@@ -49,8 +49,8 @@ class Right(tk.Frame):
 
         self.volume_button = tk.Button(self,
                                        image=self.volume_icon,
-                                       background='#000000',
-                                       activebackground='#000000',
+                                       background='#2c2c2c',
+                                       activebackground='#2c2c2c',
                                        bd=0,
                                        relief=tk.FLAT,
                                        width=20,
@@ -85,6 +85,11 @@ class Right(tk.Frame):
         percentValue = float(value) / 100
         currentTrack[0]['instance'].player.music.set_volume(percentValue)
 
+        if float(value) > 0:
+            self.volume_button.config(image=self.volume_icon)
+        else:
+            self.volume_button.config(image=self.mute_icon)
+
     @staticmethod
     def prepare_image(filename, size):
         icon = Image.open('images/' + filename)
@@ -95,6 +100,9 @@ class Right(tk.Frame):
     def click(self):
         if self.flag == 0:
             self.volume_button.config(image=self.mute_icon)
+            self.volume.set(0)
+            from Base.listOfPage import currentTrack
+            currentTrack[0]['instance'].player.music.set_volume(0)
             self.flag = 1
         else:
             self.volume_button.config(image=self.volume_icon)
