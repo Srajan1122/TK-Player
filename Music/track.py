@@ -15,6 +15,7 @@ class Track:
 
         self.track = None
         self.byteAudio = None
+        # self.trackUrl = trackUrl
         self.TrackName = trackName
         self.songDuration = None
         self.player = None
