@@ -13,7 +13,7 @@ class BottomMusicPage(tk.Frame):
 
         self.left = Left(self, title, artist, image)
         self.right = Right(self)
-        self.middle = Middle(self, controller)
+        self.middle = Middle(self, controller, title, artist, image)
 
         self.left.grid(row=0, column=0, sticky='nsew')
         self.middle.grid(row=0, column=1, sticky='nsew')

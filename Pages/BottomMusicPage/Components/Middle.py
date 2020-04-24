@@ -3,6 +3,8 @@ from ttkthemes import ThemedStyle
 from tkinter import ttk
 from PIL import ImageTk, Image
 from random import randint
+from Music.track import Track
+import math
 
 
 class Middle(tk.Frame):
@@ -10,11 +12,13 @@ class Middle(tk.Frame):
     shuffle = False
     single = False
 
-    def __init__(self, master, controller, *args, **kwargs):
+    def __init__(self, master, controller, title, artist, image, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
 
         self['bg'] = '#2c2c2c'
-        print(Middle.shuffle)
+        self.title = title
+        self.image = image
+        self.artist = artist
 
         self.upper = tk.Frame(self, bg='#2c2c2c')
         self.lower = tk.Frame(self, bg='#2c2c2c')
@@ -29,6 +33,16 @@ class Middle(tk.Frame):
         self.shuffle_active_icon = self.prepare_image('shuffle_active.png', 15)
         self.pause_icon3 = self.prepare_image('pause_icon2.png', 32)
         self.play_icon3 = self.prepare_image('play_icon2.png', 32)
+
+        if Middle.single:
+            self.current_repeat_icon = self.repeat_active_icon
+        else:
+            self.current_repeat_icon = self.repeat_icon
+
+        if Middle.shuffle:
+            self.current_shuffle_icon = self.shuffle_active_icon
+        else:
+            self.current_shuffle_icon = self.shuffle_icon
 
         # ------------------------------------------------------
         style = ThemedStyle(self)
@@ -75,7 +89,7 @@ class Middle(tk.Frame):
                                 width=33,
                                 height=33)
         self.repeat = tk.Button(self.upper,
-                                image=self.repeat_icon,
+                                image=self.current_repeat_icon,
                                 background='#2c2c2c',
                                 activebackground='#2c2c2c',
                                 bd=0,
@@ -84,7 +98,7 @@ class Middle(tk.Frame):
                                 height=15,
                                 command=self.on_repeat)
         self.shuffle = tk.Button(self.upper,
-                                 image=self.shuffle_icon,
+                                 image=self.current_shuffle_icon,
                                  background='#2c2c2c',
                                  activebackground='#2c2c2c',
                                  bd=0,
@@ -168,7 +182,7 @@ class Middle(tk.Frame):
             self.sliderValue.set(value)
             currentTrack[0]['instance'].Play()
         else:
-            # print("Track Not Playing")
+            self.after_cancel(self.loopID)
             self.sliderValue.set(value)
 
     def convertTime(self, currentTime):
@@ -185,7 +199,8 @@ class Middle(tk.Frame):
             currentTime += 1
             self.loopID = self.after(1000, lambda: self.TrackPlay(currentTime))
         else:
-            print('Track has ended')
+            if currentTime > math.ceil(currentTrack[0]['instance'].songDuration-2):
+                self.play_next()
 
     def click(self):
         self.controller.play_button.click()
@@ -236,10 +251,25 @@ class Middle(tk.Frame):
 
         if Middle.single:
             next_index = current_index
+            self.sliderValue.set(0)
+            self.after_cancel(self.loopID)
+            music = list_of_music[next_index]
+            music.play_button.click()
+
         elif Middle.shuffle:
-            next_index = randint(0, len(list_of_music)-1)
+            next_index = randint(0, len(list_of_music) - 1)
+            if next_index == current_index:
+                self.sliderValue.set(0)
+                self.after_cancel(self.loopID)
+                music = list_of_music[next_index]
+                music.play_button.click()
         else:
-            next_index = (current_index+1) % len(list_of_music)
+            next_index = (current_index + 1) % len(list_of_music)
+            if next_index == current_index:
+                self.sliderValue.set(0)
+                self.after_cancel(self.loopID)
+                music = list_of_music[next_index]
+                music.play_button.click()
 
         music = list_of_music[next_index]
         music.play_button.click()
@@ -250,13 +280,28 @@ class Middle(tk.Frame):
         current_index = list_of_music.index(current_playing[0])
         if Middle.single:
             next_index = current_index
+            self.sliderValue.set(0)
+            self.after_cancel(self.loopID)
+            music = list_of_music[next_index]
+            music.play_button.click()
+
         elif Middle.shuffle:
-            next_index = randint(0, len(list_of_music)-1)
+            next_index = randint(0, len(list_of_music) - 1)
+            if next_index == current_index:
+                self.sliderValue.set(0)
+                self.after_cancel(self.loopID)
+                music = list_of_music[next_index]
+                music.play_button.click()
         else:
             if current_index == 0:
                 next_index = len(list_of_music) - 1
             else:
-                next_index = current_index-1
+                next_index = current_index - 1
+                if next_index == current_index:
+                    self.sliderValue.set(0)
+                    self.after_cancel(self.loopID)
+                    music = list_of_music[next_index]
+                    music.play_button.click()
 
         music = list_of_music[next_index]
         music.play_button.click()
