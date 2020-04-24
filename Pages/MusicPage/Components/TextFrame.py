@@ -73,6 +73,23 @@ class TextFrame(tk.Frame):
                                     active_image=self.music_menu_button_active,
                                     width=37)
 
+        # self.menu_button = tk.Menubutton(self.button_region,
+        #                                 image=self.music_menu_button,
+        #                                 #activeimage=self.music_menu_button_active,
+        #                                 width=37)
+        # self.menu_button.menu = tk.Menu(self.menu_button,
+        #                                 tearoff=0,
+        #                                 background='#35363a',
+        #                                 activebackground='#404040',
+        #                                 foreground="#a8a8a8",
+        #                                 activeforeground="white",
+        #                                 border=0
+        #                                 )
+        # self.menu_button['menu'] = self.menu_button.menu
+        # self.menu_button.menu.add_command(label='Command 1')
+        # self.menu_button.menu.add_command(label='Command 2')
+
+       
         self.play_button.grid(row=0, column=0, sticky='nsew')
         self.like_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
         self.liked_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))

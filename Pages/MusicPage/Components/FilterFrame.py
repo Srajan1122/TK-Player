@@ -2,9 +2,6 @@ import tkinter as tk
 from tkinter import font
 import re
 
-# global songs
-# songs=[]
-
 global matchingSongs
 matchingSongs = []
 
@@ -37,7 +34,6 @@ class UserEntry(tk.Entry):
 
 		#function called on focusing
 		def foc_in(event):
-			#if self['foreground'] == self.default_fg:
 			if self.get() == placeholder:
 				self['foreground'] = self.default_fg
 				self.delete(0, 100)
@@ -49,29 +45,13 @@ class UserEntry(tk.Entry):
 			self['foreground'] = self.default_fg
 			print(self.get())
 			if not self.get():
-				if (show == 1):
-					self['show'] = ''
 				default_placeholder(self)
 			else:
 				self.insert(0, self['textvariable'])
 
-		
-		# def searchFunc(event):
-		# 	user_input = self.get().upper()
-		# 	print(user_input)
-		# def highlight(event):
-		# 	self['foreground'] = 'white'
-
-		# def dontHighlight(event):
-		# 	self['foreground'] = '#867f7a'
-
-
 		#def key(events)	
 		self.bind("<FocusIn>", lambda e: foc_in(e))
-		self.bind("<Leave>", lambda e: foc_out(e))
-		#self.bind("<Enter>", lambda e: highlight(e))
-		#self.bind("<Key>", lambda e : searchFunc(e))
-
+		self.bind("<FocusOut>", lambda e: foc_out(e))
 
 class FilterFrame(tk.Frame):
 	def __init__(self, master, *args, data, **kwargs):
@@ -97,16 +77,23 @@ class FilterFrame(tk.Frame):
 		)
 
 		self.close = tk.PhotoImage(file=r'images/close3.png',height=20, width=20)
-		self.close_icon = tk.Button(self, image=self.close, bd=0, bg="#121212", command=self.leaveHighlight,activebackground="#121212")
+		self.close_icon = tk.Button(
+								self, 
+								image=self.close, 
+								bd=0, 
+								bg="#121212", 
+								command=self.leaveHighlight,
+								activebackground="#121212",
+								width=30
+							)
 		self.close_icon.grid(row=0,column=3, sticky='nsew')
 
 		#songs = data
 		print(data)
 		self.filter.bind("<Key>", lambda e : self.searchFunc(e,data))
 		self.bind("<Enter>",lambda e: self.highlight(e))
-		#self.bind("<Leave>",lambda e : self.leaveHighlight(e))
 		self.bind("<FocusIn>",lambda e : self.focusHighlight(e))
-		#self.bind("<Button>",lambda e : self.focusoutHighlight(e))
+		self.bind("<Leave>",lambda e : self.leaveHighlight(e))
 		
 		# self.button = tk.Button(self, text='clear', command=self.clear)
 		# self.button.grid(row=0, column=0, sticky='nsew')
@@ -114,9 +101,17 @@ class FilterFrame(tk.Frame):
 		# self.button2 = tk.Button(self, text='fill', command=self.fill)
 		# self.button2.grid(row=0, column=1, sticky='nsew')
 
-		self.grid_columnconfigure(0, weight=3)
-		self.grid_columnconfigure(1, weight=20)
-		self.grid_columnconfigure(2, weight=3)
+		self.grid_columnconfigure(0, weight=1)
+		self.grid_columnconfigure(1, weight=25)
+		self.grid_columnconfigure(2, weight=2)
+
+	def foc_out(self, event):
+		self.filter['foreground'] = "#867f7a"
+		print(self.filter.get())
+		if not self.filter.get():
+			self.filter.insert(0, "  Filter")
+		else:
+			self.filter.insert(0, self['textvariable'])
 
 	def searchFunc(self,event,data):
 
@@ -161,6 +156,7 @@ class FilterFrame(tk.Frame):
 		self.close_icon['bg'] = "#121212"
 		self.filter['bg'] = "#121212"
 		self.filter['foreground'] = "#867f7a"
+		self.close_icon['bg'] = "#12121212"
 		
 
 	def focusHighlight(self,event):
@@ -170,8 +166,8 @@ class FilterFrame(tk.Frame):
 		self.close_icon['bg'] = "#404040"
 		self.unbind("<Key>")
 
-	def focusoutHighlight(self,event):
-		leaveHighlight(self)
+	# def focusoutHighlight(self,event):
+	# 	leaveHighlight(self)
 
 
 	def clear(self):
