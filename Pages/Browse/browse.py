@@ -1,7 +1,8 @@
 import tkinter as tk
 from Pages.Resource.VerticalScrollableFrame import ScrollableFrame
 from .Components.header import Header
-
+import pyglet
+import tkinter.font as tkfont
 
 class Browse(tk.Frame):
 	def __init__(self, master, controller, *args, **kwargs):
@@ -10,6 +11,9 @@ class Browse(tk.Frame):
 		self.bind('<Configure>', self.size)
 		self.main = tk.Frame(self, bg='#181818')
 		self.scrollable = ScrollableFrame(self.main)
+
+		pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
+		play = tkfont.Font(family="Play", size=15, weight="bold")
 
 		self.head = Header(self,text='Browse')
 
@@ -24,8 +28,21 @@ class Browse(tk.Frame):
 
 		self.show_frame(Artist)
 
-		self.artist = tk.Button(self, text='artist', command=lambda: self.show_frame(Artist)).grid(row=0, column=0)
-		self.genre = tk.Button(self, text='genre', command=lambda: self.show_frame(Genre)).grid(row=0, column=1)
+		self.categoryFrame = tk.Frame(self,bg='#171717',height=30)
+		self.categoryFrame.grid(row=1,column=0,sticky='nsew')
+		
+
+		self.artist = tk.Button(self.categoryFrame, text='artist',
+								padx=10,bg='#171717',
+								foreground='white',
+								pady=10,font=play,ipadx=10,
+								command=lambda: self.show_frame(Artist)).grid(row=0, column=0,pady=(35,0))
+		self.genre = tk.Button(self.categoryFrame, 
+								text='genre',
+								padx=10,bg='#171717', 
+								foreground='white', 
+								pady=10,font=play,ipadx=10,
+								command=lambda: self.show_frame(Genre)).grid(row=0, column=1,pady=(35,0))
 
 
 		self.content.grid_rowconfigure(0, weight=1)
@@ -33,13 +50,14 @@ class Browse(tk.Frame):
 
 		self.content.grid(row=0, column=0, sticky='nsew')
 
-		self.main.grid(row=1, column=0, sticky='nsew')
+		self.main.grid(row=2, column=0, sticky='nsew')
 		self.main.grid_rowconfigure(0, weight=1)
 		self.main.grid_columnconfigure(0, weight=1)
 
 
 		self.grid_rowconfigure(0, weight=1)
-		self.grid_rowconfigure(1, weight=10)
+		self.grid_rowconfigure(1, weight=1)
+		self.grid_rowconfigure(2, weight=10)
 		self.grid_columnconfigure(0, weight=1)
 
 	def show_frame(self, context):
