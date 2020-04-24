@@ -81,8 +81,7 @@ class FilterFrame(tk.Frame):
 								self, 
 								image=self.close, 
 								bd=0, 
-								bg="#121212", 
-								command=self.leaveHighlight,
+								bg="#121212",
 								activebackground="#121212",
 								width=30
 							)
@@ -90,6 +89,7 @@ class FilterFrame(tk.Frame):
 
 		#songs = data
 		print(data)
+		self.close_icon.bind("Key", lambda e : self.leaveHighlight(e))
 		self.filter.bind("<Key>", lambda e : self.searchFunc(e,data))
 		self.bind("<Enter>",lambda e: self.highlight(e))
 		self.bind("<FocusIn>",lambda e : self.focusHighlight(e))
@@ -123,8 +123,8 @@ class FilterFrame(tk.Frame):
 		user_input = self.filter.get().upper()
 		print(user_input)
 		
-		if not user_input:
-			return
+		# if not user_input:
+		# 	return
 		#print("first check done")
 		#print(songs)
 		for i in range(len(self.songs)):
@@ -150,13 +150,14 @@ class FilterFrame(tk.Frame):
 		self.filter['foreground'] = 'white'
 		
 	
-	def leaveHighlight(self):
+	def leaveHighlight(self,event):
 		self['bg'] = "#121212"
 		self.search_icon['image'] = self.search
+		self.search_icon['bg'] = "#121212"
 		self.close_icon['bg'] = "#121212"
 		self.filter['bg'] = "#121212"
 		self.filter['foreground'] = "#867f7a"
-		self.close_icon['bg'] = "#12121212"
+		self.close_icon['bg'] = "#121212"
 		
 
 	def focusHighlight(self,event):
