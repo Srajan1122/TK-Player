@@ -23,12 +23,16 @@ class Track(tk.Frame):
         self.trough = self.trough.resize((10, 4), Image.ANTIALIAS)
         self.trough = ImageTk.PhotoImage(self.trough)
 
+        self.pgbar = Image.open('images/pgbar.png')
+        self.pgbar = self.pgbar.resize((10, 4), Image.ANTIALIAS)
+        self.pgbar = ImageTk.PhotoImage(self.pgbar)
+
         style.element_create('custom.Horizontal.Scale.trough', 'image', self.trough)
-        # style.element_create('custom.Horizontal.Scale.slider', 'from', 'default')
+        style.element_create('custom.Horizontal.Scale.slider', 'image', self.pgbar)
 
         style.layout('custom.Horizontal.TScale',
                      [('custom.Horizontal.Scale.trough', {'sticky': 'ew'}),
-                      ('Horizontal.Scale.slider',
+                      ('custom.Horizontal.Scale.slider',
                        {'side': 'left', 'sticky': '',
                         'children': [('Horizontal.Scale.label', {'sticky': ''})]
                         })])
