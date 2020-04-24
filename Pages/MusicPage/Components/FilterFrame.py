@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import font
 import re
 
-global titles
-titles = []
+# global songs
+# songs=[]
 
-global matches
-matches = []
+global matchingSongs
+matchingSongs = []
 
 class UserEntry(tk.Entry):
-	def __init__(self, master, placeholder, show, textvariable, id, *args, **kwargs):
+	def __init__(self, master, placeholder, textvariable, songDict, *args, **kwargs):
 		tk.Entry.__init__(self, master, *args, **kwargs)
 
 		#placeholder function
@@ -21,7 +21,7 @@ class UserEntry(tk.Entry):
 		#font size, style
 		self.appHighlightFont = font.Font(
 			family='lineto circular',
-			size=12,
+			size=11,
 		)
 
 		#font color
@@ -29,7 +29,7 @@ class UserEntry(tk.Entry):
 		self.input_fg = 'white'
 
 		#properties of Entry widget
-		self['background'] = '#404040'
+		self['background'] = '#121212'
 		self['foreground'] = self.default_fg
 		self['insertbackground'] = 'white'
 		self['font'] = self.appHighlightFont
@@ -37,12 +37,10 @@ class UserEntry(tk.Entry):
 
 		#function called on focusing
 		def foc_in(event):
-			if (show == 1):
-				self['show'] = '*'
-			if self['foreground'] == self.default_fg:
-				if self.get() == placeholder:
-					self['foreground'] = self.default_fg
-					self.delete(0, 100)
+			#if self['foreground'] == self.default_fg:
+			if self.get() == placeholder:
+				self['foreground'] = self.default_fg
+				self.delete(0, 100)
 			self['foreground'] = 'white'
 			self['textvariable'] = textvariable
 
@@ -58,62 +56,135 @@ class UserEntry(tk.Entry):
 				self.insert(0, self['textvariable'])
 
 		
-		def searchFunc(event):
-			user_input = self.get().upper()
-			
-			for i in range(len(titles)):
-				print(titles[i])
-				if not user_input:
-					return
-				input_matcher = re.search(
-									re.search(
-										"{}".format(user_input),
-										"{}".format(titles[i].upper)
-									)
-								)
-				if input_matcher:
-					matches.append(titles[i])
+		# def searchFunc(event):
+		# 	user_input = self.get().upper()
+		# 	print(user_input)
+		# def highlight(event):
+		# 	self['foreground'] = 'white'
 
-		print(matches)
-				
+		# def dontHighlight(event):
+		# 	self['foreground'] = '#867f7a'
 
 
 		#def key(events)	
 		self.bind("<FocusIn>", lambda e: foc_in(e))
-		self.bind("<Button>", lambda e: foc_out(e))
-		self.bind("<Key>", lambda e : searchFunc(e))
+		self.bind("<Leave>", lambda e: foc_out(e))
+		#self.bind("<Enter>", lambda e: highlight(e))
+		#self.bind("<Key>", lambda e : searchFunc(e))
 
 
 class FilterFrame(tk.Frame):
 	def __init__(self, master, *args, data, **kwargs):
 		tk.Frame.__init__(self, master, *args, **kwargs)
-		self['background'] = 'black'
+		self['background'] = '#121212'
 		self['height'] = 40
+
+		self.search = tk.PhotoImage(file=r'images\search2.png', height=18, width=18)
+		self.search_highlight = tk.PhotoImage(file=r'images\search_highlight.png', height=18, width=18)
+		self.search_icon = tk.Label(self, image=self.search, bd=0, bg="#121212")
+		self.search_icon.grid(row=0, column=0, ipadx=10, ipady=3, sticky='nsew')
 
 		self.filter = UserEntry(
 			self, placeholder="  Filter",
-			show=0, textvariable=None, id=None
+			textvariable=None,
+			songDict = data
 		)
 		self.filter.grid(
-			row=0, column=0, sticky='nsew'
+			row=0, column=1, sticky='nsew',padx=2,
+			pady=4,
+			ipadx=20,
+			ipady=5
 		)
-		print(data)
-		
-		for song in data:
-			#print(song['title'])
-			titles.append(song['title'])
 
-		print(titles)
+		self.close = tk.PhotoImage(file=r'images/close3.png',height=20, width=20)
+		self.close_icon = tk.Button(self, image=self.close, bd=0, bg="#121212", command=self.leaveHighlight,activebackground="#121212")
+		self.close_icon.grid(row=0,column=3, sticky='nsew')
+
+		#songs = data
+		print(data)
+		self.filter.bind("<Key>", lambda e : self.searchFunc(e,data))
+		self.bind("<Enter>",lambda e: self.highlight(e))
+		#self.bind("<Leave>",lambda e : self.leaveHighlight(e))
+		self.bind("<FocusIn>",lambda e : self.focusHighlight(e))
+		#self.bind("<Button>",lambda e : self.focusoutHighlight(e))
+		
 		# self.button = tk.Button(self, text='clear', command=self.clear)
 		# self.button.grid(row=0, column=0, sticky='nsew')
 
 		# self.button2 = tk.Button(self, text='fill', command=self.fill)
 		# self.button2.grid(row=0, column=1, sticky='nsew')
 
-		# self.grid_columnconfigure((0, 1), weight=1)
-		# self.grid_rowconfigure(0, weight=1)
+		self.grid_columnconfigure(0, weight=3)
+		self.grid_columnconfigure(1, weight=20)
+		self.grid_columnconfigure(2, weight=3)
+
+	def searchFunc(self,event,data):
+
+		matchingSongs.clear()
+		self.songs = data
+		
+		print("searchFunc started")
+		#print(self.songs)
+		user_input = self.filter.get().upper()
+		print(user_input)
+		
+		if not user_input:
+			return
+		#print("first check done")
+		#print(songs)
+		for i in range(len(self.songs)):
+			print(self.songs[i]['title'])
+			input_matcher = re.search(
+								user_input,
+								self.songs[i]['title'].upper()
+							)
+			print(input_matcher)
+			if input_matcher:
+				matchingSongs.append(self.songs[i])
+				#print("result: ",matchingSongs)
+		
+		if not matchingSongs:
+			self.clear2()
+		else:
+			self.clear()
+
+
+	def highlight(self,event):
+		self['bg'] = "#121212"
+		self.search_icon['image'] = self.search_highlight
+		self.filter['foreground'] = 'white'
+		
+	
+	def leaveHighlight(self):
+		self['bg'] = "#121212"
+		self.search_icon['image'] = self.search
+		self.close_icon['bg'] = "#121212"
+		self.filter['bg'] = "#121212"
+		self.filter['foreground'] = "#867f7a"
+		
+
+	def focusHighlight(self,event):
+		self['bg'] = "#404040"
+		self.search_icon['bg'] = "#404040"
+		self.filter['bg'] = "#404040"
+		self.close_icon['bg'] = "#404040"
+		self.unbind("<Key>")
+
+	def focusoutHighlight(self,event):
+		leaveHighlight(self)
+
 
 	def clear(self):
+		print("clear started")
+		print("matchingDict: ",matchingSongs)
+		from .Content.Content import Content
+		self.content = Content(self.master.master, data=matchingSongs)
+		self.content.grid(row=3, column=0, sticky='nsew')
+		self.content.tkraise()
+
+	def clear2(self):
+		print("clear2 started")
+		#print("matchingDict: ",matchingSongs)
 		from .Content.Content import Content
 		self.content = Content(self.master.master, data=[])
 		self.content.grid(row=3, column=0, sticky='nsew')

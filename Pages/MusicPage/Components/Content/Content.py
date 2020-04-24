@@ -17,7 +17,7 @@ class Content(tk.Frame):
         from Base.listOfPage import musicList
         musicList.append({self.master: []})
 
-        for k in range(20):
+        for k in range(1):
             for j, i in enumerate(self.data):
                 self.music = MusicFrame(self.scrollable.scrollable_frame,
                                         title=i['title'],
