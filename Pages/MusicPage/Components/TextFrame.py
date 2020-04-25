@@ -9,6 +9,8 @@ class TextFrame(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#000000'
 
+        self.text = text
+
         pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
         self.head = tkfont.Font(family="Pragatic Narrow", size=28, weight="bold")
         self.support = tkfont.Font(family="Play", size=10, weight="bold")
@@ -72,8 +74,8 @@ class TextFrame(tk.Frame):
                                     image=self.music_menu_button,
                                     active_image=self.music_menu_button_active,
                                     width=37)
-
-        self.play_button.grid(row=0, column=0, sticky='nsew')
+        if len(data) > 0:
+            self.play_button.grid(row=0, column=0, sticky='nsew')
         self.like_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
         self.liked_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
         self.menu_button.grid(row=0, column=2, sticky='nsew')

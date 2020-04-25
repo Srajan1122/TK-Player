@@ -24,4 +24,3 @@ class BottomMusicPage(tk.Frame):
         self.grid_columnconfigure(2, weight=3)
         self.grid_rowconfigure(0, weight=1)
         self.grid_propagate(False)
-
