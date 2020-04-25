@@ -20,35 +20,47 @@ class LikeButton(tk.Button):
         self['bd'] = 0
         self['image'] = self.empty_heart
         self['command'] = self.clicked
-
-        from Base.listOfPage import likedSong
-        for index, song in enumerate(likedSong):
+        f = open('user')
+        x = f.readlines()[0]
+        from Database.Database import get_all_liked_songs
+        for index, song in enumerate(get_all_liked_songs(x)):
             for key, value in song.items():
                 if key == 'title' and value == self.title:
+                    self.liked = False
                     self['image'] = self.filled_heart
 
         self.bind('<Button-1>', self.master.master.click)
 
     def clicked(self):
+        f = open('user')
+        x = f.readlines()[0]
         from Base.listOfPage import likedSong
         if not self.liked:
             # if unliked
             self['image'] = self.empty_heart
             self.liked = True
-            for index, song in enumerate(likedSong):
-                for key, value in song.items():
-                    if key == 'title' and value == self.title:
-                        likedSong.pop(index)
+            # for index, song in enumerate(likedSong):
+            #     for key, value in song.items():
+            #         if key == 'title' and value == self.title:
+            #             likedSong.pop(index)
+            from Database.Database import delete_liked_song
+            delete_liked_song(x , self.title)
+                
+            
             return
         # if liked
         self['image'] = self.filled_heart
         self.liked = False
-        likedSong.append({
+        from Database.Database import add_liked_songs
+        track_object = {
             'title': self.title,
             'genre': self.album,
             'artist': self.artist,
             'location': self.url
-        })
+        }
+        
+        add_liked_songs(track_object,x)
+        likedSong.append(track_object)
 
 
     @staticmethod

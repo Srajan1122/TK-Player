@@ -85,6 +85,13 @@ class Top(tk.Frame):
                      image=image,
                      text=text)
         if len(data) > 0:
+            from Base.listOfPage import musicList
+            for music in musicList:
+                for key,value in music.items():
+                    if key == frame:
+                        for track in value:
+                            track.like_button.grid_forget()
+                        break
             frame.content.music.like_button.grid_forget()
         frame.head.text_frame.liked_button.grid_forget()
         frame.head.text_frame.like_button.grid_forget()

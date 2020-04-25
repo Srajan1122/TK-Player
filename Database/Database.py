@@ -712,6 +712,64 @@ def get_user_artists(uid):
     object_list = list(map(lambda x: x.to_dict(), doc_ref))
     return object_list
 
+def add_liked_songs(track_object,uid):
+    '''
+
+    params : track_object : The object of the track
+           : uid : unique Identification No. of the user
+    return Bool
+
+    '''
+    try:
+        collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_object['title'])
+        collection.set(track_object)
+        print('Added Liked song')
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+def delete_liked_song(uid,track_title):
+    '''
+
+    params : track title : The title of the track to be deleted
+           : uid : unique Identification No. of the user
+    return Bool
+
+    '''
+    try:
+        collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_title)
+        collection.delete()
+        print('deleted Liked song')
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+def get_all_liked_songs(uid): 
+    try:
+        collection = db.collection(u'users/'+uid+'/Liked_songs')
+        # print(list(map(lambda x: x.to_dict(), collection.stream())))
+        return list(map(lambda x: x.to_dict(), collection.stream()))
+        
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
 
     
     

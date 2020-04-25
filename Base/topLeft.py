@@ -71,7 +71,7 @@ class TopLeft(tk.Frame):
                                    bd=0)
         self.menu2.menu = tk.Menu(self.menu2,
                                   tearoff=0,
-                                  background='#35363a', activebackground='#35363a',
+                                  background='#35363a', activebackground='#404040',
                                   foreground='#a8a8a8', activeforeground='white',
                                   font=self.appHighlightFont2,
                                   bd=0
@@ -100,7 +100,7 @@ class TopLeft(tk.Frame):
         self.likedSongs = NormalButton(self.frame3,
                                        text='Liked Songs',
                                        command=lambda data=self.get_liked_song(): self.master.show_frame_liked(
-                                           data=data,
+                                           data=self.get_liked_song(),
                                            text='Liked Song',
                                            image=self.liked_image))
         self.albums = NormalButton(self.frame3, text='Albums')
@@ -156,6 +156,12 @@ class TopLeft(tk.Frame):
         login.mainloop()
 
     def get_liked_song(self):
-        from Base.listOfPage import likedSong
-        return likedSong
+        f = open('user')
+    
+        x = f.readlines()[0]
+        from Database.Database import get_all_liked_songs
+        print('----------------------------------')
+        print(get_all_liked_songs(x))
+        
+        return get_all_liked_songs(x)
 
