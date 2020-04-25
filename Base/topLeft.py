@@ -100,7 +100,7 @@ class TopLeft(tk.Frame):
         self.likedSongs = NormalButton(self.frame3,
                                        text='Liked Songs',
                                        command=lambda data=self.get_liked_song(): self.master.show_frame_liked(
-                                           data=data,
+                                           data=self.get_liked_song(),
                                            text='Liked Song',
                                            image=self.liked_image))
         self.albums = NormalButton(self.frame3, text='Albums')
@@ -156,6 +156,12 @@ class TopLeft(tk.Frame):
         login.mainloop()
 
     def get_liked_song(self):
-        from Base.listOfPage import likedSong
-        return likedSong
+        f = open('user')
+    
+        x = f.readlines()[0]
+        from Database.Database import get_all_liked_songs
+        print('----------------------------------')
+        print(get_all_liked_songs(x))
+        
+        return get_all_liked_songs(x)
 
