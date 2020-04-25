@@ -93,6 +93,9 @@ class MusicFrame(tk.Frame):
 
     @staticmethod
     def bg_config(frame, bg):
+        # check_frame = '.!frame.!filterframe.!userentry'
+        # if str(frame).find(check_frame) == -1:
+        #     return
         frame.iconFrame.config(bg=bg)
         frame.titleLabel.config(bg=bg)
         frame.albumLabel.config(bg=bg)
@@ -104,6 +107,9 @@ class MusicFrame(tk.Frame):
 
     @staticmethod
     def fg_config(frame, fg):
+        # check_frame = '.!container.!top.!topright.!toprightbottom.!main.!frame.!filterframe.!userentry'
+        # if str(frame).find(check_frame) > 0:
+        #     return
         frame.titleLabel.config(foreground=fg)
         frame.albumLabel.config(foreground=fg)
         frame.artistLabel.config(foreground=fg)
@@ -128,7 +134,10 @@ class MusicFrame(tk.Frame):
         return
 
     def click(self, event):
-        if str(self.focus_get()) != '.':
+        check_frame = '.!frame.!filterframe.!userentry'
+        print(self.focus_get())
+        if str(self.focus_get()) != '.' and str(self.focus_get()).find(check_frame) == -1:
+            print('hi')
             self.bg_config(self.focus_get(), '#181818')
             self.focus_get().menuFrame.menuButton.grid_forget()
         self.focus_set()

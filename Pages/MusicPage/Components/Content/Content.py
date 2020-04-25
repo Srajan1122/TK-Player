@@ -10,17 +10,26 @@ class Content(tk.Frame):
 
     def __init__(self, master, data, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, *kwargs)
-        self['background'] = 'red'
+        self['background'] = '#181818'
         self.count = 0
         self.data = data
 
         self.support = tkfont.Font(family="Pragatic Narrow", size=12, weight="bold")
 
         self.scrollable = ScrollableFrame(self)
+        self.scrollable.scrollable_frame.config(background='#181818')
         from Base.listOfPage import musicList
         musicList.append({self.master: []})
 
-        if len(data) == 0:
+        if len(data) == 1 and data[0] == 'not found':
+            self.label = tk.Label(self,
+                                  text='Song not in the list',
+                                  background='#181818',
+                                  foreground='#999999',
+                                  font=self.support
+                                  )
+            self.label.grid(row=0, column=0)
+        elif len(data) == 0:
             self.label = tk.Label(self,
                                   text='Your liked song will appear here',
                                   background='#181818',
