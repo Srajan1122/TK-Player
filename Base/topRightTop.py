@@ -35,6 +35,13 @@ class TopRightTop(tk.Frame):
 		self.dropdown = tk.Frame(self, bg='pink')
 		self.button = tk.Frame(self, bg='green')
 
+
+		#Dynamic content
+		f = open('user')
+		x = f.readlines()[0]
+		from Database.Database import get_user
+		myobject = get_user(x)
+
 		#User_button
 		# self.name = self.user_data
 		# print(self.name)
@@ -42,7 +49,7 @@ class TopRightTop(tk.Frame):
 		self.appHighlightFont2 = font.Font(family='lineto circular',underline=1, size=11, weight='bold')
 		self.user_icon = tk.PhotoImage(file=r".\Images\user2.png",height=25,width=25)
 		self.userButton = IconButton(self.name,
-								master, text="Aditya Kotkar",
+								master, text= myobject['display_name'],
 								image=self.user_icon,
 								command=lambda:self.master.master.show_frame(UserPage)
 							)
