@@ -17,6 +17,8 @@ class MusicFrame(tk.Frame):
         self['background'] = '#181818'
         self['height'] = 40
 
+        self.play_music = None
+
         self.pause_icon = self.prepare_icon('pause_icon.png', size=25)
         self.music_icon = self.prepare_icon('music_icon.png', size=16)
         self.volume_icon = self.prepare_icon('volume_icon.png', size=25)
@@ -36,7 +38,11 @@ class MusicFrame(tk.Frame):
         self.play_button = PlayButton(self.iconFrame,
                                       title=self.title,
                                       url=self.url)
-        self.like_button = LikeButton(self.iconFrame)
+        self.like_button = LikeButton(self.iconFrame,
+                                      title=self.title,
+                                      album=self.album,
+                                      artist=self.artist,
+                                      url=self.url)
 
         self.play_button.grid(row=0, column=0, sticky='nsew')
         self.like_button.grid(row=0, column=1, sticky='nsew')
@@ -87,6 +93,7 @@ class MusicFrame(tk.Frame):
 
     @staticmethod
     def bg_config(frame, bg):
+        frame.iconFrame.config(bg=bg)
         frame.titleLabel.config(bg=bg)
         frame.albumLabel.config(bg=bg)
         frame.artistLabel.config(bg=bg)
@@ -160,7 +167,9 @@ class MusicFrame(tk.Frame):
 
             currentTrack[0]['instance'] = self.play_music
         else:
-            if currentTrack[0]['title'] == self.title:
+            # if currentTrack[0]['title'] == self.title:
+            #     self.play_music = currentTrack[0]['instance']
+            if currentTrack[0]['instance'] == self.play_music:
                 self.play_music = currentTrack[0]['instance']
             else:
                 from Base.listOfPage import bottomPage

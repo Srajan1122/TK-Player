@@ -77,3 +77,24 @@ class Top(tk.Frame):
         pages.append(frame)
         frame.update()
         frame.tkraise()
+
+    def show_frame_liked(self, data, image, text):
+        frame = Main(self.topRight.topRightBottom,
+                     self,
+                     data=data,
+                     image=image,
+                     text=text)
+        if len(data) > 0:
+            frame.content.music.like_button.grid_forget()
+        frame.head.text_frame.liked_button.grid_forget()
+        frame.head.text_frame.like_button.grid_forget()
+        frame.head.text_frame.menu_button.grid_forget()
+        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
+        if len(pages) > 1:
+            if pages[len(pages) - 1] == frame:
+                print('hi')
+                return
+        rightPage.clear()
+        resetCount()
+        pages.append(frame)
+        frame.tkraise()

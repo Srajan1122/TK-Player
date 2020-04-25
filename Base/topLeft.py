@@ -1,12 +1,8 @@
 import tkinter as tk
-
-
 from Pages.HomePage.Home import Home
 from Pages.Browse.browse import Browse
 from tkinter import font
 from PIL import ImageTk, Image
-from tkinter.ttk import *
-
 
 
 class IconButton(tk.Button):
@@ -30,7 +26,7 @@ class IconButton(tk.Button):
 
 
 class NormalButton(tk.Button):
-    def __init__(self, master, controller, text, page, *args, **kwargs):
+    def __init__(self, master, text, *args, **kwargs):
         tk.Button.__init__(self, master, *args, **kwargs)
 
         self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')
@@ -45,7 +41,6 @@ class NormalButton(tk.Button):
         self['text'] = text
         self['anchor'] = tk.W
         self['font'] = self.appHighlightFont
-        self['command'] = lambda: controller.show_frame(page)
 
 
 class TopLeft(tk.Frame):
@@ -54,24 +49,26 @@ class TopLeft(tk.Frame):
         self['background'] = '#121212'
         self.master = master
 
-        #font
+        # font
         self.appHighlightFont = font.Font(family='lineto circular', size=12, weight='bold')
         self.appHighlightFont2 = font.Font(family='lineto circular', size=10)
 
-        #images
+        # images
         self.home_icon = tk.PhotoImage(file=r".\Images\home.png")
         self.browse_icon = tk.PhotoImage(file=r".\Images\browse2.png")
         self.menu_icon = tk.PhotoImage(file=r".\Images\menu2.png")
+        self.liked_image = Image.open(r".\Images\purple_heart.png")
 
-        #frames
+        # frames
         self.frame1 = tk.Frame(self, bg='#121212', padx=10, pady=10)
         self.frame2 = tk.Frame(self, bg='#121212', padx=10)
         self.frame3 = tk.Frame(self, bg='#121212', padx=10)
         self.frame4 = tk.Frame(self, bg='#121212', padx=10)
         self.frame5 = tk.Frame(self, bg='#121212', padx=10)
 
-        #frame1
-        self.menu2 = tk.Menubutton(self.frame1, image=self.menu_icon, background='#121212', activebackground='#121212', bd=0)
+        # frame1
+        self.menu2 = tk.Menubutton(self.frame1, image=self.menu_icon, background='#121212', activebackground='#121212',
+                                   bd=0)
         self.menu2.menu = tk.Menu(self.menu2,
                                   tearoff=0,
                                   background='#35363a', activebackground='#404040',
@@ -84,41 +81,44 @@ class TopLeft(tk.Frame):
         self.menu2.menu.add_command(label='Playback')
         self.menu2.menu.add_command(label='View')
 
-        #frame2
+        # frame2
         self.home = IconButton(self.frame2, master, text='Home', image=self.home_icon, page=Home)
         self.browse = IconButton(self.frame2, master, text='Browse', image=self.browse_icon, page=Browse)
 
-        #frame3
+        # frame3
         self.appHighlightFont = font.Font(family='lineto circular', size=9, weight='bold')
         self.label = tk.Label(self.frame3,
-                         text='YOUR LIBRARY',
-                         background='#121212',
-                         foreground='#a8a8a8',
-                         anchor= tk.W,
-                         padx = 5,
-                         font=self.appHighlightFont
-                         )
-        self.madeForYou = NormalButton(self.frame3, master, text='Made For You', page='')
-        self.recentlyPlayed = NormalButton(self.frame3, master, text='Recently Played', page='')
-        self.likedSongs = NormalButton(self.frame3, master, text='Liked Songs', page='')
-        self.albums = NormalButton(self.frame3, master, text='Albums', page='')
-        self.artists = NormalButton(self.frame3, master, text='Artists', page='')
-
-        #frame4
-        self.label2 = tk.Label(self.frame4,
-                              text='PLAYLISTS',
+                              text='YOUR LIBRARY',
                               background='#121212',
                               foreground='#a8a8a8',
                               anchor=tk.W,
                               padx=5,
                               font=self.appHighlightFont
                               )
+        self.madeForYou = NormalButton(self.frame3, text='Made For You')
+        self.recentlyPlayed = NormalButton(self.frame3, text='Recently Played')
+        self.likedSongs = NormalButton(self.frame3,
+                                       text='Liked Songs',
+                                       command=lambda data=self.get_liked_song(): self.master.show_frame_liked(
+                                           data=data,
+                                           text='Liked Song',
+                                           image=self.liked_image))
+        self.albums = NormalButton(self.frame3, text='Albums')
+        self.artists = NormalButton(self.frame3, text='Artists')
 
-        #frame5
+        # frame4
+        self.label2 = tk.Label(self.frame4,
+                               text='PLAYLISTS',
+                               background='#121212',
+                               foreground='#a8a8a8',
+                               anchor=tk.W,
+                               padx=5,
+                               font=self.appHighlightFont
+                               )
 
-        self.logout = tk.Button(self.frame5,text = 'logout',command = self.logout)
+        # frame5
 
-        #grid - components
+        # grid - components
         self.menu2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
         self.home.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.browse.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -129,20 +129,20 @@ class TopLeft(tk.Frame):
         self.albums.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.artists.grid(row=5, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.logout.grid(row = 0, column = 0,sticky=tk.N + tk.S + tk.E + tk.W)
-        #grid - frames
+
+        # grid - frames
         self.frame1.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.frame2.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.frame3.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.frame4.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.frame5.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
-        #grid - row/column
+        # grid - row/column
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=2)
         self.grid_rowconfigure(2, weight=2)
-        self.grid_rowconfigure(3, weight=2)
+        self.grid_rowconfigure(3, weight=1)
         self.grid_rowconfigure(4, weight=10)
 
     def logout(self):
@@ -154,3 +154,8 @@ class TopLeft(tk.Frame):
         self.master.master.master.destroy()
         login = AuthBase()
         login.mainloop()
+
+    def get_liked_song(self):
+        from Base.listOfPage import likedSong
+        return likedSong
+
