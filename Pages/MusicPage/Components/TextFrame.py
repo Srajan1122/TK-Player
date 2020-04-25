@@ -74,8 +74,8 @@ class TextFrame(tk.Frame):
                                     image=self.music_menu_button,
                                     active_image=self.music_menu_button_active,
                                     width=37)
-        if len(data) > 0:
-            self.play_button.grid(row=0, column=0, sticky='nsew')
+
+        self.play_button.grid(row=0, column=0, sticky='nsew')
         self.like_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
         self.liked_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
         self.menu_button.grid(row=0, column=2, sticky='nsew')
