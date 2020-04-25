@@ -74,7 +74,7 @@ class TopLeft(tk.Frame):
         self.menu2 = tk.Menubutton(self.frame1, image=self.menu_icon, background='#121212', activebackground='#121212', bd=0)
         self.menu2.menu = tk.Menu(self.menu2,
                                   tearoff=0,
-                                  background='#35363a', activebackground='#35363a',
+                                  background='#35363a', activebackground='#404040',
                                   foreground='#a8a8a8', activeforeground='white',
                                   font=self.appHighlightFont2,
                                   bd=0
