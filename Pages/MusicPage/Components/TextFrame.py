@@ -9,6 +9,8 @@ class TextFrame(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#000000'
 
+        self.text = text
+
         pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
         self.head = tkfont.Font(family="Pragatic Narrow", size=28, weight="bold")
         self.support = tkfont.Font(family="Play", size=10, weight="bold")

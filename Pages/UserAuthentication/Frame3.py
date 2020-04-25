@@ -275,7 +275,7 @@ class Frame3(tk.Frame):
 				root = tk.Tk()
 				lbl = ImageLabel(root)
 				lbl.pack()
-				lbl.load(r'Images/Activity.gif')
+				lbl.load(r'images/Activity.gif')
 				root.mainloop()
 				
 				self.master.login(user_object)

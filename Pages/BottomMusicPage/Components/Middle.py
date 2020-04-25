@@ -2,15 +2,23 @@ import tkinter as tk
 from ttkthemes import ThemedStyle
 from tkinter import ttk
 from PIL import ImageTk, Image
+from random import randint
+from Music.track import Track
+import math
 
 
 class Middle(tk.Frame):
     count = 100
+    shuffle = False
+    single = False
 
-    def __init__(self, master, controller, *args, **kwargs):
+    def __init__(self, master, controller, title, artist, image, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
 
         self['bg'] = '#2c2c2c'
+        self.title = title
+        self.image = image
+        self.artist = artist
 
         self.upper = tk.Frame(self, bg='#2c2c2c')
         self.lower = tk.Frame(self, bg='#2c2c2c')
@@ -18,11 +26,23 @@ class Middle(tk.Frame):
         self.pause_icon2 = self.prepare_image('pause_icon2.png', 30)
         self.play_icon2 = self.prepare_image('play_icon2.png', 30)
         self.repeat_icon = self.prepare_image('repeat_icon.png', 15)
+        self.repeat_active_icon = self.prepare_image('repeat_active.png', 15)
         self.previous_icon = self.prepare_image('previous.png', 18)
         self.next_icon = self.prepare_image('next.png', 18)
         self.shuffle_icon = self.prepare_image('shuffle.png', 15)
+        self.shuffle_active_icon = self.prepare_image('shuffle_active.png', 15)
         self.pause_icon3 = self.prepare_image('pause_icon2.png', 32)
         self.play_icon3 = self.prepare_image('play_icon2.png', 32)
+
+        if Middle.single:
+            self.current_repeat_icon = self.repeat_active_icon
+        else:
+            self.current_repeat_icon = self.repeat_icon
+
+        if Middle.shuffle:
+            self.current_shuffle_icon = self.shuffle_active_icon
+        else:
+            self.current_shuffle_icon = self.shuffle_icon
 
         # ------------------------------------------------------
         style = ThemedStyle(self)
@@ -69,21 +89,23 @@ class Middle(tk.Frame):
                                 width=33,
                                 height=33)
         self.repeat = tk.Button(self.upper,
-                                image=self.repeat_icon,
+                                image=self.current_repeat_icon,
                                 background='#2c2c2c',
                                 activebackground='#2c2c2c',
                                 bd=0,
                                 relief=tk.FLAT,
                                 width=15,
-                                height=15)
+                                height=15,
+                                command=self.on_repeat)
         self.shuffle = tk.Button(self.upper,
-                                 image=self.shuffle_icon,
+                                 image=self.current_shuffle_icon,
                                  background='#2c2c2c',
                                  activebackground='#2c2c2c',
                                  bd=0,
                                  relief=tk.FLAT,
                                  width=15,
-                                 height=15)
+                                 height=15,
+                                 command=self.on_shuffle)
         self.next = tk.Button(self.upper,
                               image=self.next_icon,
                               background='#2c2c2c',
@@ -91,7 +113,8 @@ class Middle(tk.Frame):
                               bd=0,
                               relief=tk.FLAT,
                               width=18,
-                              height=18)
+                              height=18,
+                              command=self.play_next)
         self.previous = tk.Button(self.upper,
                                   image=self.previous_icon,
                                   background='#2c2c2c',
@@ -99,7 +122,8 @@ class Middle(tk.Frame):
                                   bd=0,
                                   relief=tk.FLAT,
                                   width=18,
-                                  height=18)
+                                  height=18,
+                                  command=self.play_previous)
 
         from Base.listOfPage import currentTrack
         self.sliderValue = tk.DoubleVar()
@@ -158,7 +182,7 @@ class Middle(tk.Frame):
             self.sliderValue.set(value)
             currentTrack[0]['instance'].Play()
         else:
-            # print("Track Not Playing")
+            self.after_cancel(self.loopID)
             self.sliderValue.set(value)
 
     def convertTime(self, currentTime):
@@ -175,8 +199,8 @@ class Middle(tk.Frame):
             currentTime += 1
             self.loopID = self.after(1000, lambda: self.TrackPlay(currentTime))
         else:
-            pass
-            # print('Track has ended')
+            if currentTime > math.ceil(currentTrack[0]['instance'].songDuration-2):
+                self.play_next()
 
     def click(self):
         self.controller.play_button.click()
@@ -207,3 +231,93 @@ class Middle(tk.Frame):
             self.button.config(image=self.play_icon2)
         else:
             self.button.config(image=self.pause_icon2)
+
+    @staticmethod
+    def find_list():
+        from Base.listOfPage import current_playing, musicList
+        list_of_music = []
+
+        for music in musicList:
+            for key, value in music.items():
+                if key == current_playing[0].master.master.master.master.master:
+                    list_of_music = value
+                    break
+        return list_of_music
+
+    def play_next(self):
+        from Base.listOfPage import current_playing
+        list_of_music = self.find_list()
+        current_index = list_of_music.index(current_playing[0])
+
+        if Middle.single:
+            next_index = current_index
+            self.sliderValue.set(0)
+            self.after_cancel(self.loopID)
+            music = list_of_music[next_index]
+            music.play_button.click()
+
+        elif Middle.shuffle:
+            next_index = randint(0, len(list_of_music) - 1)
+            if next_index == current_index:
+                self.sliderValue.set(0)
+                self.after_cancel(self.loopID)
+                music = list_of_music[next_index]
+                music.play_button.click()
+        else:
+            next_index = (current_index + 1) % len(list_of_music)
+            if next_index == current_index:
+                self.sliderValue.set(0)
+                self.after_cancel(self.loopID)
+                music = list_of_music[next_index]
+                music.play_button.click()
+
+        music = list_of_music[next_index]
+        music.play_button.click()
+
+    def play_previous(self):
+        from Base.listOfPage import current_playing
+        list_of_music = self.find_list()
+        current_index = list_of_music.index(current_playing[0])
+        if Middle.single:
+            next_index = current_index
+            self.sliderValue.set(0)
+            self.after_cancel(self.loopID)
+            music = list_of_music[next_index]
+            music.play_button.click()
+
+        elif Middle.shuffle:
+            next_index = randint(0, len(list_of_music) - 1)
+            if next_index == current_index:
+                self.sliderValue.set(0)
+                self.after_cancel(self.loopID)
+                music = list_of_music[next_index]
+                music.play_button.click()
+        else:
+            if current_index == 0:
+                next_index = len(list_of_music) - 1
+            else:
+                next_index = current_index - 1
+                if next_index == current_index:
+                    self.sliderValue.set(0)
+                    self.after_cancel(self.loopID)
+                    music = list_of_music[next_index]
+                    music.play_button.click()
+
+        music = list_of_music[next_index]
+        music.play_button.click()
+
+    def on_shuffle(self):
+        if Middle.shuffle:
+            Middle.shuffle = False
+            self.shuffle.config(image=self.shuffle_icon)
+        else:
+            Middle.shuffle = True
+            self.shuffle.config(image=self.shuffle_active_icon)
+
+    def on_repeat(self):
+        if Middle.single:
+            Middle.single = False
+            self.repeat.config(image=self.repeat_icon)
+        else:
+            Middle.single = True
+            self.repeat.config(image=self.repeat_active_icon)

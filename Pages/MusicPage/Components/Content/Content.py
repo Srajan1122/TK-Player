@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.font as tkfont
 
 from Pages.MusicPage.Components.Content.Components.MusicFrame import MusicFrame
 from Pages.Resource.VerticalScrollableFrame import ScrollableFrame
@@ -13,11 +14,21 @@ class Content(tk.Frame):
         self.count = 0
         self.data = data
 
+        self.support = tkfont.Font(family="Pragatic Narrow", size=12, weight="bold")
+
         self.scrollable = ScrollableFrame(self)
         from Base.listOfPage import musicList
         musicList.append({self.master: []})
 
-        for k in range(20):
+        if len(data) == 0:
+            self.label = tk.Label(self,
+                                  text='Your liked song will appear here',
+                                  background='#181818',
+                                  foreground='#999999',
+                                  font=self.support
+                                  )
+            self.label.grid(row=0, column=0)
+        else:
             for j, i in enumerate(self.data):
                 self.music = MusicFrame(self.scrollable.scrollable_frame,
                                         title=i['title'],
