@@ -7,7 +7,6 @@ from PIL import Image, ImageTk
 from Music.track import Track
 
 
-
 class MusicFrame(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         self.title = kwargs.pop('title')
@@ -17,6 +16,8 @@ class MusicFrame(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self['height'] = 40
+
+        self.play_music = None
 
         self.pause_icon = self.prepare_icon('pause_icon.png', size=25)
         self.music_icon = self.prepare_icon('music_icon.png', size=16)
@@ -37,7 +38,11 @@ class MusicFrame(tk.Frame):
         self.play_button = PlayButton(self.iconFrame,
                                       title=self.title,
                                       url=self.url)
-        self.like_button = LikeButton(self.iconFrame)
+        self.like_button = LikeButton(self.iconFrame,
+                                      title=self.title,
+                                      album=self.album,
+                                      artist=self.artist,
+                                      url=self.url)
 
         self.play_button.grid(row=0, column=0, sticky='nsew')
         self.like_button.grid(row=0, column=1, sticky='nsew')
@@ -81,13 +86,17 @@ class MusicFrame(tk.Frame):
 
     @staticmethod
     def prepare_icon(filename, size):
-        icon = Image.open('images/'+filename)
+        icon = Image.open('images/' + filename)
         icon = icon.resize((size, size), Image.ANTIALIAS)
         icon = ImageTk.PhotoImage(icon)
         return icon
 
     @staticmethod
     def bg_config(frame, bg):
+        # check_frame = '.!frame.!filterframe.!userentry'
+        # if str(frame).find(check_frame) == -1:
+        #     return
+        frame.iconFrame.config(bg=bg)
         frame.titleLabel.config(bg=bg)
         frame.albumLabel.config(bg=bg)
         frame.artistLabel.config(bg=bg)
@@ -98,6 +107,9 @@ class MusicFrame(tk.Frame):
 
     @staticmethod
     def fg_config(frame, fg):
+        # check_frame = '.!container.!top.!topright.!toprightbottom.!main.!frame.!filterframe.!userentry'
+        # if str(frame).find(check_frame) > 0:
+        #     return
         frame.titleLabel.config(foreground=fg)
         frame.albumLabel.config(foreground=fg)
         frame.artistLabel.config(foreground=fg)
@@ -122,7 +134,10 @@ class MusicFrame(tk.Frame):
         return
 
     def click(self, event):
-        if str(self.focus_get()) != '.':
+        check_frame = '.!frame.!filterframe.!userentry'
+        print(self.focus_get())
+        if str(self.focus_get()) != '.' and str(self.focus_get()).find(check_frame) == -1:
+            print('hi')
             self.bg_config(self.focus_get(), '#181818')
             self.focus_get().menuFrame.menuButton.grid_forget()
         self.focus_set()
@@ -148,20 +163,33 @@ class MusicFrame(tk.Frame):
         self.play_button.playing = True
         self.master.master.master.master.master.head.text_frame.play_button.isPlaying = True
         self.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+
         from Base.listOfPage import currentTrack
         if len(currentTrack) == 0:
             currentTrack.append({})
             currentTrack[0]['title'] = self.title
             currentTrack[0]['url'] = self.url
-            self.play_music = Track(self, trackName=self.title, trackUrl=self.url)
+            self.play_music = Track(self, trackName=self.title,
+                                    trackUrl=self.url,
+                                    artist=self.artist,
+                                    image=self.master.master.master.master.master.image)
+
             currentTrack[0]['instance'] = self.play_music
         else:
-            if currentTrack[0]['title'] == self.title:
+            # if currentTrack[0]['title'] == self.title:
+            #     self.play_music = currentTrack[0]['instance']
+            if currentTrack[0]['instance'] == self.play_music:
                 self.play_music = currentTrack[0]['instance']
             else:
+                from Base.listOfPage import bottomPage
+                _ = bottomPage.pop()
                 currentTrack[0]['title'] = self.title
                 currentTrack[0]['url'] = self.url
-                self.play_music = Track(self, trackName=self.title, trackUrl=self.url)
+                self.play_music = Track(self,
+                                        trackName=self.title,
+                                        trackUrl=self.url,
+                                        artist=self.artist,
+                                        image=self.master.master.master.master.master.image)
                 currentTrack[0]['instance'] = self.play_music
 
         self.play_music.Play()

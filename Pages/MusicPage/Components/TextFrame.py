@@ -9,6 +9,8 @@ class TextFrame(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#000000'
 
+        self.text = text
+
         pyglet.font.add_file('fonts/Play/Play-Bold.ttf')
         self.head = tkfont.Font(family="Pragatic Narrow", size=28, weight="bold")
         self.support = tkfont.Font(family="Play", size=10, weight="bold")
@@ -175,14 +177,10 @@ class PlayHeadIcon(tk.Button):
     def click(self, event):
         from Base.listOfPage import current_playing
         from Base.listOfPage import musicList
-        # print(self.master.master.master.master)
         if self.isPlaying:
             self.config(image=self.play)
             if len(current_playing) != 0:
-                from Base.listOfPage import currentTrack
-                url = currentTrack[0]['url']
-                title = currentTrack[0]['title']
-                current_playing[0].play_button.click(title=title, url=url)
+                current_playing[0].play_button.click()
         else:
             from Base.listOfPage import focusCard
             if len(focusCard) != 0:
@@ -193,17 +191,15 @@ class PlayHeadIcon(tk.Button):
             self.config(image=self.pause)
             if len(current_playing) != 0:
                 if current_playing[0].master.master.master.master.master == self.master.master.master.master:
-                    from Base.listOfPage import currentTrack
-                    url = currentTrack[0]['url']
-                    title = currentTrack[0]['title']
-                    current_playing[0].play_button.click(title=title, url=url)
+                    current_playing[0].play_button.click()
                 else:
                     for i in musicList:
                         for k, v in i.items():
                             if k == self.master.master.master.master:
-                                v[0].play_button.click(self.data[0]['title'], self.data[0]['location'])
+                                v[0].play_button.click()
+
             elif len(current_playing) == 0:
                 for i in musicList:
                     for k, v in i.items():
                         if k == self.master.master.master.master:
-                            v[0].play_button.click(self.data[0]['title'], self.data[0]['location'])
+                            v[0].play_button.click()

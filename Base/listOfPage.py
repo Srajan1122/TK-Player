@@ -5,9 +5,12 @@ musicPages = []
 focusCard = []
 musicList = []
 currentTrack = []
+bottomInstance = []
+bottomPage = []
+likedSong = []
+likedPlaylist = []
 
 c = 1
-
 f = 0
 
 
