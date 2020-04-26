@@ -3,7 +3,6 @@ from Base import top
 from Base.bottom import Bottom
 from threading import Thread
 from ActivityIndicator.Activity_Indicator import ImageLabel
-import time
 
 
 class Splash(tk.Toplevel):
@@ -48,6 +47,10 @@ class Container(tk.Frame):
 class Root(tk.Tk):
     def __init__(self, data, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        self.counter = False
+
+        self.bind("<F11>", self.toggle_fullscreen)
+        self.bind("<Escape>", self.end_fullscreen)
 
         def TK_player():
             self.withdraw()
@@ -73,12 +76,24 @@ class Root(tk.Tk):
                 self.deiconify()
 
             splash.after(15000, myfun)
-            time.sleep(15000)
+            # time.sleep(15000)
 
-        Thread(target=TK_player).start()
-        Thread(target=Splash_Screen).start()
+        self.tk_player = Thread(target=TK_player)
+        self.tk_player.start()
+        self.splash = Thread(target=Splash_Screen)
+        self.splash.start()
 
         print(data)
+
+    def toggle_fullscreen(self, event=None):
+        self.counter = not self.counter  # Just toggling the boolean
+        self.attributes("-fullscreen", self.counter)
+        return "break"
+
+    def end_fullscreen(self, event=None):
+        self.counter = False
+        self.attributes("-fullscreen", False)
+        return "break"
 
 
 if __name__ == '__main__':
