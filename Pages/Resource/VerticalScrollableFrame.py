@@ -59,7 +59,7 @@ class ScrollableFrame(tk.Frame):
                                        )
         ScrollableFrame.name += 1
         # ---------------------------------------------------------------------------
-        self.scrollable_frame = tk.Frame(self.canvas, bg='#181818')
+        self.scrollable_frame = tk.Frame(self.canvas)
 
         self.scrollable_frame.bind(
             "<Configure>",
@@ -68,6 +68,7 @@ class ScrollableFrame(tk.Frame):
             )
         )
 
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.canvas.bind('<Configure>', self.size)
 
         self.canvas.grid(row=0, column=0, sticky=tk.N+tk.S+tk.W+tk.E)
@@ -77,7 +78,6 @@ class ScrollableFrame(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.canvas.bind("<Enter>", self._bind_mouse)
         self.canvas.bind("<Leave>", self._unbind_mouse)
 
@@ -108,5 +108,5 @@ class ScrollableFrame(tk.Frame):
         self.canvas.create_window((0, 0),
                                   window=self.scrollable_frame,
                                   anchor="nw",
-                                  width=width
+                                  width=width,
                                   )
