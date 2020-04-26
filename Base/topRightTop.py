@@ -173,7 +173,7 @@ class MinMaxCross(tk.Frame):
                              bg='#000000',
                              activebackground='#867f7a',
                              height=25,
-                             width=25,
+                             width=35,
                              image=self.min_icon,
                              relief=tk.FLAT,
                              bd=0,
@@ -183,7 +183,7 @@ class MinMaxCross(tk.Frame):
                              bg='#000000',
                              relief=tk.FLAT,
                              height=25,
-                             width=25,
+                             width=35,
                              bd=0,
                              activebackground='#867f7a',
                              command=lambda: self.master.master.master.master.master.state('zoomed'))
@@ -192,6 +192,7 @@ class MinMaxCross(tk.Frame):
                                activebackground='red',
                                image=self.cross_icon,
                                relief=tk.FLAT,
+                               width=35,
                                bd=0,
                                command=lambda: sys.exit())
         self.min.grid(row=0, column=1)
