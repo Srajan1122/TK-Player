@@ -8,6 +8,7 @@ class Bottom(tk.Frame):
 
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)
+		self.grid_propagate(False)
 
 	def show_frame(self, title):
 		from Base.listOfPage import bottomPage
