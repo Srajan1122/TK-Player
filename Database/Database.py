@@ -771,7 +771,7 @@ def get_all_liked_songs(uid):
             traceback.print_exc()
         return False
 
-    
+all_songs = get_all_tracks()
     
 
     
