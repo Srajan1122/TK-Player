@@ -31,6 +31,11 @@ class TopRightTop(tk.Frame):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#000000'
 
+        f = open('user')
+        x = f.readlines()[0]
+        from Database.Database import get_user
+        myobject  = get_user(x)
+
         self.back = Back(self)
         self.search = tk.Frame(self, bg='#000000')
         self.name = tk.Frame(self, bg='#000000')
@@ -44,7 +49,7 @@ class TopRightTop(tk.Frame):
         self.appHighlightFont2 = font.Font(family='lineto circular', underline=1, size=11, weight='bold')
         self.user_icon = tk.PhotoImage(file=r".\Images\user2.png", height=25, width=25)
         self.userButton = IconButton(self.name,
-                                     master, text="Aditya Kotkar",
+                                     master, text=myobject['display_name'],
                                      image=self.user_icon,
                                      command=lambda: self.master.master.show_frame(UserPage)
                                      )
