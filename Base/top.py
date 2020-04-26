@@ -4,6 +4,8 @@ from .topRight import TopRight
 from Pages.HomePage.Home import Home
 from Pages.Browse.browse import Browse
 from Pages.MusicPage.main import Main
+from Pages.ArtistPage.Artist import Artist
+from Pages.AlbumPage.Album import Album
 from Pages.UserPage.UserPage import UserPage
 from .listOfPage import *
 
@@ -20,7 +22,7 @@ class Top(tk.Frame):
         # Loading all the frames
 
         self.frames = {}
-        for F in (Home, Browse,UserPage):
+        for F in (Home, Browse, UserPage, Artist, Album):
             frame = F(self.topRight.topRightBottom, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
@@ -78,6 +80,52 @@ class Top(tk.Frame):
         frame.update()
         frame.tkraise()
 
+    def show_frame_Main2(self, data, image, r, c, text):
+        from Base.listOfPage import musicPages2
+        if musicPages2[r][c] == 0:
+            frame = Main(self.topRight.topRightBottom,
+                         self,
+                         data=data,
+                         image=image,
+                         text=text)
+            musicPages2[r][c] = frame
+        else:
+            frame = musicPages2[r][c]
+
+        self.frames[Main] = frame
+        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
+
+        if pages[len(pages) - 1] == frame:
+            return
+        rightPage.clear()
+        resetCount()
+        pages.append(frame)
+        frame.update()
+        frame.tkraise()
+
+    def show_frame_Main3(self, data, image, r, c, text):
+        from Base.listOfPage import musicPages3
+        if musicPages3[r][c] == 0:
+            frame = Main(self.topRight.topRightBottom,
+                         self,
+                         data=data,
+                         image=image,
+                         text=text)
+            musicPages3[r][c] = frame
+        else:
+            frame = musicPages3[r][c]
+
+        self.frames[Main] = frame
+        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
+
+        if pages[len(pages) - 1] == frame:
+            return
+        rightPage.clear()
+        resetCount()
+        pages.append(frame)
+        frame.update()
+        frame.tkraise()
+
     def show_frame_liked(self, data, image, text):
         frame = Main(self.topRight.topRightBottom,
                      self,
@@ -99,7 +147,6 @@ class Top(tk.Frame):
         frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
         if len(pages) > 1:
             if pages[len(pages) - 1] == frame:
-                print('hi')
                 return
         rightPage.clear()
         resetCount()
