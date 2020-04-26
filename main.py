@@ -28,7 +28,7 @@ class Splash(tk.Toplevel):
 
 class Container(tk.Frame):
     def __init__(self, master, *args, **kwargs):
-        tk.Frame.__init__(self, master, bg='white', *args, **kwargs)
+        tk.Frame.__init__(self, master, bg='#000000', *args, **kwargs)
 
         self.top = top.Top(self)
         self.bottom = Bottom(self)
