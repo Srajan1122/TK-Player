@@ -8,6 +8,7 @@ from Pages.ArtistPage.Artist import Artist
 from Pages.AlbumPage.Album import Album
 from Pages.UserPage.UserPage import UserPage
 from .listOfPage import *
+from Pages.SearchPage.SearchPage import SearchPage
 
 
 class Top(tk.Frame):
@@ -22,7 +23,7 @@ class Top(tk.Frame):
         # Loading all the frames
 
         self.frames = {}
-        for F in (Home, Browse, UserPage, Artist, Album):
+        for F in (Home, Browse, UserPage, Artist, Album,SearchPage):
             frame = F(self.topRight.topRightBottom, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)

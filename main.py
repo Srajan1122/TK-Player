@@ -48,53 +48,59 @@ class Root(tk.Tk):
     def __init__(self, data, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.counter = False
+        container = Container(self)
+        container.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
-        self.bind("<F11>", self.toggle_fullscreen)
-        self.bind("<Escape>", self.end_fullscreen)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.state('zoomed')
 
-        def TK_player():
-            self.withdraw()
-            # print('befire')
+        # self.bind("<F11>", self.toggle_fullscreen)
+        # self.bind("<Escape>", self.end_fullscreen)
 
-            # print('aim teher')
-            self.title('Amplify')
-            # self.title['bg']='black'
-            app_icon = tk.PhotoImage(file=r"images\app_64.png")
-            self.iconphoto(False, app_icon)
+        # def TK_player():
+        #     self.withdraw()
+        #     # print('befire')
 
-            container = Container(self)
-            container.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
+        #     # print('aim teher')
+        #     self.title('Amplify')
+        #     # self.title['bg']='black'
+        #     app_icon = tk.PhotoImage(file=r"images\app_64.png")
+        #     self.iconphoto(False, app_icon)
 
-            self.grid_columnconfigure(0, weight=1)
-            self.grid_rowconfigure(0, weight=1)
-            self.state('zoomed')
+            # container = Container(self)
+            # container.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
 
-        def Splash_Screen():
-            splash = Splash(self)
+            # self.grid_columnconfigure(0, weight=1)
+            # self.grid_rowconfigure(0, weight=1)
+            # self.state('zoomed')
 
-            def myfun():
-                splash.destroy()
-                self.deiconify()
+    #     def Splash_Screen():
+    #         splash = Splash(self)
 
-            splash.after(15000, myfun)
-            # time.sleep(15000)
+    #         def myfun():
+    #             splash.destroy()
+    #             self.deiconify()
 
-        self.tk_player = Thread(target=TK_player)
-        self.tk_player.start()
-        self.splash = Thread(target=Splash_Screen)
-        self.splash.start()
+    #         splash.after(15000, myfun)
+    #         # time.sleep(15000)
 
-        # print(data)
+    #     self.tk_player = Thread(target=TK_player)
+    #     self.tk_player.start()
+    #     self.splash = Thread(target=Splash_Screen)
+    #     self.splash.start()
 
-    def toggle_fullscreen(self, event=None):
-        self.counter = not self.counter  # Just toggling the boolean
-        self.attributes("-fullscreen", self.counter)
-        return "break"
+    #     # print(data)
 
-    def end_fullscreen(self, event=None):
-        self.counter = False
-        self.attributes("-fullscreen", False)
-        return "break"
+    # def toggle_fullscreen(self, event=None):
+    #     self.counter = not self.counter  # Just toggling the boolean
+    #     self.attributes("-fullscreen", self.counter)
+    #     return "break"
+
+    # def end_fullscreen(self, event=None):
+    #     self.counter = False
+    #     self.attributes("-fullscreen", False)
+    #     return "break"
 
 
 if __name__ == '__main__':

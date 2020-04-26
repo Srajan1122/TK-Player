@@ -49,24 +49,24 @@ class Browse(tk.Frame):
 		# print(len(data))
 		# print('###################################################')
 
-		gData = HomePagedata.genre_data
-		print('###################################################')
-		# print(gData)
-		print(len(gData))
-		gTitle = ['All']
-		for i in gData:
-			gTitle.append(i['text'])
-		print(gTitle)
-		print('###################################################')
+		# gData = HomePagedata.genre_data
+		# print('###################################################')
+		# # print(gData)
+		# print(len(gData))
+		# gTitle = ['All']
+		# for i in gData:
+		# 	gTitle.append(i['text'])
+		# print(gTitle)
+		# print('###################################################')
 
-		for j,i in enumerate(gTitle):
-			print(j,i)
-			self.button = tk.Button(self.categoryFrame,
-									text=i,
-									padx=5,bg='#171717', 
-									foreground='white', 
-									pady=10,font=play,
-									command=lambda: self.show_frame(All)).grid(row=0, column=j)
+		# for j,i in enumerate(gTitle):
+		# 	print(j,i)
+		# 	self.button = tk.Button(self.categoryFrame,
+		# 							text=i,
+		# 							padx=5,bg='#171717', 
+		# 							foreground='white', 
+		# 							pady=10,font=play,
+		# 							command=lambda: self.show_frame(All)).grid(row=0, column=j)
 		
 		for F in (All,Artist,Genre):
 			frame = F(self.content, self)

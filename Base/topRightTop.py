@@ -4,6 +4,7 @@ from tkinter import font
 from .listOfPage import pages, rightPage, incrementCount, getCount, resetCount
 from Pages.UserPage.UserPage import UserPage
 import sys
+from Pages.SearchPage.SearchPage import SearchPage
 
 
 class IconButton(tk.Button):
@@ -37,7 +38,7 @@ class TopRightTop(tk.Frame):
         myobject  = get_user(x)
 
         self.back = Back(self)
-        self.search = tk.Frame(self, bg='#000000')
+        self.search = tk.Frame(self, bg='pink')
         self.name = tk.Frame(self, bg='#000000')
         # self.dropdown = tk.Frame(self, bg='pink')
         self.min_max_cross = MinMaxCross(self)
@@ -77,6 +78,10 @@ class TopRightTop(tk.Frame):
         self.user_menu.menu.add_command(label='Logout', command=self.logout)
         self.user_menu.menu.add_command(label="Settings")
 
+        #Search
+        self.searchButton = tk.Button(self.search,text='Search',command=lambda: master.master.show_frame(SearchPage))
+
+
         self.user_menu.grid(row=0, column=2, sticky='nsew', padx=10, pady=0)
         self.userButton.grid(row=0, column=1, sticky='nsew', ipady=0)
         self.back.grid(row=0, column=0, sticky='nsew')
@@ -84,6 +89,7 @@ class TopRightTop(tk.Frame):
         self.name.grid(row=0, column=2, sticky='nsew')
         # self.dropdown.grid(row=0, column=3, sticky='nsew')
         self.min_max_cross.grid(row=0, column=3, sticky='nsew')
+        self.searchButton.grid(row=0 , column=0, sticky='nsew')
 
         self.name.grid_rowconfigure(0, weight=1)
         self.name.grid_columnconfigure(0, weight=1)
