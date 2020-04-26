@@ -84,6 +84,7 @@ class MusicFrame(tk.Frame):
         self.bind('<Enter>', self.enter)
         self.bind('<Leave>', self.leave)
 
+
     @staticmethod
     def prepare_icon(filename, size):
         icon = Image.open('images/' + filename)
