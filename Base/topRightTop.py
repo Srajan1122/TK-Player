@@ -7,6 +7,55 @@ import sys
 from Pages.SearchPage.SearchPage import SearchPage
 
 
+class UserEntry(tk.Entry):
+    def __init__(self, master, placeholder, textvariable, songDict, *args, **kwargs):
+        tk.Entry.__init__(self, master, *args, **kwargs)
+
+        # placeholder function
+        def default_placeholder(self):
+            self.insert(0, placeholder)
+
+        default_placeholder(self)
+
+        # font size, style
+        self.appHighlightFont = font.Font(
+            family='lineto circular',
+            size=11,
+        )
+
+        # font color
+        self.default_fg = 'black'
+        self.input_fg = 'white'
+
+        # properties of Entry widget
+        self['background'] = 'white'
+        self['foreground'] = self.default_fg
+        self['insertbackground'] = 'black'
+        self['font'] = self.appHighlightFont
+        self['border'] = 0
+
+        # function called on focusing
+        def foc_in(event):
+            if self.get() == placeholder:
+                self['foreground'] = self.default_fg
+                self.delete(0, 100)
+            self['foreground'] = 'black'
+            self['textvariable'] = textvariable
+
+        # function called when not focusing
+        def foc_out(event):
+            self['foreground'] = self.default_fg
+            # print(self.get())
+            if not self.get():
+                default_placeholder(self)
+            else:
+                self.insert(0, self['textvariable'])
+
+        # def key(events)
+        self.bind("<FocusIn>", lambda e: foc_in(e))
+        self.bind("<FocusOut>", lambda e: foc_out(e))
+
+
 class IconButton(tk.Button):
     def __init__(self, master, controller, text, image, command, *args, **kwargs):
         tk.Button.__init__(self, master, *args, **kwargs)
@@ -25,6 +74,7 @@ class IconButton(tk.Button):
         self['anchor'] = tk.W
         self['font'] = self.appHighlightFont
         self['command'] = command
+        # self['width']=100
 
 
 class TopRightTop(tk.Frame):
@@ -42,6 +92,19 @@ class TopRightTop(tk.Frame):
         self.name = tk.Frame(self, bg='#000000')
         # self.dropdown = tk.Frame(self, bg='pink')
         self.min_max_cross = MinMaxCross(self)
+
+        self.filter = UserEntry(
+            self.search, placeholder="  Search",
+            textvariable=None,
+            songDict=None
+        )
+        self.filter.grid(
+            row=0, column=0, sticky='nsew', padx=10,
+            pady=4,
+            ipadx=20,
+            ipady=5
+        )
+        self.filter.bind("<Return>",lambda e: self.sendSearchData(e))
 
         # User_button
         # self.name = self.user_data
@@ -96,10 +159,13 @@ class TopRightTop(tk.Frame):
 
         self.rowconfigure(0)
         self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=20)
-        self.grid_columnconfigure(2, weight=10)
+        self.grid_columnconfigure(1, weight=10)
+        self.grid_columnconfigure(2, weight=5)
         # self.grid_columnconfigure(3, weight=1)
         self.grid_columnconfigure(3, weight=4)
+    
+    def sendSearchData(self, event):
+        print(self.filter.get())
 
     def userButtonHighlight(self, event):
         self.userButton['bg'] = "#000000"
