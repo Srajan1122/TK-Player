@@ -27,7 +27,7 @@ class MusicFrame(tk.Frame):
         self.titleFrame = tk.Frame(self, bg='#181818')
         self.artistFrame = tk.Frame(self, bg='#181818')
         self.albumFrame = tk.Frame(self, bg='#181818')
-        self.menuFrame = MenuFrame(self, bg='#181818')
+        self.menuFrame = MenuFrame(self, bg='#181818', title=self.title, album=self.album, artist=self.artist)
 
         self.iconFrame.grid(row=0, column=0, sticky='nsew')
         self.titleFrame.grid(row=0, column=1, sticky='nsew')
@@ -83,6 +83,7 @@ class MusicFrame(tk.Frame):
         self.bind('<Button-1>', self.click)
         self.bind('<Enter>', self.enter)
         self.bind('<Leave>', self.leave)
+
 
     @staticmethod
     def prepare_icon(filename, size):
