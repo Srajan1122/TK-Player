@@ -44,6 +44,17 @@ def get_genre_data():
         genre_data[i]['tracks'] = my_tracks
     return genre_data
 
+def get_language_data():
+    from Database.Database import get_tracks_by_language
+    language_data = get_tracks_by_language()
+
+    tracks_list = []
+    for i in range(len(language_data)):
+        my_tracks = get_tracks_by_language(language=language_data[i]['text'])
+        language_data[i]['tracks'] = my_tracks
+    return language_data
+
 
 genre_data = get_genre_data()
 artist_data = get_artist_data()
+language_data = get_language_data()

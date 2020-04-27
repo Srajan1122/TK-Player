@@ -51,6 +51,8 @@ class TopLeft(tk.Frame):
         self['background'] = '#121212'
         self.master = master
 
+        self.string1 = 	"Copyright "u"\u00A9 2020"
+
         # font
         self.appHighlightFont = font.Font(family='lineto circular', size=12, weight='bold')
         self.appHighlightFont2 = font.Font(family='lineto circular', size=10)
@@ -74,15 +76,16 @@ class TopLeft(tk.Frame):
                                    bd=0)
         self.menu2.menu = tk.Menu(self.menu2,
                                   tearoff=0,
-                                  background='#35363a', activebackground='#404040',
-                                  foreground='#a8a8a8', activeforeground='white',
+                                  background='#404040', activebackground='#404040',
+                                  foreground='white', activeforeground='white',
                                   font=self.appHighlightFont2,
                                   bd=0
                                   )
         self.menu2['menu'] = self.menu2.menu
-        self.menu2.menu.add_command(label='File')
-        self.menu2.menu.add_command(label='Playback')
-        self.menu2.menu.add_command(label='View')
+        self.menu2.menu.add_command(label='AMPLIFY')
+        self.menu2.menu.add_command(label=self.string1)
+        self.menu2.menu.add_command(label='Contact us:')
+        self.menu2.menu.add_command(label='amplifyteam1234@gmail.com')
 
         # frame2
         self.home = IconButton(self.frame2, master, text='Home', image=self.home_icon, page=Home)
@@ -122,7 +125,6 @@ class TopLeft(tk.Frame):
                                padx=5,
                                font=self.appHighlightFont
                                )
-        self.string1 = 	"Copyright "u"\u00A9 2020"
         self.copyright = tk.Label(self.frame4,
                                text=self.string1,
                                background='#000000',

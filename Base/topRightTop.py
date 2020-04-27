@@ -139,7 +139,8 @@ class TopRightTop(tk.Frame):
         )
         self.user_menu['menu'] = self.user_menu.menu
         self.user_menu.menu.add_command(label='Logout', command=self.logout)
-        self.user_menu.menu.add_command(label="Settings")
+        #self.user_menu.menu.add_separator()
+        self.user_menu.menu.add_command(label="Profile", command=lambda: self.master.master.show_frame(UserPage))
 
         #Search
         self.searchButton = tk.Button(self.search,text='Search',command=lambda: master.master.show_frame(SearchPage))
