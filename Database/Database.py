@@ -3,7 +3,140 @@ import traceback
 import tkinter as tk
 from tkinter import messagebox
 
-def set_artist(track_title, track_genre, track_location, track_artist):
+
+def Check_artist(artist):
+    """
+    Returns boolean value if the artist exist or not in the database
+    """
+    try:
+        doc_ref = db.collection(u'artist').document(artist)
+        if doc_ref.get().to_dict() is None:
+            return False
+        print('Artist got successfully')
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+def Check_genre(genre):
+    """
+    Returns boolean value if the genre exist or not in the database
+    """
+    try:
+        doc_ref = db.collection(u'genres').document(genre)
+        if doc_ref.get().to_dict() is None:
+           return False
+        print('genre got successfully')
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+    
+def Check_language(language):
+    """
+    Returns boolean value if the language exist or not in the database
+    """
+    try:
+        doc_ref = db.collection(u'languages').document(language)
+        if doc_ref.get().to_dict() is None:
+           return False
+        print('language got successfully')
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+
+def set_language(language):
+    '''
+
+
+    :param language:
+    This is the name of the language
+
+    :return:
+    Bool if success
+
+    '''
+    try:
+        if(Check_language(language)):
+            pass
+        else : 
+            doc_ref = db.collection(u'languages').document(language)
+            doc_ref.set({
+                'language_name' : language,
+                'language_image':'',
+
+            })
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+def get_tracks_by_language(**kwargs):
+    """
+    Returns a list of songs with particular language
+    kwarg : language = 'required language'
+    else return the list of all languages
+    if failed returns false
+    """
+    if 'language' in kwargs:
+        try:
+            doc_ref = db.collection('Tracks')
+            snapshots = list(doc_ref.where(u'Language', u'==', kwargs['language']).stream())
+            if len(snapshots):
+                object_list = list(map(lambda x: x.to_dict(), snapshots))
+                # print(object_list)
+                return object_list
+        except Exception as ex:
+            messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+            print('Exception Occurred which is of type :', ex.__class__.__name__)
+            y = input('If you want to see Traceback press 1 : ')
+            if y == '1':
+                traceback.print_exc()
+            return False
+    else:
+        try:
+            doc_ref = db.collection(u'languages').stream()
+            object_list = list(map(lambda x: x.to_dict(), doc_ref))
+            # print(object_list)
+            all_dicts = []
+            for i in range(len(object_list)):
+                my_dict = {
+                    'text': object_list[i]['language_name'],
+                     'url': object_list[i]['language_image'],
+                }
+                all_dicts.append(my_dict)
+            # print(all_dicts)
+            return all_dicts
+        except Exception as ex:
+            messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+            
+            print('Exception Occurred which is of type :', ex.__class__.__name__)
+            y = input('If you want to see Traceback press 1 : ')
+            if y == '1':
+                traceback.print_exc()
+            return False
+
+def set_artist(track_title, track_genre, track_location, track_artist,language):
     """
     Function to set only artist details
     Returns boolean True if set else False
@@ -11,17 +144,23 @@ def set_artist(track_title, track_genre, track_location, track_artist):
     """
 
     try:
-        collection = db.collection(u'artist').document(track_artist)
-        collection.set({
-            'name': track_artist,
-            'image_url':''
-        })
+        if(Check_artist(track_artist)):
+            pass
+        else:
+            collection = db.collection(u'artist').document(track_artist)
+            collection.set({
+                'name': track_artist,
+                'image_url': ''
+                
+            })
         artistTracks = db.collection(u'artist/' + track_artist + '/tracks').document(track_title)
         artistTracks.set({
             'title': track_title,
             'genre': track_genre,
             'location': track_location,
-            'artist':track_artist
+            'artist':track_artist,
+            'like_count': 0,
+            'Language': language
 
         })
         print('artist added')
@@ -36,24 +175,6 @@ def set_artist(track_title, track_genre, track_location, track_artist):
         return False
 
 
-def Check_artist(artist):
-    """
-    Returns boolean value if the artist exist or not in the database
-    """
-    try:
-        doc_ref = db.collection(u'artist').document(artist)
-        if doc_ref.get().to_dict() is None:
-            raise Exception('Not such artist registered')
-        print('Artist got successfully')
-        return True
-    except Exception as ex:
-        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
-        
-        print('Exception Occurred which is of type :', ex.__class__.__name__)
-        y = input('If you want to see Traceback press 1 : ')
-        if y == '1':
-            traceback.print_exc()
-        return False
 
 
 def get_artist_tracks(artist):
@@ -78,7 +199,7 @@ def get_artist_tracks(artist):
         return False
 
 
-def set_track(track_title, track_genre, track_location, track_artist):
+def set_track(track_title, track_genre, track_location, track_artist,language):
     """
     Function to set only track details
     Returns boolean depending if the value is successfully set then 'True' else 'False'
@@ -92,11 +213,14 @@ def set_track(track_title, track_genre, track_location, track_artist):
             'artist': track_artist,
             'genre': track_genre,
             'location': track_location,
-            'title': track_title
+            'title': track_title,
+            'like_count': 0,
+            'Language': language
         })
         print('Track added successfully')
-        set_artist(track_title, track_genre, track_location, track_artist)
+        set_artist(track_title, track_genre, track_location, track_artist,language)
         set_genre(track_genre)
+        set_language(language)
         return True
     except Exception as ex:
         messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -291,12 +415,15 @@ def set_genre(genre):
 
     '''
     try:
-        doc_ref = db.collection(u'genres').document(genre)
-        doc_ref.set({
-            'genre_name' : genre,
-            'genre_image':'',
+        if(Check_genre(genre)):
+            pass
+        else : 
+            doc_ref = db.collection(u'genres').document(genre)
+            doc_ref.set({
+                'genre_name' : genre,
+                'genre_image':'',
 
-        })
+            })
         return True
     except Exception as ex:
         messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -771,17 +898,31 @@ def get_all_liked_songs(uid):
             traceback.print_exc()
         return False
 
-    
-    
 
     
+def add_language_and_Like_count():
+    '''
+
+    Never use this function once used.
+    Used only when all songs are of same language
+
+    '''
+    my_objects = get_all_tracks()
+    for i in my_objects:
+        doc_ref = db.collection(u'Tracks').document(i['title'])
+        doc_ref.update({
+            'like_count': 0,
+            'Language': 'English'
+        })
+        doc_ref_artist = db.collection(u'artist/'+i['artist']+'/tracks').document(i['title'])
+        doc_ref_artist.update({
+            'like_count': 0,
+            'Language': 'English'
+        })
 
 
-    
 
-
-
-
-
-
-# get_playlists('1DXAOpIfWdYLylWaGe1Hmm1O6vh2',playlist = 'myplalist')
+# add_language_and_Like_count()
+# set_track('ads','asdas','asdas','asda','Hindi')
+# set_language('English')
+# print(get_tracks_by_language(language = 'English'))
