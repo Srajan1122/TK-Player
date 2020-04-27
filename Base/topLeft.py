@@ -54,6 +54,7 @@ class TopLeft(tk.Frame):
         # font
         self.appHighlightFont = font.Font(family='lineto circular', size=12, weight='bold')
         self.appHighlightFont2 = font.Font(family='lineto circular', size=10)
+        self.appHighlightFont3 = font.Font(family='lineto circular', size=9)
 
         # images
         self.home_icon = tk.PhotoImage(file=r".\Images\home.png")
@@ -65,8 +66,8 @@ class TopLeft(tk.Frame):
         self.frame1 = tk.Frame(self, bg='#121212', padx=10, pady=10)
         self.frame2 = tk.Frame(self, bg='#121212', padx=10)
         self.frame3 = tk.Frame(self, bg='#121212', padx=10)
-        self.frame4 = tk.Frame(self, bg='#121212', padx=10)
-        self.frame5 = tk.Frame(self, bg='#121212', padx=10)
+        self.frame4 = tk.Frame(self, bg='#000000', padx=10)
+        self.frame5 = tk.Frame(self, bg='#000000', padx=10)
 
         # frame1
         self.menu2 = tk.Menubutton(self.frame1, image=self.menu_icon, background='#121212', activebackground='#121212',
@@ -85,7 +86,7 @@ class TopLeft(tk.Frame):
 
         # frame2
         self.home = IconButton(self.frame2, master, text='Home', image=self.home_icon, page=Home)
-        self.browse = IconButton(self.frame2, master, text='Browse', image=self.browse_icon, page=Browse)
+        self.browse = IconButton(self.frame2, master, text='About Us', image=self.browse_icon, page=Browse)
 
         # frame3
         self.appHighlightFont = font.Font(family='lineto circular', size=9, weight='bold')
@@ -97,8 +98,8 @@ class TopLeft(tk.Frame):
                               padx=5,
                               font=self.appHighlightFont
                               )
-        self.madeForYou = NormalButton(self.frame3, text='Made For You')
-        self.recentlyPlayed = NormalButton(self.frame3, text='Recently Played')
+        #self.madeForYou = NormalButton(self.frame3, text='Made For You')
+        #self.recentlyPlayed = NormalButton(self.frame3, text='Recently Played')
         self.likedSongs = NormalButton(self.frame3,
                                        text='Liked Songs',
                                        command=lambda data=self.get_liked_song(): self.master.show_frame_liked(
@@ -114,27 +115,56 @@ class TopLeft(tk.Frame):
 
         # frame4
         self.label2 = tk.Label(self.frame4,
-                               text='PLAYLISTS',
-                               background='#121212',
+                               text='AMPLIFY',
+                               background='#000000',
                                foreground='#a8a8a8',
                                anchor=tk.W,
                                padx=5,
                                font=self.appHighlightFont
                                )
-
+        self.string1 = 	"Copyright "u"\u00A9 2020"
+        self.copyright = tk.Label(self.frame4,
+                               text=self.string1,
+                               background='#000000',
+                               foreground='#a8a8a8',
+                               anchor=tk.W,
+                               padx=5,
+                               font=self.appHighlightFont
+                               )
         # frame5
+        self.label4 = tk.Label(
+                            self.frame5,
+                            text='CONTACT US',
+                            background="#000000",
+                            foreground="#a8a8a8",
+                            anchor=tk.W,
+                            padx=5,
+                            font=self.appHighlightFont
+                        )
+        self.label3 = tk.Label(
+                            self.frame5,
+                            text='amplifyteam1234@gmail.com',
+                            background="#000000",
+                            foreground="#a8a8a8",
+                            anchor=tk.W,
+                            padx=5,
+                            font=self.appHighlightFont3
+                        )
 
         # grid - components
         self.menu2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
         self.home.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.browse.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.label.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.madeForYou.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.recentlyPlayed.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.likedSongs.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.albums.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.artists.grid(row=5, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        #self.madeForYou.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        #self.recentlyPlayed.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.likedSongs.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.albums.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.artists.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.copyright.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)        
+        self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
+        self.label3.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
+        self.label4.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
 
         # grid - frames
         self.frame1.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -147,9 +177,9 @@ class TopLeft(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=2)
-        self.grid_rowconfigure(2, weight=2)
+        self.grid_rowconfigure(2, weight=9)
         self.grid_rowconfigure(3, weight=1)
-        self.grid_rowconfigure(4, weight=10)
+        self.grid_rowconfigure(4, weight=1)
 
     def logout(self):
         import os
