@@ -138,7 +138,8 @@ class TopRightTop(tk.Frame):
         )
         self.user_menu['menu'] = self.user_menu.menu
         self.user_menu.menu.add_command(label='Logout', command=self.logout)
-        self.user_menu.menu.add_command(label="Settings")
+        #self.user_menu.menu.add_separator()
+        self.user_menu.menu.add_command(label="Profile", command=lambda: self.master.master.show_frame(UserPage))
 
         self.user_menu.grid(row=0, column=2, sticky='nsew', padx=10, pady=0)
         self.userButton.grid(row=0, column=1, sticky='nsew', ipady=0)
