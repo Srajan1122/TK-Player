@@ -1,0 +1,249 @@
+Index: Pages/Resource/VerticalScrollableFrame.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom tkinter import ttk\r\n\r\n\r\nclass ScrollableFrame(tk.Frame):\r\n    name = 1\r\n\r\n    def __init__(self, container, *args, **kwargs):\r\n        tk.Frame.__init__(self, container, *args, **kwargs)\r\n\r\n        self.canvas = tk.Canvas(self,\r\n                                borderwidth=0,\r\n                                highlightthickness=0,\r\n                                bg='#181818')\r\n        # -----------------------------------------------------------------------------\r\n        name_of_style = 'My'+str(ScrollableFrame.name)+'.Vertical.Scrollbar'\r\n        self.style = ttk.Style()\r\n\r\n        self.style.element_create(name_of_style+\".trough\", \"from\", \"default\")\r\n        self.style.element_create(name_of_style+\".uparrow\", \"from\", \"default\")\r\n        self.style.element_create(name_of_style+\".downarrow\", \"from\", \"default\")\r\n        self.style.element_create(name_of_style+\".thumb\", \"from\", \"default\")\r\n        self.style.element_create(name_of_style+\".grip\", \"from\", \"default\")\r\n\r\n        self.style.layout(\"My.Vertical.TScrollbar\",\r\n                          [(name_of_style+'.trough', {'children': [\r\n                              (name_of_style+'.uparrow',\r\n                               {'side': 'top', 'sticky': ''}),\r\n                              (name_of_style+'.downarrow',\r\n                               {'side': 'bottom', 'sticky': ''}),\r\n                              (name_of_style+'.thumb',\r\n                               {\r\n                                   'unit': '1',\r\n                                   'children': [(name_of_style+'.grip',\r\n                                                 {'sticky': ''})],\r\n                                   'sticky': 'nswe'\r\n                               })], 'sticky': 'ns', })])\r\n\r\n        self.style.configure(\"My.Vertical.TScrollbar\", self.style.configure(\"Vertical.TScrollbar\"))\r\n        self.style.configure(\"My.Vertical.TScrollbar\",\r\n                             troughcolor=\"#181818\",\r\n                             arrowcolor='#181818',\r\n                             background='#535353',\r\n                             borderwidth=0,\r\n                             relief=tk.FLAT)\r\n\r\n        self.style.theme_settings(\"vista\", {\r\n            \"My.Vertical.TScrollbar\": {\r\n                'map': {\r\n                    'background': [('active', '#818181')]\r\n                }\r\n            }\r\n        })\r\n\r\n        self.scrollbar = ttk.Scrollbar(self,\r\n                                       orient=\"vertical\",\r\n                                       command=self.canvas.yview,\r\n                                       style='My.Vertical.TScrollbar'\r\n                                       )\r\n        ScrollableFrame.name += 1\r\n        # ---------------------------------------------------------------------------\r\n        self.scrollable_frame = tk.Frame(self.canvas, bg='#181818')\r\n\r\n        self.scrollable_frame.bind(\r\n            \"<Configure>\",\r\n            lambda e: self.canvas.configure(\r\n                scrollregion=self.canvas.bbox('all'),\r\n            )\r\n        )\r\n\r\n        self.canvas.bind('<Configure>', self.size)\r\n\r\n        self.canvas.grid(row=0, column=0, sticky=tk.N+tk.S+tk.W+tk.E)\r\n        self.scrollbar.grid(row=0, column=1, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n\r\n        self.grid_columnconfigure(0, weight=1)\r\n        self.grid_rowconfigure(0, weight=1)\r\n\r\n        self.canvas.configure(yscrollcommand=self.scrollbar.set)\r\n        self.canvas.bind(\"<Enter>\", self._bind_mouse)\r\n        self.canvas.bind(\"<Leave>\", self._unbind_mouse)\r\n\r\n        self.scrollable_frame.grid_columnconfigure(0, weight=1)\r\n        self.scrollable_frame.grid_rowconfigure(0, weight=1)\r\n\r\n    def _bind_mouse(self, event=None):\r\n        self.canvas.bind_all(\"<4>\", self._on_mousewheel)\r\n        self.canvas.bind_all(\"<5>\", self._on_mousewheel)\r\n        self.canvas.bind_all(\"<MouseWheel>\", self._on_mousewheel)\r\n\r\n    def _unbind_mouse(self, event=None):\r\n        self.canvas.unbind_all(\"<4>\")\r\n        self.canvas.unbind_all(\"<5>\")\r\n        self.canvas.unbind_all(\"<MouseWheel>\")\r\n\r\n    def _on_mousewheel(self, event):\r\n        \"\"\"Linux uses event.num; Windows / Mac uses event.delta\"\"\"\r\n        func = self.canvas.xview_scroll if event.state & 1 else self.canvas.yview_scroll\r\n        if event.num == 4 or event.delta > 0:\r\n            func(-1, \"units\")\r\n        elif event.num == 5 or event.delta < 0:\r\n            func(1, \"units\")\r\n\r\n    def size(self, event):\r\n        width = event.width\r\n        height = event.height\r\n        self.canvas.create_window((0, 0),\r\n                                  window=self.scrollable_frame,\r\n                                  anchor=\"nw\",\r\n                                  width=width\r\n                                  )\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Pages/Resource/VerticalScrollableFrame.py	(revision e49b903c75f6ed87827e97ccafe151cd1bc26257)
++++ Pages/Resource/VerticalScrollableFrame.py	(date 1587913467187)
+@@ -59,7 +59,7 @@
+                                        )
+         ScrollableFrame.name += 1
+         # ---------------------------------------------------------------------------
+-        self.scrollable_frame = tk.Frame(self.canvas, bg='#181818')
++        self.scrollable_frame = tk.Frame(self.canvas)
+ 
+         self.scrollable_frame.bind(
+             "<Configure>",
+@@ -68,6 +68,7 @@
+             )
+         )
+ 
++        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+         self.canvas.bind('<Configure>', self.size)
+ 
+         self.canvas.grid(row=0, column=0, sticky=tk.N+tk.S+tk.W+tk.E)
+@@ -77,7 +78,6 @@
+         self.grid_columnconfigure(0, weight=1)
+         self.grid_rowconfigure(0, weight=1)
+ 
+-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+         self.canvas.bind("<Enter>", self._bind_mouse)
+         self.canvas.bind("<Leave>", self._unbind_mouse)
+ 
+@@ -108,5 +108,5 @@
+         self.canvas.create_window((0, 0),
+                                   window=self.scrollable_frame,
+                                   anchor="nw",
+-                                  width=width
++                                  width=width,
+                                   )
+Index: Base/topLeft.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom Pages.HomePage.Home import Home\r\nfrom Pages.Browse.browse import Browse\r\nfrom tkinter import font\r\nfrom PIL import ImageTk, Image\r\n\r\n\r\nclass IconButton(tk.Button):\r\n    def __init__(self, master, controller, text, image, page, *args, **kwargs):\r\n        tk.Button.__init__(self, master, *args, **kwargs)\r\n\r\n        self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')\r\n        self['foreground'] = '#a8a8a8'\r\n        self['background'] = '#121212'\r\n        self['border'] = 0\r\n        self['activebackground'] = '#121212'\r\n        self['activeforeground'] = 'white'\r\n        self['padx'] = 10\r\n        self['pady'] = 5\r\n        self['image'] = image\r\n        self['compound'] = tk.LEFT\r\n        self['text'] = text\r\n        self['anchor'] = tk.W\r\n        self['font'] = self.appHighlightFont\r\n        self['command'] = lambda: controller.show_frame(page)\r\n\r\n\r\nclass NormalButton(tk.Button):\r\n    def __init__(self, master, text, *args, **kwargs):\r\n        tk.Button.__init__(self, master, *args, **kwargs)\r\n\r\n        self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')\r\n\r\n        self['foreground'] = '#a8a8a8'\r\n        self['background'] = '#121212'\r\n        self['border'] = 0\r\n        self['activebackground'] = '#121212'\r\n        self['activeforeground'] = 'white'\r\n        self['padx'] = 10\r\n        self['pady'] = 5\r\n        self['text'] = text\r\n        self['anchor'] = tk.W\r\n        self['font'] = self.appHighlightFont\r\n\r\n\r\nclass TopLeft(tk.Frame):\r\n    def __init__(self, master, *args, **kwargs):\r\n        tk.Frame.__init__(self, master, *args, **kwargs)\r\n        self['background'] = '#121212'\r\n        self.master = master\r\n\r\n        # font\r\n        self.appHighlightFont = font.Font(family='lineto circular', size=12, weight='bold')\r\n        self.appHighlightFont2 = font.Font(family='lineto circular', size=10)\r\n\r\n        # images\r\n        self.home_icon = tk.PhotoImage(file=r\".\\Images\\home.png\")\r\n        self.browse_icon = tk.PhotoImage(file=r\".\\Images\\browse2.png\")\r\n        self.menu_icon = tk.PhotoImage(file=r\".\\Images\\menu2.png\")\r\n        self.liked_image = Image.open(r\".\\Images\\purple_heart.png\")\r\n\r\n        # frames\r\n        self.frame1 = tk.Frame(self, bg='#121212', padx=10, pady=10)\r\n        self.frame2 = tk.Frame(self, bg='#121212', padx=10)\r\n        self.frame3 = tk.Frame(self, bg='#121212', padx=10)\r\n        self.frame4 = tk.Frame(self, bg='#121212', padx=10)\r\n        self.frame5 = tk.Frame(self, bg='#121212', padx=10)\r\n\r\n        # frame1\r\n        self.menu2 = tk.Menubutton(self.frame1, image=self.menu_icon, background='#121212', activebackground='#121212',\r\n                                   bd=0)\r\n        self.menu2.menu = tk.Menu(self.menu2,\r\n                                  tearoff=0,\r\n                                  background='#35363a', activebackground='#404040',\r\n                                  foreground='#a8a8a8', activeforeground='white',\r\n                                  font=self.appHighlightFont2,\r\n                                  bd=0\r\n                                  )\r\n        self.menu2['menu'] = self.menu2.menu\r\n        self.menu2.menu.add_command(label='File')\r\n        self.menu2.menu.add_command(label='Playback')\r\n        self.menu2.menu.add_command(label='View')\r\n\r\n        # frame2\r\n        self.home = IconButton(self.frame2, master, text='Home', image=self.home_icon, page=Home)\r\n        self.browse = IconButton(self.frame2, master, text='Browse', image=self.browse_icon, page=Browse)\r\n\r\n        # frame3\r\n        self.appHighlightFont = font.Font(family='lineto circular', size=9, weight='bold')\r\n        self.label = tk.Label(self.frame3,\r\n                              text='YOUR LIBRARY',\r\n                              background='#121212',\r\n                              foreground='#a8a8a8',\r\n                              anchor=tk.W,\r\n                              padx=5,\r\n                              font=self.appHighlightFont\r\n                              )\r\n        self.madeForYou = NormalButton(self.frame3, text='Made For You')\r\n        self.recentlyPlayed = NormalButton(self.frame3, text='Recently Played')\r\n        self.likedSongs = NormalButton(self.frame3,\r\n                                       text='Liked Songs',\r\n                                       command=lambda data=self.get_liked_song(): self.master.show_frame_liked(\r\n                                           data=self.get_liked_song(),\r\n                                           text='Liked Song',\r\n                                           image=self.liked_image))\r\n        self.albums = NormalButton(self.frame3, text='Albums')\r\n        self.artists = NormalButton(self.frame3, text='Artists')\r\n\r\n        # frame4\r\n        self.label2 = tk.Label(self.frame4,\r\n                               text='PLAYLISTS',\r\n                               background='#121212',\r\n                               foreground='#a8a8a8',\r\n                               anchor=tk.W,\r\n                               padx=5,\r\n                               font=self.appHighlightFont\r\n                               )\r\n\r\n        # frame5\r\n\r\n        # grid - components\r\n        self.menu2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n        self.home.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.browse.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.label.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.madeForYou.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.recentlyPlayed.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.likedSongs.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.albums.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.artists.grid(row=5, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n\r\n        # grid - frames\r\n        self.frame1.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.frame2.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.frame3.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.frame4.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n        self.frame5.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)\r\n\r\n        # grid - row/column\r\n        self.grid_columnconfigure(0, weight=1)\r\n        self.grid_rowconfigure(0, weight=1)\r\n        self.grid_rowconfigure(1, weight=2)\r\n        self.grid_rowconfigure(2, weight=2)\r\n        self.grid_rowconfigure(3, weight=1)\r\n        self.grid_rowconfigure(4, weight=10)\r\n\r\n    def logout(self):\r\n        import os\r\n        from Database.Database import sign_out\r\n        from Pages.UserAuthentication.AuthBase import AuthBase\r\n        sign_out()\r\n        print(os.getcwd())\r\n        self.master.master.master.destroy()\r\n        login = AuthBase()\r\n        login.mainloop()\r\n\r\n    def get_liked_song(self):\r\n        f = open('user')\r\n    \r\n        x = f.readlines()[0]\r\n        from Database.Database import get_all_liked_songs\r\n        print('----------------------------------')\r\n        print(get_all_liked_songs(x))\r\n        \r\n        return get_all_liked_songs(x)\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Base/topLeft.py	(revision e49b903c75f6ed87827e97ccafe151cd1bc26257)
++++ Base/topLeft.py	(date 1587913467030)
+@@ -1,6 +1,8 @@
+ import tkinter as tk
+ from Pages.HomePage.Home import Home
+ from Pages.Browse.browse import Browse
++from Pages.ArtistPage.Artist import Artist
++from Pages.AlbumPage.Album import Album
+ from tkinter import font
+ from PIL import ImageTk, Image
+ 
+@@ -103,8 +105,12 @@
+                                            data=self.get_liked_song(),
+                                            text='Liked Song',
+                                            image=self.liked_image))
+-        self.albums = NormalButton(self.frame3, text='Albums')
+-        self.artists = NormalButton(self.frame3, text='Artists')
++        self.albums = NormalButton(self.frame3,
++                                   text='Albums',
++                                   command=lambda: self.master.show_frame(Album))
++        self.artists = NormalButton(self.frame3,
++                                    text='Artists',
++                                    command=lambda: self.master.show_frame(Artist))
+ 
+         # frame4
+         self.label2 = tk.Label(self.frame4,
+Index: Base/top.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom .topLeft import TopLeft\r\nfrom .topRight import TopRight\r\nfrom Pages.HomePage.Home import Home\r\nfrom Pages.Browse.browse import Browse\r\nfrom Pages.MusicPage.main import Main\r\nfrom Pages.UserPage.UserPage import UserPage\r\nfrom .listOfPage import *\r\n\r\n\r\nclass Top(tk.Frame):\r\n\r\n    def __init__(self, master, *args, **kwargs):\r\n        tk.Frame.__init__(self, master, *args, **kwargs)\r\n        self['background'] = 'yellow'\r\n\r\n        self.topleft = TopLeft(self)\r\n        self.topRight = TopRight(self)\r\n        # --------------------------------------------------------------------------\r\n        # Loading all the frames\r\n\r\n        self.frames = {}\r\n        for F in (Home, Browse,UserPage):\r\n            frame = F(self.topRight.topRightBottom, self)\r\n            self.frames[F] = frame\r\n            frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n\r\n        # Displaying the frame\r\n        self.show_frame(Home)\r\n        # --------------------------------------------------------------------------\r\n\r\n        self.topleft.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n        self.topRight.grid(row=0, column=1, sticky=tk.N + tk.S + tk.W + tk.E)\r\n\r\n        self.grid_rowconfigure(0, weight=1)\r\n        self.grid_columnconfigure(0, weight=1)\r\n        self.grid_columnconfigure(1, weight=40)\r\n\r\n    def show_frame_directly(self, frame):\r\n        if frame == self.frames[Home]:\r\n            if len(pages) == 0:\r\n                if frame == pages[len(pages) - 1]:\r\n                    pass\r\n                else:\r\n                    pages.append(frame)\r\n        frame.tkraise()\r\n\r\n    def show_frame(self, context):\r\n        frame = self.frames[context]\r\n        if len(pages) > 1:\r\n            if pages[len(pages) - 1] == frame:\r\n                return\r\n        rightPage.clear()\r\n        resetCount()\r\n        pages.append(frame)\r\n        frame.tkraise()\r\n\r\n    def show_frame_Main(self, data, image, r, c, text):\r\n        from Base.listOfPage import musicPages\r\n        if musicPages[r][c] == 0:\r\n            frame = Main(self.topRight.topRightBottom,\r\n                         self,\r\n                         data=data,\r\n                         image=image,\r\n                         text=text)\r\n            musicPages[r][c] = frame\r\n        else:\r\n            frame = musicPages[r][c]\r\n\r\n        self.frames[Main] = frame\r\n        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n\r\n        if pages[len(pages) - 1] == frame:\r\n            return\r\n        rightPage.clear()\r\n        resetCount()\r\n        pages.append(frame)\r\n        frame.update()\r\n        frame.tkraise()\r\n\r\n    def show_frame_liked(self, data, image, text):\r\n        frame = Main(self.topRight.topRightBottom,\r\n                     self,\r\n                     data=data,\r\n                     image=image,\r\n                     text=text)\r\n        if len(data) > 0:\r\n            from Base.listOfPage import musicList\r\n            for music in musicList:\r\n                for key,value in music.items():\r\n                    if key == frame:\r\n                        for track in value:\r\n                            track.like_button.grid_forget()\r\n                        break\r\n            frame.content.music.like_button.grid_forget()\r\n        frame.head.text_frame.liked_button.grid_forget()\r\n        frame.head.text_frame.like_button.grid_forget()\r\n        frame.head.text_frame.menu_button.grid_forget()\r\n        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n        if len(pages) > 1:\r\n            if pages[len(pages) - 1] == frame:\r\n                print('hi')\r\n                return\r\n        rightPage.clear()\r\n        resetCount()\r\n        pages.append(frame)\r\n        frame.tkraise()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Base/top.py	(revision e49b903c75f6ed87827e97ccafe151cd1bc26257)
++++ Base/top.py	(date 1587913467029)
+@@ -4,6 +4,8 @@
+ from Pages.HomePage.Home import Home
+ from Pages.Browse.browse import Browse
+ from Pages.MusicPage.main import Main
++from Pages.ArtistPage.Artist import Artist
++from Pages.AlbumPage.Album import Album
+ from Pages.UserPage.UserPage import UserPage
+ from .listOfPage import *
+ 
+@@ -20,7 +22,7 @@
+         # Loading all the frames
+ 
+         self.frames = {}
+-        for F in (Home, Browse,UserPage):
++        for F in (Home, Browse, UserPage, Artist, Album):
+             frame = F(self.topRight.topRightBottom, self)
+             self.frames[F] = frame
+             frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
+@@ -78,6 +80,52 @@
+         frame.update()
+         frame.tkraise()
+ 
++    def show_frame_Main2(self, data, image, r, c, text):
++        from Base.listOfPage import musicPages2
++        if musicPages2[r][c] == 0:
++            frame = Main(self.topRight.topRightBottom,
++                         self,
++                         data=data,
++                         image=image,
++                         text=text)
++            musicPages2[r][c] = frame
++        else:
++            frame = musicPages2[r][c]
++
++        self.frames[Main] = frame
++        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
++
++        if pages[len(pages) - 1] == frame:
++            return
++        rightPage.clear()
++        resetCount()
++        pages.append(frame)
++        frame.update()
++        frame.tkraise()
++
++    def show_frame_Main3(self, data, image, r, c, text):
++        from Base.listOfPage import musicPages3
++        if musicPages3[r][c] == 0:
++            frame = Main(self.topRight.topRightBottom,
++                         self,
++                         data=data,
++                         image=image,
++                         text=text)
++            musicPages3[r][c] = frame
++        else:
++            frame = musicPages3[r][c]
++
++        self.frames[Main] = frame
++        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
++
++        if pages[len(pages) - 1] == frame:
++            return
++        rightPage.clear()
++        resetCount()
++        pages.append(frame)
++        frame.update()
++        frame.tkraise()
++
+     def show_frame_liked(self, data, image, text):
+         frame = Main(self.topRight.topRightBottom,
+                      self,
+@@ -99,7 +147,6 @@
+         frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
+         if len(pages) > 1:
+             if pages[len(pages) - 1] == frame:
+-                print('hi')
+                 return
+         rightPage.clear()
+         resetCount()
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import tkinter as tk\r\nfrom Base import top\r\nfrom Base.bottom import Bottom\r\nfrom threading import Thread\r\nfrom ActivityIndicator.Activity_Indicator import ImageLabel\r\n\r\n\r\nclass Splash(tk.Toplevel):\r\n    def __init__(self, parent):\r\n        tk.Toplevel.__init__(self, parent)\r\n        self.title(\"Splash\")\r\n        self['bg'] = 'black'\r\n\r\n        lbl = ImageLabel(self)\r\n        lbl['bd'] = 0\r\n        lbl['bg'] = 'black'\r\n        lbl.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n\r\n        self.logo = tk.PhotoImage(file=r'images\\loading.png', height=150, width=360)\r\n        self.labelLogo = tk.Label(self, image=self.logo, bd=0, bg='black')\r\n        self.labelLogo.grid(row=1, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n        self.grid_columnconfigure(0, weight=1)\r\n        self.state('zoomed')\r\n        self.overrideredirect(True)\r\n\r\n        lbl.load('ActivityIndicator/Activity.gif')\r\n\r\n\r\nclass Container(tk.Frame):\r\n    def __init__(self, master, *args, **kwargs):\r\n        tk.Frame.__init__(self, master, bg='#000000', *args, **kwargs)\r\n\r\n        self.top = top.Top(self)\r\n        self.bottom = Bottom(self)\r\n\r\n        from Base.listOfPage import bottomInstance\r\n        bottomInstance.append(self.bottom)\r\n\r\n        self.top.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n        self.bottom.grid(row=1, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n\r\n        self.grid_rowconfigure(0, weight=8)\r\n        self.grid_rowconfigure(1, weight=2)\r\n        self.grid_columnconfigure(0, weight=1)\r\n\r\n\r\nclass Root(tk.Tk):\r\n    def __init__(self, data, *args, **kwargs):\r\n        tk.Tk.__init__(self, *args, **kwargs)\r\n        self.counter = False\r\n\r\n        self.bind(\"<F11>\", self.toggle_fullscreen)\r\n        self.bind(\"<Escape>\", self.end_fullscreen)\r\n\r\n        def TK_player():\r\n            self.withdraw()\r\n            print('befire')\r\n\r\n            print('aim teher')\r\n            self.title('TK-Player')\r\n            app_icon = tk.PhotoImage(file=r\"images\\app_64.png\")\r\n            self.iconphoto(False, app_icon)\r\n\r\n            container = Container(self)\r\n            container.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)\r\n\r\n            self.grid_columnconfigure(0, weight=1)\r\n            self.grid_rowconfigure(0, weight=1)\r\n            self.state('zoomed')\r\n\r\n        def Splash_Screen():\r\n            splash = Splash(self)\r\n\r\n            def myfun():\r\n                splash.destroy()\r\n                self.deiconify()\r\n\r\n            splash.after(15000, myfun)\r\n            # time.sleep(15000)\r\n\r\n        self.tk_player = Thread(target=TK_player)\r\n        self.tk_player.start()\r\n        self.splash = Thread(target=Splash_Screen)\r\n        self.splash.start()\r\n\r\n        print(data)\r\n\r\n    def toggle_fullscreen(self, event=None):\r\n        self.counter = not self.counter  # Just toggling the boolean\r\n        self.attributes(\"-fullscreen\", self.counter)\r\n        return \"break\"\r\n\r\n    def end_fullscreen(self, event=None):\r\n        self.counter = False\r\n        self.attributes(\"-fullscreen\", False)\r\n        return \"break\"\r\n\r\n\r\nif __name__ == '__main__':\r\n    from Database.Database import get_user\r\n    # from ActivityIndicator.Activity_Indicator import ImageLabel\r\n\r\n    from os import path\r\n\r\n    if path.exists('user'):\r\n        f = open('user', 'r')\r\n        doc = get_user(f.readline())\r\n        f.close()\r\n\r\n        root = Root(data=doc)\r\n\r\n        root.mainloop()\r\n    else:\r\n        from Pages.UserAuthentication.AuthBase import AuthBase\r\n\r\n        login = AuthBase()\r\n        login.mainloop()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- main.py	(revision e49b903c75f6ed87827e97ccafe151cd1bc26257)
++++ main.py	(date 1587913467190)
+@@ -54,10 +54,11 @@
+ 
+         def TK_player():
+             self.withdraw()
+-            print('befire')
++            # print('befire')
+ 
+-            print('aim teher')
+-            self.title('TK-Player')
++            # print('aim teher')
++            self.title('Amplify')
++            # self.title['bg']='black'
+             app_icon = tk.PhotoImage(file=r"images\app_64.png")
+             self.iconphoto(False, app_icon)
+ 
+@@ -83,7 +84,7 @@
+         self.splash = Thread(target=Splash_Screen)
+         self.splash.start()
+ 
+-        print(data)
++        # print(data)
+ 
+     def toggle_fullscreen(self, event=None):
+         self.counter = not self.counter  # Just toggling the boolean
+@@ -98,7 +99,7 @@
+ 
+ if __name__ == '__main__':
+     from Database.Database import get_user
+-    # from ActivityIndicator.Activity_Indicator import ImageLabel
++    
+ 
+     from os import path
+ 
+Index: Base/listOfPage.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>pages = []\r\nrightPage = []\r\ncurrent_playing = []\r\nmusicPages = []\r\nfocusCard = []\r\nmusicList = []\r\ncurrentTrack = []\r\nbottomInstance = []\r\nbottomPage = []\r\nlikedSong = []\r\nlikedPlaylist = []\r\n\r\nc = 1\r\nf = 0\r\n\r\n\r\ndef flag():\r\n    global f\r\n    return f\r\n\r\n\r\ndef setFlagValue():\r\n    global f\r\n    f = 1\r\n    return f\r\n\r\n\r\ndef getCount():\r\n    global c\r\n    return c\r\n\r\n\r\ndef incrementCount():\r\n    global c\r\n    c += 1\r\n    return\r\n\r\n\r\ndef resetCount():\r\n    global c\r\n    c = 1\r\n    return\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Base/listOfPage.py	(revision e49b903c75f6ed87827e97ccafe151cd1bc26257)
++++ Base/listOfPage.py	(date 1587913467028)
+@@ -2,6 +2,8 @@
+ rightPage = []
+ current_playing = []
+ musicPages = []
++musicPages2 = []
++musicPages3 = []
+ focusCard = []
+ musicList = []
+ currentTrack = []
+Index: Pages/UserAuthentication/Frame3.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#-----Login Page-----\r\nfrom .Frame2 import data3\r\nimport tkinter as tk\r\nfrom PIL import Image, ImageTk\r\nfrom itertools import count\r\nfrom tkinter import ttk\r\n\r\n# from ActivityIndicator import Activity\r\nfrom tkinter import font\r\nimport re\r\nfrom Database.Database import check_verification\r\n# from .Frame2 import data3\r\n# check_verification('dkhoche70@gmail.com')\r\n# data2 for checking credentials and passing them\r\nglobal data2\r\ndata2 = {\r\n\t\"email\": \"\",\r\n\t\"password\": \"\",\r\n}\r\n\r\n#passing user credentials to Homepage\r\nglobal state\r\nstate = {\r\n\t'user_object': None\r\n}\r\n\r\n#Class for Entry widget\r\nclass UserEntry(tk.Entry):\r\n\tdef __init__(self, master, placeholder, show, textvariable, id, *args, **kwargs):\r\n\t\ttk.Entry.__init__(self, master, *args, **kwargs)\r\n\r\n\t\t#placeholder function\r\n\t\tdef default_placeholder(self):\r\n\t\t\tself.insert(0, placeholder)\r\n\r\n\t\tdefault_placeholder(self)\r\n\r\n\t\t#font size, style\r\n\t\tself.appHighlightFont = font.Font(\r\n\t\t\tfamily='lineto circular',\r\n\t\t\tsize=12,\r\n\t\t)\r\n\r\n\t\t#font color\r\n\t\tself.default_fg = '#867f7a'\r\n\t\tself.input_fg = 'white'\r\n\r\n\t\t#properties of Entry widget\r\n\t\tself['background'] = '#404040'\r\n\t\tself['foreground'] = self.default_fg\r\n\t\tself['insertbackground'] = 'white'\r\n\t\tself['font'] = self.appHighlightFont\r\n\t\tself['border'] = 0\r\n\r\n\t\t#function called on focusing\r\n\t\tdef foc_in(event):\r\n\t\t\tif (show == 1):\r\n\t\t\t\tself['show'] = '*'\r\n\t\t\tif self['foreground'] == self.default_fg:\r\n\t\t\t\tif self.get() == placeholder:\r\n\t\t\t\t\tself['foreground'] = self.default_fg\r\n\t\t\t\t\tself.delete(0, 100)\r\n\t\t\tself['textvariable'] = textvariable\r\n\t\t\tself['foreground'] = 'white'\r\n\t\t\t\r\n\t\t#function called when not focusing\r\n\t\tdef foc_out(event):\r\n\t\t\tlambda e: enter_details(e)\r\n\t\t\tself['foreground'] = self.default_fg\r\n\t\t\tprint(self.get())\r\n\t\t\tif not self.get():\r\n\t\t\t\tif (show == 1):\r\n\t\t\t\t\tself['show'] = ''\r\n\t\t\t\tdefault_placeholder(self)\r\n\t\t\telse:\r\n\t\t\t\tself.insert(0, self['textvariable'])\r\n\t\t\r\n\t\t#def key(events):\r\n\t\tself.bind(\"<FocusIn>\", lambda e: foc_in(e))\r\n\t\tself.bind(\"<FocusOut>\", lambda e: foc_out(e))\r\n\r\n#Frame of Login Page\r\nclass Frame3(tk.Frame):\r\n\tdef __init__(self, master, *args, **kwargs):\r\n\t\ttk.Frame.__init__(self, master, *args, **kwargs)\r\n\r\n\t\t#Frame\r\n\t\tself.container = tk.Frame(self, bg='#121212', padx=80, pady=80)\r\n\r\n\t\t#Login head\r\n\t\tself.logo = tk.PhotoImage(file=r'images\\login_head2.png', height=150, width=360)\r\n\t\tself.labelLogo = tk.Label(self.container, image=self.logo, bd=0)\r\n\t\tself.labelLogo.grid(row=0, column=0, pady=25)\r\n\r\n\t\t#For Back buttton\r\n\t\tfrom .Frame1 import Frame1\r\n\r\n\t\t#Font style, size\r\n\t\tself.appHighlightFont = font.Font(\r\n\t\t\tfamily='lineto circular',\r\n\t\t\tsize=14\r\n\t\t)\r\n\r\n\t\t#Back button\r\n\t\tself.back = tk.Button(\r\n\t\t\tself.container,\r\n\t\t\tborder=0,\r\n\t\t\ttext='Back',\r\n\t\t\tbackground='#121212',\r\n\t\t\tactivebackground='#121212',\r\n\t\t\tforeground='white',\r\n\t\t\tactiveforeground='white',\r\n\t\t\tfont=self.appHighlightFont,\r\n\t\t\tcommand=lambda: self.master.show_frame(Frame1)\r\n\t\t)\r\n\t\tself.back.grid(\r\n\t\t\trow=6,\r\n\t\t\tcolumn=0,\r\n\t\t\tsticky='news',\r\n\t\t\tpadx=2,\r\n\t\t\tpady=5,\r\n\t\t\tipadx=20,\r\n\t\t\tipady=10\r\n\t\t)\r\n\t\t\r\n\t\t\r\n\t\t#Email entry\r\n\t\tself.email = UserEntry(\r\n\t\t\tself.container,\r\n\t\t\tplaceholder=\"  Email ID\",\r\n\t\t\tshow=0,\r\n\t\t\ttextvariable=None,\r\n\t\t\tid=\"email\"\r\n\t\t)\r\n\t\tself.email.grid(\r\n\t\t\trow=1,\r\n\t\t\tcolumn=0,\r\n\t\t\tsticky=tk.N + tk.S + tk.E + tk.W,\r\n\t\t\tpadx=2,\r\n\t\t\tpady=4,\r\n\t\t\tipadx=20,\r\n\t\t\tipady=10\r\n\t\t)\r\n\r\n\t\t#Password Entry\r\n\t\tself.password = UserEntry(\r\n\t\t\tself.container,\r\n\t\t\tplaceholder=\"  Password\",\r\n\t\t\tshow=1,\r\n\t\t\ttextvariable=None,\r\n\t\t\tid=\"password\"\r\n\t\t)\r\n\t\tself.password.grid(\r\n\t\t\trow=2,\r\n\t\t\tcolumn=0,\r\n\t\t\tsticky=tk.N + tk.S + tk.E + tk.W,\r\n\t\t\tpadx=2,\r\n\t\t\tpady=5,\r\n\t\t\tipadx=20,\r\n\t\t\tipady=10\r\n\t\t)\r\n\r\n\t\t#Result/Status Display\r\n\t\tself.result = tk.Label(\r\n\t\t\tself.container,\r\n\t\t\tborder=0,\r\n\t\t\tbackground='#121212',\r\n\t\t\tactivebackground='#121212',\r\n\t\t\tforeground='white',\r\n\t\t\tactiveforeground='white',\r\n\t\t\t# font=appHighlightFont,\r\n\t\t)\r\n\t\tself.result.grid(row=3, column=0)\r\n\r\n\t\t#Login Button\r\n\t\tself.btnimg = tk.PhotoImage(file=r'images\\login.png')\r\n\r\n\t\tself.login = tk.Button(\r\n\t\t\tself.container,\r\n\t\t\tborder=0,\r\n\t\t\tbackground='#121212',\r\n\t\t\tactivebackground='#121212',\r\n\t\t\timage=self.btnimg,\r\n\t\t\t# command=self.master.login\r\n\t\t\tcommand=self.loginNow\r\n\t\t)\r\n\t\tself.login.grid(row=4, column=0, pady=10)\r\n\r\n\t\t#Frame grid and configurations\r\n\t\tself.container.grid(row=0, column=0)\r\n\r\n\t\tself.grid_rowconfigure(0, weight=1)\r\n\t\tself.grid_columnconfigure(0, weight=1)\r\n\r\n\t#Validation function for email\r\n\tdef emailCheck(self, s):\r\n\t\tpattern = re.compile('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')\r\n\t\treturn pattern.match(s)\r\n\r\n\t#Validation function for password\r\n\tdef passwordCheck(self, s):\r\n\t\tif len(s) in range(8, 20):\r\n\t\t\treturn True\r\n\t\treturn False\r\n\r\n\t#Validation for login\r\n\tdef loginNow(self):\r\n\t\t\r\n\t\tglobal data2\r\n\t\tpassword = self.password.get()\r\n\t\temail = self.email.get()\r\n\t\tdata2['email'] = email\r\n\t\tdata2['password'] = password \r\n\t\tprint(email)\r\n\t\tprint(password)\r\n\r\n\t\t#placeholders\r\n\t\temail_placeholder = \"  Email ID\"\r\n\t\tpassword_placeholder = \"  Password\"\r\n\r\n\t\tif email == email_placeholder or password == password_placeholder:\r\n\t\t\tself.result['text'] = \"Please enter all fields\"\r\n\t\t\treturn\r\n\r\n\t\tif password.strip(' ') == '' or email.strip(' ') == '':\r\n\t\t\tself.result['text'] = \"Invalid Credentials\"\r\n\t\t\treturn\r\n\r\n\t\tif not self.emailCheck(email):\r\n\t\t\tself.result['text'] = \"Invalid Email\"\r\n\t\t\treturn\r\n\r\n\t\tif not self.passwordCheck(password):\r\n\t\t\tself.result['text'] = \"Password must be atleast 8 characters long\"\r\n\t\t\treturn\r\n\t\tself.verify = tk.Button(\r\n\t\t\tself.container,\r\n\t\t\tborder=0,\r\n\t\t\ttext=\"\",\r\n\t\t\tbackground='#121212',\r\n\t\t\tactivebackground='#121212',\r\n\t\t\tforeground='white',\r\n\t\t\tactiveforeground='white',\r\n\t\t\tfont=self.appHighlightFont,\r\n\t\t\tcommand=lambda: self.master.openFrame4()\r\n\t\t\t)\r\n\t\tself.verify.grid(\r\n\t\t\trow=6,\r\n\t\t\tcolumn=0,\r\n\t\t\tsticky='news',\r\n\t\t\tpadx=2,\r\n\t\t\tpady=5,\r\n\t\t\tipadx=20,\r\n\t\t\tipady=10\r\n\t\t\t)\r\n\r\n\r\n\r\n\t\tdata3['email'] = email\r\n\t\tprint(data3['email'])\r\n\t\tif check_verification(data3['email']):\r\n\t\t\tfrom Database.Database import sign_in_with_email_and_password\r\n\t\t\tprint('i am in there')\r\n\t\t\tuser_object = sign_in_with_email_and_password(email,password)\r\n\t\t\tif(user_object):\r\n\t\t\t\t# global state\r\n\t\t\t\t# print(user_object)\r\n\t\t\t\t# state['user_object'] = user_object\r\n\t\t\t\tself.result['text'] = \"Please have patience\"\r\n\t\t\t\timport os \r\n\t\t\t\tprint(os.getcwd())\r\n\t\t\t\tfrom ActivityIndicator.Activity_Indicator import ImageLabel\r\n\r\n\t\t\t\t# my_image = tk.PhotoImage(r'Images/Activity.gif')\r\n\t\t\t\troot = tk.Tk()\r\n\t\t\t\tlbl = ImageLabel(root)\r\n\t\t\t\tlbl.pack()\r\n\t\t\t\tlbl.load(r'images/Activity.gif')\r\n\t\t\t\troot.mainloop()\r\n\t\t\t\t\r\n\t\t\t\tself.master.login(user_object)\r\n\t\t\t\t\r\n\t\t\t\r\n\t\telse:\r\n\t\t\tfrom Database.Database import send_email_verification_otp\r\n\t\t\tsend_email_verification_otp(data3['email'])\r\n\t\t\tself.verify['text'] = \"You haven't verified your email.\\nPlease Verify First.\"\r\n\t\t\t\r\n\r\n 
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- Pages/UserAuthentication/Frame3.py	(revision e49b903c75f6ed87827e97ccafe151cd1bc26257)
++++ Pages/UserAuthentication/Frame3.py	(date 1587913467189)
+@@ -267,16 +267,7 @@
+ 				# print(user_object)
+ 				# state['user_object'] = user_object
+ 				self.result['text'] = "Please have patience"
+-				import os 
+-				print(os.getcwd())
+-				from ActivityIndicator.Activity_Indicator import ImageLabel
+-
+-				# my_image = tk.PhotoImage(r'Images/Activity.gif')
+-				root = tk.Tk()
+-				lbl = ImageLabel(root)
+-				lbl.pack()
+-				lbl.load(r'images/Activity.gif')
+-				root.mainloop()
++				
+ 				
+ 				self.master.login(user_object)
+ 				
