@@ -70,10 +70,31 @@ class TextFrame(tk.Frame):
                                      active_image=self.button_liked_active,
                                      width=39,
                                      command=self.unliked)
-        self.menu_button = HeadIcon(self.button_region,
-                                    image=self.music_menu_button,
-                                    active_image=self.music_menu_button_active,
-                                    width=37)
+        # self.menu_button = HeadIcon(self.button_region,
+        #                             image=self.music_menu_button,
+        #                             active_image=self.music_menu_button_active,
+        #                             width=37)
+        self.menu_button = tk.Menubutton(
+                                self.button_region,
+                                image=self.music_menu_button,
+                                bg="#000000", activebackground="#000000",
+                                #active_image=self.music_menu_button_active,
+                                width=37, bd=0
+                            )
+        self.menu_button.menu = tk.Menu(
+                                    self.menu_button,
+                                    tearoff=0,
+                                    background="#404040",
+                                    activebackground="#404040",
+                                    foreground="white",
+                                    activeforeground="white",
+                                    bd=0
+                                )
+        self.menu_button['menu'] = self.menu_button.menu
+        self.menu_button.menu.add_command(label="Amplify EXCLUSIVES")
+
+        self.menu_button.bind("<Enter>",lambda e: self.enterMenu(e))
+        self.menu_button.bind("<Leave>",lambda e: self.leaveMenu(e))
 
         self.play_button.grid(row=0, column=0, sticky='nsew')
         self.like_button.grid(row=0, column=1, sticky='nsew', padx=(0, 5))
@@ -98,6 +119,12 @@ class TextFrame(tk.Frame):
 
     def unliked(self):
         self.like_button.tkraise()
+
+    def enterMenu(self,event):
+        self.menu_button['image'] = self.music_menu_button
+
+    def leaveMenu(self,event):
+        self.menu_button['image'] = self.music_menu_button_active
 
 
 class HeadIcon(tk.Button):

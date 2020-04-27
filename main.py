@@ -54,10 +54,11 @@ class Root(tk.Tk):
 
         def TK_player():
             self.withdraw()
-            print('befire')
+            # print('befire')
 
-            print('aim teher')
-            self.title('TK-Player')
+            # print('aim teher')
+            self.title('Amplify')
+            # self.title['bg']='black'
             app_icon = tk.PhotoImage(file=r"images\app_64.png")
             self.iconphoto(False, app_icon)
 
@@ -83,7 +84,7 @@ class Root(tk.Tk):
         self.splash = Thread(target=Splash_Screen)
         self.splash.start()
 
-        print(data)
+        # print(data)
 
     def toggle_fullscreen(self, event=None):
         self.counter = not self.counter  # Just toggling the boolean
@@ -98,7 +99,7 @@ class Root(tk.Tk):
 
 if __name__ == '__main__':
     from Database.Database import get_user
-    # from ActivityIndicator.Activity_Indicator import ImageLabel
+    
 
     from os import path
 

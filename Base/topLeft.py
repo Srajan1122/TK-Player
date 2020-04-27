@@ -1,6 +1,8 @@
 import tkinter as tk
 from Pages.HomePage.Home import Home
 from Pages.Browse.browse import Browse
+from Pages.ArtistPage.Artist import Artist
+from Pages.AlbumPage.Album import Album
 from tkinter import font
 from PIL import ImageTk, Image
 
@@ -103,8 +105,12 @@ class TopLeft(tk.Frame):
                                            data=self.get_liked_song(),
                                            text='Liked Song',
                                            image=self.liked_image))
-        self.albums = NormalButton(self.frame3, text='Albums')
-        self.artists = NormalButton(self.frame3, text='Artists')
+        self.albums = NormalButton(self.frame3,
+                                   text='Albums',
+                                   command=lambda: self.master.show_frame(Album))
+        self.artists = NormalButton(self.frame3,
+                                    text='Artists',
+                                    command=lambda: self.master.show_frame(Artist))
 
         # frame4
         self.label2 = tk.Label(self.frame4,

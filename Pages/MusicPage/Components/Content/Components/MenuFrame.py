@@ -40,9 +40,20 @@ class MenuFrame(tk.Frame):
         self.menuButton.menu.add_command(label=self.artist, command=None)
         self.menuButton.menu.add_command(label=self.album, command=None)
 
+        #self.menuButton.bind("<Enter>",lambda e: self.menuEnter(e))
+        #self.menuButton.bind("<Leave>",lambda e: self.menuLeave(e))
+
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
         self.menuButton.bind('<Button-1>', self.master.click)
 
         self.bind('<Button-1>', self.master.click)
+
+    def menuEnter(self,event):
+        self.menuButton['bg'] = "#333333",
+        self.menuButton['activebackground'] = "#333333"
+
+    def menuLeave(self,event):
+        self.menuButton['bg'] = "#222222",
+        self.menuButton['activebackground'] = "#222222"
