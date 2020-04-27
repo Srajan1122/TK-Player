@@ -6,7 +6,6 @@ from Pages.UserPage.UserPage import UserPage
 import sys
 from Pages.SearchPage.SearchPage import SearchPage
 
-
 class UserEntry(tk.Entry):
     def __init__(self, master, placeholder, textvariable, songDict, *args, **kwargs):
         tk.Entry.__init__(self, master, *args, **kwargs)
@@ -33,6 +32,7 @@ class UserEntry(tk.Entry):
         self['insertbackground'] = 'black'
         self['font'] = self.appHighlightFont
         self['border'] = 0
+        # self['command'] = command
 
         # function called on focusing
         def foc_in(event):
@@ -88,7 +88,7 @@ class TopRightTop(tk.Frame):
         myobject  = get_user(x)
 
         self.back = Back(self)
-        self.search = tk.Frame(self, bg='pink')
+        self.search = tk.Frame(self, bg='#000000')
         self.name = tk.Frame(self, bg='#000000')
         # self.dropdown = tk.Frame(self, bg='pink')
         self.min_max_cross = MinMaxCross(self)
@@ -96,7 +96,7 @@ class TopRightTop(tk.Frame):
         self.filter = UserEntry(
             self.search, placeholder="  Search",
             textvariable=None,
-            songDict=None
+            songDict=None,
         )
         self.filter.grid(
             row=0, column=0, sticky='nsew', padx=10,
@@ -142,10 +142,6 @@ class TopRightTop(tk.Frame):
         #self.user_menu.menu.add_separator()
         self.user_menu.menu.add_command(label="Profile", command=lambda: self.master.master.show_frame(UserPage))
 
-        #Search
-        self.searchButton = tk.Button(self.search,text='Search',command=lambda: master.master.show_frame(SearchPage))
-
-
         self.user_menu.grid(row=0, column=2, sticky='nsew', padx=10, pady=0)
         self.userButton.grid(row=0, column=1, sticky='nsew', ipady=0)
         self.back.grid(row=0, column=0, sticky='nsew')
@@ -153,7 +149,6 @@ class TopRightTop(tk.Frame):
         self.name.grid(row=0, column=2, sticky='nsew')
         # self.dropdown.grid(row=0, column=3, sticky='nsew')
         self.min_max_cross.grid(row=0, column=3, sticky='nsew')
-        self.searchButton.grid(row=0 , column=0, sticky='nsew')
 
         self.name.grid_rowconfigure(0, weight=1)
         self.name.grid_columnconfigure(0, weight=1)
@@ -167,6 +162,10 @@ class TopRightTop(tk.Frame):
     
     def sendSearchData(self, event):
         print(self.filter.get())
+        data = self.filter.get()
+
+        from Pages.SearchPage.SearchPage import SearchPage
+        self.master.master.show_frame_search(data=data)
 
     def userButtonHighlight(self, event):
         self.userButton['bg'] = "#000000"

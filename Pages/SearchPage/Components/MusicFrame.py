@@ -1,7 +1,7 @@
 import tkinter as tk
 from Pages.SearchPage.Components.ContentLabel import ContentLabel
 from Pages.SearchPage.Components.LikeButton import LikeButton
-# from Pages.SearchPage.Components.MenuFrame import MenuFrame
+from Pages.SearchPage.Components.MenuFrame import MenuFrame
 from Pages.SearchPage.Components.PlayButton import PlayButton
 from PIL import Image, ImageTk
 from Music.track import Track
@@ -27,13 +27,13 @@ class MusicFrame(tk.Frame):
         self.titleFrame = tk.Frame(self, bg='#181818')
         self.artistFrame = tk.Frame(self, bg='#181818')
         self.albumFrame = tk.Frame(self, bg='#181818')
-        # self.menuFrame = MenuFrame(self, bg='#181818')
+        self.menuFrame = MenuFrame(self, bg='#181818', title=self.title, album=self.album, artist=self.artist)
 
         self.iconFrame.grid(row=0, column=0, sticky='nsew')
         self.titleFrame.grid(row=0, column=1, sticky='nsew')
         self.artistFrame.grid(row=0, column=2, sticky='nsew')
         self.albumFrame.grid(row=0, column=3, sticky='nsew')
-        # self.menuFrame.grid(row=0, column=4, sticky='nsew')
+        self.menuFrame.grid(row=0, column=4, sticky='nsew')
 
         self.play_button = PlayButton(self.iconFrame,
                                       title=self.title,
@@ -74,15 +74,15 @@ class MusicFrame(tk.Frame):
         self.grid_columnconfigure(4, weight=1)
         self.grid_propagate(False)
 
-        # self.iconFrame.bind('<Configure>', self.icon_size)
-        # self.titleFrame.bind('<Configure>', self.title_size)
-        # self.albumFrame.bind('<Configure>', self.album_size)
-        # self.artistFrame.bind('<Configure>', self.artist_size)
-        # self.menuFrame.bind('<Configure>', self.menu_size)
+        self.iconFrame.bind('<Configure>', self.icon_size)
+        self.titleFrame.bind('<Configure>', self.title_size)
+        self.albumFrame.bind('<Configure>', self.album_size)
+        self.artistFrame.bind('<Configure>', self.artist_size)
+        self.menuFrame.bind('<Configure>', self.menu_size)
 
-        # self.bind('<Button-1>', self.click)
-        # self.bind('<Enter>', self.enter)
-        # self.bind('<Leave>', self.leave)
+        self.bind('<Button-1>', self.click)
+        self.bind('<Enter>', self.enter)
+        self.bind('<Leave>', self.leave)
 
     @staticmethod
     def prepare_icon(filename, size):
@@ -96,12 +96,12 @@ class MusicFrame(tk.Frame):
         # check_frame = '.!frame.!filterframe.!userentry'
         # if str(frame).find(check_frame) == -1:
         #     return
-        frame.iconFrame.config(bg=bg)
+        # frame.iconFrame.config(bg=bg)
         frame.titleLabel.config(bg=bg)
         frame.albumLabel.config(bg=bg)
         frame.artistLabel.config(bg=bg)
-        # frame.menuFrame.config(bg=bg)
-        # frame.menuFrame.menuButton.config(bg=bg)
+        frame.menuFrame.config(bg=bg)
+        frame.menuFrame.menuButton.config(bg=bg)
         frame.like_button.config(bg=bg)
         frame.play_button.config(bg=bg)
 
@@ -114,35 +114,35 @@ class MusicFrame(tk.Frame):
         frame.albumLabel.config(foreground=fg)
         frame.artistLabel.config(foreground=fg)
 
-    # def enter(self, event):
-    #     from Base.listOfPage import current_playing
-    #     if self.focus_get() != self:
-    #         self.bg_config(self, '#222222')
-    #         self.menuFrame.menuButton.grid(row=0, column=0, sticky='nsew')
-    #     if self not in current_playing:
-    #         self.play_button.config(image=self.pause_icon)
-    #     return
+    def enter(self, event):
+        from Base.listOfPage import current_playing
+        if self.focus_get() != self:
+            self.bg_config(self, '#222222')
+            self.menuFrame.menuButton.grid(row=0, column=0, sticky='nsew')
+        if self not in current_playing:
+            self.play_button.config(image=self.pause_icon)
+        return
 
-    # def leave(self, event):
-    #     from Base.listOfPage import current_playing
-    #     if self.focus_get() != self:
-    #         self.bg_config(self, '#181818')
-    #         self.menuFrame.menuButton.grid_forget()
-    #     if self not in current_playing:
-    #         self.play_button.config(image=self.music_icon)
+    def leave(self, event):
+        from Base.listOfPage import current_playing
+        if self.focus_get() != self:
+            self.bg_config(self, '#181818')
+            self.menuFrame.menuButton.grid_forget()
+        if self not in current_playing:
+            self.play_button.config(image=self.music_icon)
 
-    #     return
+        return
 
-    # def click(self, event):
-    #     check_frame = '.!frame.!filterframe.!userentry'
-    #     print(self.focus_get())
-    #     if str(self.focus_get()) != '.' and str(self.focus_get()).find(check_frame) == -1:
-    #         print('hi')
-    #         self.bg_config(self.focus_get(), '#181818')
-    #         self.focus_get().menuFrame.menuButton.grid_forget()
-    #     self.focus_set()
-    #     self.menuFrame.menuButton.grid(row=0, column=0, sticky='nsew')
-    #     self.bg_config(self, '#333333')
+    def click(self, event):
+        check_frame = '.!frame.!filterframe.!userentry'
+        print(self.focus_get())
+        if str(self.focus_get()) != '.' and str(self.focus_get()).find(check_frame) == -1:
+            print('hi')
+            self.bg_config(self.focus_get(), '#181818')
+            self.focus_get().menuFrame.menuButton.grid_forget()
+        self.focus_set()
+        self.menuFrame.menuButton.grid(row=0, column=0, sticky='nsew')
+        self.bg_config(self, '#333333')
 
     # def double_click(self, event):
     #     from Base.listOfPage import current_playing
@@ -194,27 +194,27 @@ class MusicFrame(tk.Frame):
 
     #     self.play_music.Play()
 
-    # def title_size(self, event):
-    #     from ...TitleFrame import title_size
-    #     self.titleFrame.config(width=title_size)
-    #     self.titleFrame.grid_propagate(False)
+    def title_size(self, event):
+        from .TitleFrame import title_size
+        self.titleFrame.config(width=title_size)
+        self.titleFrame.grid_propagate(False)
 
-    # def icon_size(self, event):
-    #     from ...TitleFrame import icon_size
-    #     self.iconFrame.config(width=icon_size)
-    #     self.iconFrame.grid_propagate(False)
+    def icon_size(self, event):
+        from .TitleFrame import icon_size
+        self.iconFrame.config(width=icon_size)
+        self.iconFrame.grid_propagate(False)
 
-    # def album_size(self, event):
-    #     from ...TitleFrame import album_size
-    #     self.albumFrame.config(width=album_size)
-    #     self.albumFrame.grid_propagate(False)
+    def album_size(self, event):
+        from .TitleFrame import album_size
+        self.albumFrame.config(width=album_size)
+        self.albumFrame.grid_propagate(False)
 
-    # def artist_size(self, event):
-    #     from ...TitleFrame import artist_size
-    #     self.artistFrame.config(width=artist_size)
-    #     self.artistFrame.grid_propagate(False)
+    def artist_size(self, event):
+        from .TitleFrame import artist_size
+        self.artistFrame.config(width=artist_size)
+        self.artistFrame.grid_propagate(False)
 
-    # def menu_size(self, event):
-    #     from ...TitleFrame import menu_size
-    #     self.menuFrame.config(width=menu_size)
-    #     self.menuFrame.grid_propagate(False)
+    def menu_size(self, event):
+        from .TitleFrame import menu_size
+        self.menuFrame.config(width=menu_size)
+        self.menuFrame.grid_propagate(False)

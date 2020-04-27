@@ -23,7 +23,7 @@ class Top(tk.Frame):
         # Loading all the frames
 
         self.frames = {}
-        for F in (Home, Browse, UserPage, Artist, Album,SearchPage):
+        for F in (Home, Browse, UserPage, Artist, Album):
             frame = F(self.topRight.topRightBottom, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
@@ -149,6 +149,16 @@ class Top(tk.Frame):
         if len(pages) > 1:
             if pages[len(pages) - 1] == frame:
                 return
+        rightPage.clear()
+        resetCount()
+        pages.append(frame)
+        frame.tkraise()
+
+    def show_frame_search(self,data):
+        frame = SearchPage(self.topRight.topRightBottom,
+                            self,
+                            data=data)
+        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
         rightPage.clear()
         resetCount()
         pages.append(frame)

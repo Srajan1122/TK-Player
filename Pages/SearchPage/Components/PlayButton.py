@@ -29,9 +29,9 @@ class PlayButton(tk.Button):
         self['width'] = 23
         self['command'] = lambda: self.click()
 
-        # self.bind('<Button-1>', self.master.master.click)
-        # self.bind('<Enter>', self.enter)
-        # self.bind('<Leave>', self.leave)
+        self.bind('<Button-1>', self.master.master.click)
+        self.bind('<Enter>', self.enter)
+        self.bind('<Leave>', self.leave)
 
     @staticmethod
     def prepare_image(filename, size):
