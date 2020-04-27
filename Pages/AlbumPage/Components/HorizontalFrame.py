@@ -1,7 +1,7 @@
 import tkinter as tk
 import pyglet
 import tkinter.font as tkfont
-from Pages.Resource.HorizontalScrollableFrame import HorizontalScrollableFrame
+from ..Components.HorizontalScrollableFrame import HorizontalScrollableFrame
 from skimage import io
 from PIL import ImageTk, Image
 
@@ -9,6 +9,16 @@ from PIL import ImageTk, Image
 def wid():
     global w
     return w
+
+
+def hei():
+    global height
+    return height
+
+
+def num():
+    global number
+    return number
 
 
 class HorizontalFrame(tk.Frame):
@@ -55,12 +65,12 @@ class Upper(tk.Frame):
                               background='#181818',
                               foreground='white')
 
-        if len(data) > 5:
-            self.left_button = ArrowButton(self, image=self.left, command=master.left)
-            self.right_button = ArrowButton(self, image=self.right, command=master.right)
-
-            self.left_button.grid(row=0, column=1, sticky=tk.N + tk.S + tk.E + tk.W)
-            self.right_button.grid(row=0, column=2, sticky=tk.N + tk.S + tk.E + tk.W)
+        # if len(data) > 5:
+        #     self.left_button = ArrowButton(self, image=self.left, command=master.left)
+        #     self.right_button = ArrowButton(self, image=self.right, command=master.right)
+        #
+        #     self.left_button.grid(row=0, column=1, sticky=tk.N + tk.S + tk.E + tk.W)
+        #     self.right_button.grid(row=0, column=2, sticky=tk.N + tk.S + tk.E + tk.W)
 
         self.label.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
@@ -73,15 +83,22 @@ class Lower(tk.Frame):
     count = 0
 
     def __init__(self, master, controller, data, *args, **kwargs):
-        from Base.listOfPage import musicPages
-        musicPages.append([])
+        from Base.listOfPage import musicPages3
+        musicPages3.append([])
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self['pady'] = 10
         self.bind('<Configure>', self.size)
 
+        global number
+        remainder = len(data) % 5
+        if remainder != 0:
+            number = len(data) / 5 + 1
+        else:
+            number = len(data) / 5
+
         self.scrollable = HorizontalScrollableFrame(self)
-        self.frame = tk.Frame(self, bg='#181818')
+        self.frame = tk.Frame(self.scrollable.scrollable_frame, bg='#181818')
 
         self.images = []
 
@@ -96,7 +113,7 @@ class Lower(tk.Frame):
             if i%5 == 0:
                 row += 1
                 column=0
-            musicPages[Lower.count].append(0)
+            musicPages3[Lower.count].append(0)
             self.button = CardButton(self.frame, text=j['text'],
                                      url=self.images[i],
                                      command=lambda d=j['tracks'],
@@ -104,7 +121,7 @@ class Lower(tk.Frame):
                                                     txt=j['text'],
                                                     r=Lower.count,
                                                     c=i:
-                                     controller.show_frame_Main(data=d,
+                                     controller.show_frame_Main3(data=d,
                                                                 image=img,
                                                                 text=txt,
                                                                 r=r,
@@ -114,9 +131,10 @@ class Lower(tk.Frame):
             column+=1
 
         self.frame.grid(row=0, column=0, sticky='nsew')
+        self.frame.grid_rowconfigure((0, 1), weight=1)
         self.frame.grid_columnconfigure((0, 1, 2, 3, 4), weight=1)
 
-        self.scrollable.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.scrollable.grid(row=0, column=0, sticky=tk.S + tk.W + tk.E)
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -125,7 +143,9 @@ class Lower(tk.Frame):
     def size(self, event):
         global width
         global w
+        global height
         width = event.width
+        height = event.height
         w = event.width / 5 - 14
 
 

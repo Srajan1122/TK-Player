@@ -106,10 +106,11 @@ class TopRightTop(tk.Frame):
     def logout(self):
         import os
         from Database.Database import sign_out
-        from Pages.UserAuthentication.AuthBase import AuthBase
         sign_out()
-        print(os.getcwd())
+        from Base.listOfPage import current_playing
+        current_playing[0].play_button.click()
         self.master.master.master.master.destroy()
+        from Pages.UserAuthentication.AuthBase import AuthBase
         login = AuthBase()
         login.mainloop()
 
