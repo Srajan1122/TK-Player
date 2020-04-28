@@ -176,15 +176,20 @@ class TopRightTop(tk.Frame):
         self.userButton['font'] = self.appHighlightFont
 
     def logout(self):
-        import os
         from Database.Database import sign_out
         sign_out()
-        from Base.listOfPage import current_playing
-        current_playing[0].play_button.click()
-        self.master.master.master.master.destroy()
-        from Pages.UserAuthentication.AuthBase import AuthBase
-        login = AuthBase()
-        login.mainloop()
+        try:
+            from Base.listOfPage import current_playing
+            from Base.listOfPage import currentTrack
+            if currentTrack[0]['instance'].player.music.get_busy():
+                currentTrack[0]['instance'].player.music.stop()
+        except Exception:
+            pass
+        # self.master.master.master.master.destroy()
+        # from Pages.UserAuthentication.AuthBase import AuthBase
+        # login = AuthBase()
+        # login.mainloop()
+        sys.exit()
 
 
 class Back(tk.Frame):

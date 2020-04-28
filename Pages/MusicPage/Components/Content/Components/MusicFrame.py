@@ -113,9 +113,12 @@ class MusicFrame(tk.Frame):
         # check_frame = '.!container.!top.!topright.!toprightbottom.!main.!frame.!filterframe.!userentry'
         # if str(frame).find(check_frame) > 0:
         #     return
-        frame.titleLabel.config(foreground=fg)
-        frame.albumLabel.config(foreground=fg)
-        frame.artistLabel.config(foreground=fg)
+        try:
+            frame.titleLabel.config(foreground=fg)
+            frame.albumLabel.config(foreground=fg)
+            frame.artistLabel.config(foreground=fg)
+        except Exception:
+            pass
 
     def enter(self, event):
         from Base.listOfPage import current_playing
