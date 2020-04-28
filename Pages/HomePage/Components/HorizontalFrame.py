@@ -86,9 +86,14 @@ class Lower(tk.Frame):
         self.images = []
 
         for i in data:
-            self.image = io.imread(i['url'])
-            self.image = Image.fromarray(self.image)
-            self.images.append(self.image)
+            print(i['text'])
+            print(i['url'])
+            try:
+                self.image = io.imread(i['url'])
+                self.image = Image.fromarray(self.image)
+                self.images.append(self.image)
+            except ValueError as ex:
+                print('Errorb aaya hai')
 
         for i, j in enumerate(data):
             musicPages[Lower.count].append(0)

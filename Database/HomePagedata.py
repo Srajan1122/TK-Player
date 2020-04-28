@@ -54,7 +54,19 @@ def get_language_data():
         language_data[i]['tracks'] = my_tracks
     return language_data
 
+def Top_hits_data():
+    from Database.Database import  order_simple_trending_song
+    data = order_simple_trending_song()
+    my_dict = {
+        'text':'Top Hits',
+        'url':'https://firebasestorage.googleapis.com/v0/b/another-tk-player.appspot.com/o/Top%20Hits.jpg?alt=media&token=38eec66b-9bf9-455c-b24f-d8cdf6906186',
+        'tracks':data
+    }
+    my_list = []
+    my_list.append(my_dict)
+    return my_list
 
 genre_data = get_genre_data()
 artist_data = get_artist_data()
 language_data = get_language_data()
+Trending_data = Top_hits_data()

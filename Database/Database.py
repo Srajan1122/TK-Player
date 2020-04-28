@@ -697,8 +697,6 @@ def send_email_verification_otp(email):
         server.login(username, password)
         server.sendmail(fromaddr, toaddrs, message)
         server.quit()
-        messagebox.showinfo('Email Verification','A verification has been\n sent to your email')
-        return True
     except firebase_admin._auth_utils.UserNotFoundError as ex:
         from Pages.UserAuthentication.Exceptions import User_not_Found
         User_not_Found()
@@ -714,43 +712,24 @@ def send_email_verification_otp(email):
 
 
 def generate_password(uid):
-    
-    '''
-    Generates a 10 letters lowercase password
-
-    '''
-    
     import random
     import string
 
-    try:
     
-        letters = string.ascii_lowercase
-        password = ''.join(random.choice(letters) for i in range(10))
-        doc_ref = db.collection(u'users').document(uid)
-        doc_ref.update({
-                'password'  :  password
-            })
-        return password
-    except firebase_admin._auth_utils.UserNotFoundError as ex:
-        from Pages.UserAuthentication.Exceptions import User_not_Found
-        User_not_Found()
-        return False
-    except Exception as ex:
-        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
-        
-        print('Exception Occurred which is of type :', ex.__class__.__name__)
-        y = input('If you want to see Traceback press 1 : ')
-        if y == '1':
-            traceback.print_exc()
-        return False
+    letters = string.ascii_lowercase
+    password = ''.join(random.choice(letters) for i in range(10))
+    doc_ref = db.collection(u'users').document(uid)
+    doc_ref.update({
+            'password'  :  password
+        })
+    return password
 
 
 
 def Forget_password_email(email):
     '''
 
-    :param:
+    :param otp:
            email: email of the user
     :return: bool
 
@@ -777,16 +756,10 @@ def Forget_password_email(email):
         server.login(username, password)
         server.sendmail(fromaddr, toaddrs, message)
         server.quit()
-        messagebox.showinfo('Passwod Request','A new password has been\n sent to your email')
-        
-        return True
-    except ValueError as ex:
-        messagebox.showerror('Error','Please Enter your email in\n the email field.')
-        return False
-    except firebase_admin._auth_utils.UserNotFoundError as ex:
-        from Pages.UserAuthentication.Exceptions import User_not_Found
-        User_not_Found()
-        return False
+    # except firebase_admin._auth_utils.UserNotFoundError as ex:
+    #     from Pages.UserAuthentication.Exceptions import User_not_Found
+    #     User_not_Found()
+    #     return False
     except Exception as ex:
         messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
         
@@ -934,6 +907,7 @@ def add_liked_songs(track_object,uid):
     try:
         collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_object['title'])
         collection.set(track_object)
+        add_like_count(track_object['title'])
         print('Added Liked song')
         return True
     except Exception as ex:
@@ -956,6 +930,7 @@ def delete_liked_song(uid,track_title):
     try:
         collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_title)
         collection.delete()
+        decrease_like_count(track_title)
         print('deleted Liked song')
         return True
     except Exception as ex:
@@ -1004,10 +979,69 @@ def add_language_and_Like_count():
             'Language': 'English'
         })
 
+def order_simple_trending_song():
+    '''
+    Returns list of songs in the descending order
+
+    '''
+    try:
+        doc_ref = db.collection(u'Tracks')
+        query = doc_ref.order_by(
+            u'like_count', direction=firestore.Query.DESCENDING)
+        results = query.stream()
+        
+        return list(map(lambda x: x.to_dict(), results))
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+        
+
+def add_like_count(title):
+    try:
+        myobject = get_track(title)
+        doc_ref  = db.collection(u'Tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] + 1
+        })
+        doc_ref = db.collection(u'artist/'+myobject['artist']+'/tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] + 1 
+
+        })
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
 
 
-# add_language_and_Like_count()
-# set_track('ads','asdas','asdas','asda','Hindi')
-# set_language('English')
-# print(get_tracks_by_language(language = 'English'))
-# Forget_password_email('dkhoche70@gmail.com')
+def decrease_like_count(title):
+    try:
+        myobject = get_track(title)
+        doc_ref  = db.collection(u'Tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] - 1
+        })
+        doc_ref = db.collection(u'artist/'+myobject['artist']+'/tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] - 1 
+
+        })
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False

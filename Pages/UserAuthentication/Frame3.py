@@ -125,7 +125,8 @@ class Frame3(tk.Frame):
 
 		def forget_pass():
 			try:
-				Forget_password_email(data2['email'])
+				email = self.email.get()
+				Forget_password_email(email)
 			except ValueError :
 				print('entre email')
 		from Database.Database import Forget_password_email
