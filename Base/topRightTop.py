@@ -185,11 +185,9 @@ class TopRightTop(tk.Frame):
                 currentTrack[0]['instance'].player.music.stop()
         except Exception:
             pass
-        # self.master.master.master.master.destroy()
-        # from Pages.UserAuthentication.AuthBase import AuthBase
-        # login = AuthBase()
-        # login.mainloop()
-        sys.exit()
+        self.master.master.master.master.destroy()
+        import subprocess
+        _ = subprocess.call(["venv/Scripts/python.exe", "main.py"])
 
 
 class Back(tk.Frame):
