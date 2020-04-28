@@ -155,6 +155,9 @@ class FilterFrame(tk.Frame):
         self.filter['bg'] = "#121212"
         self.filter['foreground'] = "#867f7a"
         self.close_icon['bg'] = "#121212"
+        self.close_icon.focus_set()
+        self.filter.delete(0, 100)
+        self.fill()
 
     def focusHighlight(self, event):
         self['bg'] = "#404040"
