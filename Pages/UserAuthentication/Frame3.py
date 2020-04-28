@@ -122,7 +122,34 @@ class Frame3(tk.Frame):
 			ipadx=20,
 			ipady=10
 		)
-		
+
+		def forget_pass():
+			try:
+				Forget_password_email(data2['email'])
+			except ValueError :
+				print('entre email')
+		from Database.Database import Forget_password_email
+		self.Forget_password = tk.Button(
+			self.container,
+			border=0,
+			text="Forget Password ?",
+			background='#121212',
+			activebackground='#121212',
+			foreground='white',
+			activeforeground='white',
+			font=self.appHighlightFont,
+			command=forget_pass
+			)
+			
+		self.Forget_password.grid(
+			row=5,
+			column=0,
+			sticky='news',
+			padx=2,
+			pady=5,
+			ipadx=20,
+			ipady=10
+			)
 		
 		#Email entry
 		self.email = UserEntry(
@@ -233,6 +260,8 @@ class Frame3(tk.Frame):
 		if not self.passwordCheck(password):
 			self.result['text'] = "Password must be atleast 8 characters long"
 			return
+		
+
 		self.verify = tk.Button(
 			self.container,
 			border=0,
