@@ -32,14 +32,15 @@ class Home(tk.Frame):
 
     def data(self):
         from Database import HomePagedata
-        title = ['Listen to your favourite Artist', 'Get your mood on','Listen Songs by Language']
+        title = ['Listen Songs by Language','Trending Songs','Listen to your favourite Artist', 'Get your mood on']
         data = [
-            HomePagedata.artist_data, HomePagedata.genre_data, HomePagedata.language_data
+           HomePagedata.language_data, HomePagedata.Trending_data ,  HomePagedata.artist_data, HomePagedata.genre_data
         ]
         info = [
             {'title': title[0], 'data': data[0]},
             {'title': title[1], 'data': data[1]},
             {'title': title[2], 'data': data[2]},
+            {'title': title[3], 'data': data[3]},
 
         ]
 

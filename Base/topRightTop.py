@@ -4,6 +4,7 @@ from tkinter import font
 from .listOfPage import pages, rightPage, incrementCount, getCount, resetCount
 from Pages.UserPage.UserPage import UserPage
 import sys
+import subprocess
 
 
 class UserEntry(tk.Entry):
@@ -158,7 +159,7 @@ class TopRightTop(tk.Frame):
         self.grid_columnconfigure(2, weight=5)
         # self.grid_columnconfigure(3, weight=1)
         self.grid_columnconfigure(3, weight=4)
-    
+
     def sendSearchData(self, event):
         print(self.filter.get())
 
@@ -179,7 +180,10 @@ class TopRightTop(tk.Frame):
             current_playing[0].play_button.click()
         except IndexError as ex:
             print("Song is not playing")
+
         self.master.master.master.master.destroy()
+        import main
+        sys.exit('Exited safetly')
         from Pages.UserAuthentication.AuthBase import AuthBase
         login = AuthBase()
         login.mainloop()
@@ -217,7 +221,7 @@ class Back(tk.Frame):
         if len(rightPage) < 1:
             return
 
-        c = getCount()
+        c = getCount() 
         if c > len(rightPage):
             return
         frame = rightPage[len(rightPage) - c]
