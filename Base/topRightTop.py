@@ -80,6 +80,7 @@ class TopRightTop(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#000000'
+        self['height'] = 1
 
         f = open('user')
         x = f.readlines()[0]
@@ -95,12 +96,13 @@ class TopRightTop(tk.Frame):
         self.filter = UserEntry(
             self.search, placeholder="  Search",
             textvariable=None,
-            songDict=None
+            songDict=None,
         )
         self.filter.grid(
-            row=0, column=0, sticky='nsew', padx=10,
+            row=0, column=0, sticky='ew',
+            # padx=10,
             pady=4,
-            ipadx=20,
+            # ipadx=20,
             ipady=5
         )
         self.filter.bind("<Return>",lambda e: self.sendSearchData(e))
@@ -149,15 +151,18 @@ class TopRightTop(tk.Frame):
         # self.dropdown.grid(row=0, column=3, sticky='nsew')
         self.min_max_cross.grid(row=0, column=3, sticky='nsew')
 
+        self.search.grid_rowconfigure(0, weight=1)
+
         self.name.grid_rowconfigure(0, weight=1)
         self.name.grid_columnconfigure(0, weight=1)
 
-        self.rowconfigure(0)
+        self.rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=10)
         self.grid_columnconfigure(2, weight=5)
         # self.grid_columnconfigure(3, weight=1)
         self.grid_columnconfigure(3, weight=4)
+        self.grid_propagate(False)
     
     def sendSearchData(self, event):
         print(self.filter.get())
