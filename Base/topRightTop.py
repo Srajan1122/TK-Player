@@ -175,7 +175,10 @@ class TopRightTop(tk.Frame):
         from Database.Database import sign_out
         sign_out()
         from Base.listOfPage import current_playing
-        current_playing[0].play_button.click()
+        try:
+            current_playing[0].play_button.click()
+        except IndexError as ex:
+            print("Song is not playing")
         self.master.master.master.master.destroy()
         from Pages.UserAuthentication.AuthBase import AuthBase
         login = AuthBase()

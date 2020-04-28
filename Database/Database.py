@@ -726,7 +726,7 @@ def generate_password(uid):
     try:
     
         letters = string.ascii_lowercase
-        password = ''.join(random.choice(letters) for i in range(10))
+        password = ''.join(random.choice(letters) for i in range(8))
         doc_ref = db.collection(u'users').document(uid)
         doc_ref.update({
                 'password'  :  password
