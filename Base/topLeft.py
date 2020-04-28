@@ -68,7 +68,7 @@ class TopLeft(tk.Frame):
         self.frame1 = tk.Frame(self, bg='#121212', padx=10, pady=10)
         self.frame2 = tk.Frame(self, bg='#121212', padx=10)
         self.frame3 = tk.Frame(self, bg='#121212', padx=10)
-        self.frame4 = tk.Frame(self, bg='#000000', padx=10)
+        self.frame4 = tk.Frame(self, bg='#2c2c2c', padx=10)
         self.frame5 = tk.Frame(self, bg='#000000', padx=10)
 
         # frame1
@@ -117,22 +117,22 @@ class TopLeft(tk.Frame):
                                     command=lambda: self.master.show_frame(Artist))
 
         # frame4
-        self.label2 = tk.Label(self.frame4,
-                               text='AMPLIFY',
-                               background='#000000',
-                               foreground='#a8a8a8',
-                               anchor=tk.W,
-                               padx=5,
-                               font=self.appHighlightFont
-                               )
-        self.copyright = tk.Label(self.frame4,
-                               text=self.string1,
-                               background='#000000',
-                               foreground='#a8a8a8',
-                               anchor=tk.W,
-                               padx=5,
-                               font=self.appHighlightFont
-                               )
+        # self.label2 = tk.Label(self.frame4,
+        #                        text='AMPLIFY',
+        #                        background='#000000',
+        #                        foreground='#a8a8a8',
+        #                        anchor=tk.W,
+        #                        padx=5,
+        #                        font=self.appHighlightFont
+        #                        )
+        # self.copyright = tk.Label(self.frame4,
+        #                        text=self.string1,
+        #                        background='#000000',
+        #                        foreground='#a8a8a8',
+        #                        anchor=tk.W,
+        #                        padx=5,
+        #                        font=self.appHighlightFont
+        #                        )
         # frame5
         self.label4 = tk.Label(
                             self.frame5,
@@ -150,7 +150,7 @@ class TopLeft(tk.Frame):
                             foreground="#a8a8a8",
                             anchor=tk.W,
                             padx=5,
-                            font=self.appHighlightFont3
+                            font=self.appHighlightFont2
                         )
 
         # grid - components
@@ -163,10 +163,10 @@ class TopLeft(tk.Frame):
         self.likedSongs.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.albums.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.artists.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.copyright.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)        
-        self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
-        self.label3.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
-        self.label4.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
+        #self.copyright.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)        
+        #self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
+        self.label3.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=0)
+        self.label4.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=0)
 
         # grid - frames
         self.frame1.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -180,8 +180,11 @@ class TopLeft(tk.Frame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=2)
         self.grid_rowconfigure(2, weight=9)
-        self.grid_rowconfigure(3, weight=1)
         self.grid_rowconfigure(4, weight=1)
+        #self.grid_rowconfigure(4, weight=1)
+
+        self.frame5.grid_columnconfigure(0, weight=1)
+        self.frame5.grid_rowconfigure((0,1), weight=1)
 
     def logout(self):
         import os
