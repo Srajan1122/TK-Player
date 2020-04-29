@@ -86,8 +86,6 @@ class Lower(tk.Frame):
         self.images = []
 
         for i in data:
-            print(i['text'])
-            print(i['url'])
             try:
                 self.image = io.imread(i['url'])
                 self.image = Image.fromarray(self.image)
@@ -97,7 +95,6 @@ class Lower(tk.Frame):
                 print('This url(above url) need to be replaced as it is not readable by the imread function')
                 print('---------------------------------------------------------------------')
         for i, j in enumerate(data):
-            # print(i)
             musicPages[Lower.count].append(0)
             self.button = CardButton(self.frame, text=j['text'],
                                      url=self.images[i],
@@ -157,6 +154,9 @@ class CardButton(tk.Button):
         self['foreground'] = 'white'
         self['activeforeground'] = 'white'
 
+        self.bind('<Enter>', self.enter)
+        self.bind('<Leave>', self.leave)
+
     def size(self, event):
         global width
         w = width / 5 - 14
@@ -165,3 +165,23 @@ class CardButton(tk.Button):
         self.image = self.image.resize((int(round(w)), int(round(w))), Image.ANTIALIAS)
         self.image = ImageTk.PhotoImage(self.image)
         self.config(image=self.image)
+
+    def enter(self, event):
+        global width
+        w = width / 5 - 14
+        self.configure(width=int(round(w)), height=int(round(w)) + 50)
+        self.image = self.url
+        self.image = self.image.resize((int(round(w))+3, int(round(w))+3), Image.ANTIALIAS)
+        # self.greyscale = self.image.convert('LA')
+        self.image = ImageTk.PhotoImage(self.image)
+        self.config(image=self.image)
+
+    def leave(self, event):
+        global width
+        w = width / 5 - 14
+        self.configure(width=int(round(w)), height=int(round(w)) + 50)
+        self.image = self.url
+        self.image = self.image.resize((int(round(w)), int(round(w))), Image.ANTIALIAS)
+        self.image = ImageTk.PhotoImage(self.image)
+        self.config(image=self.image)
+
