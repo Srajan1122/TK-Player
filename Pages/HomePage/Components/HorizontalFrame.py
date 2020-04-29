@@ -93,9 +93,11 @@ class Lower(tk.Frame):
                 self.image = Image.fromarray(self.image)
                 self.images.append(self.image)
             except ValueError as ex:
-                print('Errorb aaya hai')
-
+                print('---------------------------------------------------------------------')
+                print('This url(above url) need to be replaced as it is not readable by the imread function')
+                print('---------------------------------------------------------------------')
         for i, j in enumerate(data):
+            # print(i)
             musicPages[Lower.count].append(0)
             self.button = CardButton(self.frame, text=j['text'],
                                      url=self.images[i],
