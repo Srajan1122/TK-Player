@@ -70,6 +70,7 @@ class TopLeft(tk.Frame):
         self.frame3 = tk.Frame(self, bg='#121212', padx=10)
         self.frame4 = tk.Frame(self, bg='#000000', padx=10)
         self.frame5 = tk.Frame(self, bg='#000000', padx=10)
+        self.line = tk.Frame(self, bg="#2c2c2c", padx=10)
 
         # frame1
         self.menu2 = tk.Menubutton(self.frame1, image=self.menu_icon, background='#121212', activebackground='#121212',
@@ -150,7 +151,7 @@ class TopLeft(tk.Frame):
                             foreground="#a8a8a8",
                             anchor=tk.W,
                             padx=5,
-                            font=self.appHighlightFont3
+                            font=self.appHighlightFont2
                         )
 
         # grid - components
@@ -165,23 +166,27 @@ class TopLeft(tk.Frame):
         self.artists.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.copyright.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)        
         self.label2.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
-        self.label3.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
-        self.label4.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=5)
+        self.label3.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=0)
+        self.label4.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W, pady=0)
 
         # grid - frames
         self.frame1.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.frame2.grid(row=1, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
         self.frame3.grid(row=2, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.frame4.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
-        self.frame5.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.frame4.grid(row=4, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.frame5.grid(row=5, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.line.grid(row=3, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
         # grid - row/column
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=2)
         self.grid_rowconfigure(2, weight=9)
-        self.grid_rowconfigure(3, weight=1)
         self.grid_rowconfigure(4, weight=1)
+        self.grid_rowconfigure(5, weight=1)
+
+        self.frame5.grid_columnconfigure(0, weight=1)
+        self.frame5.grid_rowconfigure((0,1), weight=1)
 
     def logout(self):
         import os

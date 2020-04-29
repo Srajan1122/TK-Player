@@ -30,7 +30,7 @@ class MenuFrame(tk.Frame):
                                     self.menuButton,
                                     tearoff=0,
                                     background="#404040",
-                                    activebackground="#333333",
+                                    activebackground="#404040",
                                     foreground="white",
                                     activeforeground="white",
                                     bd=0

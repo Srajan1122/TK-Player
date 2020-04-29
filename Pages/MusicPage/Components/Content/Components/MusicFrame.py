@@ -84,7 +84,6 @@ class MusicFrame(tk.Frame):
         self.bind('<Enter>', self.enter)
         self.bind('<Leave>', self.leave)
 
-
     @staticmethod
     def prepare_icon(filename, size):
         icon = Image.open('images/' + filename)
@@ -97,23 +96,29 @@ class MusicFrame(tk.Frame):
         # check_frame = '.!frame.!filterframe.!userentry'
         # if str(frame).find(check_frame) == -1:
         #     return
-        frame.iconFrame.config(bg=bg)
-        frame.titleLabel.config(bg=bg)
-        frame.albumLabel.config(bg=bg)
-        frame.artistLabel.config(bg=bg)
-        frame.menuFrame.config(bg=bg)
-        frame.menuFrame.menuButton.config(bg=bg)
-        frame.like_button.config(bg=bg)
-        frame.play_button.config(bg=bg)
+        try:
+            frame.iconFrame.config(bg=bg)
+            frame.titleLabel.config(bg=bg)
+            frame.albumLabel.config(bg=bg)
+            frame.artistLabel.config(bg=bg)
+            frame.menuFrame.config(bg=bg)
+            frame.menuFrame.menuButton.config(bg=bg)
+            frame.like_button.config(bg=bg)
+            frame.play_button.config(bg=bg)
+        except Exception:
+            pass
 
     @staticmethod
     def fg_config(frame, fg):
         # check_frame = '.!container.!top.!topright.!toprightbottom.!main.!frame.!filterframe.!userentry'
         # if str(frame).find(check_frame) > 0:
         #     return
-        frame.titleLabel.config(foreground=fg)
-        frame.albumLabel.config(foreground=fg)
-        frame.artistLabel.config(foreground=fg)
+        try:
+            frame.titleLabel.config(foreground=fg)
+            frame.albumLabel.config(foreground=fg)
+            frame.artistLabel.config(foreground=fg)
+        except Exception:
+            pass
 
     def enter(self, event):
         from Base.listOfPage import current_playing
@@ -136,11 +141,12 @@ class MusicFrame(tk.Frame):
 
     def click(self, event):
         check_frame = '.!frame.!filterframe.!userentry'
-        print(self.focus_get())
         if str(self.focus_get()) != '.' and str(self.focus_get()).find(check_frame) == -1:
-            print('hi')
-            self.bg_config(self.focus_get(), '#181818')
-            self.focus_get().menuFrame.menuButton.grid_forget()
+            try:
+                self.bg_config(self.focus_get(), '#181818')
+                self.focus_get().menuFrame.menuButton.grid_forget()
+            except Exception:
+                pass
         self.focus_set()
         self.menuFrame.menuButton.grid(row=0, column=0, sticky='nsew')
         self.bg_config(self, '#333333')

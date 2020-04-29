@@ -593,7 +593,9 @@ def sign_in_with_email_and_password(email, password):
             f.write(user.uid)
             return doc
         else:
-            raise Exception('Credentials invalid')
+            from Pages.UserAuthentication.Exceptions import Invalid_credentials
+            Invalid_credentials()
+
             # return False
     except firebase_admin._auth_utils.UserNotFoundError as ex:
         from Pages.UserAuthentication.Exceptions import User_not_Found
@@ -684,7 +686,7 @@ def send_email_verification_otp(email):
         otp = generate_otp(user.uid)
         fromaddr = 'amplifyteam1234@gmail.com.'
         toaddrs = email
-        Text = 'Hello '+ user.display_name  + ',\nEnter the following OTP to verify your email address. \nYour verification code is verification code is '+otp+'\nIf you didn’t ask to verify this address, you can ignore this email.\nThanks,\nYour AmplifyTeam'
+        Text = 'Hello '+ user.display_name  + ',\nEnter the following OTP to verify your email address. \nYour verification code is '+otp+'\nIf you didn’t ask to verify this address, you can ignore this email.\nThanks,\nYour AmplifyTeam'
         subject = 'Email Verification'
         username = 'amplifyteam1234@gmail.com'
         password = '15412342'
@@ -711,6 +713,63 @@ def send_email_verification_otp(email):
         return False
 
 
+def generate_password(uid):
+    import random
+    import string
+
+    
+    letters = string.ascii_lowercase
+    password = ''.join(random.choice(letters) for i in range(10))
+    doc_ref = db.collection(u'users').document(uid)
+    doc_ref.update({
+            'password'  :  password
+        })
+    return password
+
+
+
+def Forget_password_email(email):
+    '''
+
+    :param otp:
+           email: email of the user
+    :return: bool
+
+
+    '''
+    try:
+        from firebase_admin import auth
+        
+        import smtplib
+        user = auth.get_user_by_email(email)
+        password = generate_password(user.uid)
+        fromaddr = 'amplifyteam1234@gmail.com.'
+        toaddrs = email
+        Text = 'Hello '+ user.display_name  + ',\nThis is your new password now on. \nYour new password is '+password+'.\nMake sure you don"t forget it.\nThanks,\nYour AmplifyTeam'
+        subject = 'New Password Request'
+        username = 'amplifyteam1234@gmail.com'
+        password = '15412342'
+        # print('i ma in the funtion')
+        message = 'Subject: {}\n\n{}'.format(subject, Text)
+        message = message.encode()
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.login(username, password)
+        server.sendmail(fromaddr, toaddrs, message)
+        server.quit()
+    # except firebase_admin._auth_utils.UserNotFoundError as ex:
+    #     from Pages.UserAuthentication.Exceptions import User_not_Found
+    #     User_not_Found()
+    #     return False
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occurred which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
 
 def verify_email_database(email,entered_otp):
     '''
@@ -850,6 +909,7 @@ def add_liked_songs(track_object,uid):
     try:
         collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_object['title'])
         collection.set(track_object)
+        add_like_count(track_object['title'])
         print('Added Liked song')
         return True
     except Exception as ex:
@@ -872,6 +932,7 @@ def delete_liked_song(uid,track_title):
     try:
         collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_title)
         collection.delete()
+        decrease_like_count(track_title)
         print('deleted Liked song')
         return True
     except Exception as ex:
@@ -922,9 +983,69 @@ def add_language_and_Like_count():
             'Language': 'English'
         })
 
+def order_simple_trending_song():
+    '''
+    Returns list of songs in the descending order
+
+    '''
+    try:
+        doc_ref = db.collection(u'Tracks')
+        query = doc_ref.order_by(
+            u'like_count', direction=firestore.Query.DESCENDING)
+        results = query.stream()
+        
+        return list(map(lambda x: x.to_dict(), results))
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
+        
+
+def add_like_count(title):
+    try:
+        myobject = get_track(title)
+        doc_ref  = db.collection(u'Tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] + 1
+        })
+        doc_ref = db.collection(u'artist/'+myobject['artist']+'/tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] + 1 
+
+        })
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
 
 
-# add_language_and_Like_count()
-# set_track('ads','asdas','asdas','asda','Hindi')
-# set_language('English')
-# print(get_tracks_by_language(language = 'English'))
+def decrease_like_count(title):
+    try:
+        myobject = get_track(title)
+        doc_ref  = db.collection(u'Tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] - 1
+        })
+        doc_ref = db.collection(u'artist/'+myobject['artist']+'/tracks').document(title)
+        doc_ref.update({
+            'like_count' : myobject['like_count'] - 1 
+
+        })
+        return True
+    except Exception as ex:
+        messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+        
+        print('Exception Occured which is of type :', ex.__class__.__name__)
+        y = input('If you want to see Traceback press 1 : ')
+        if y == '1':
+            traceback.print_exc()
+        return False
