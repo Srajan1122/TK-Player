@@ -593,7 +593,9 @@ def sign_in_with_email_and_password(email, password):
             f.write(user.uid)
             return doc
         else:
-            raise Exception('Credentials invalid')
+            from Pages.UserAuthentication.Exceptions import Invalid_credentials
+            Invalid_credentials()
+
             # return False
     except firebase_admin._auth_utils.UserNotFoundError as ex:
         from Pages.UserAuthentication.Exceptions import User_not_Found
