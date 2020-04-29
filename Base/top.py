@@ -8,6 +8,7 @@ from Pages.ArtistPage.Artist import Artist
 from Pages.AlbumPage.Album import Album
 from Pages.UserPage.UserPage import UserPage
 from .listOfPage import *
+from Pages.SearchPage.SearchPage import SearchPage
 
 
 class Top(tk.Frame):
@@ -148,6 +149,16 @@ class Top(tk.Frame):
         if len(pages) > 1:
             if pages[len(pages) - 1] == frame:
                 return
+        rightPage.clear()
+        resetCount()
+        pages.append(frame)
+        frame.tkraise()
+
+    def show_frame_Search(self,data):
+        frame = SearchPage(self.topRight.topRightBottom,
+                            self,
+                            data=data)
+        frame.grid(row=0, column=0, sticky=tk.N + tk.S + tk.W + tk.E)
         rightPage.clear()
         resetCount()
         pages.append(frame)

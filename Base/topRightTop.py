@@ -166,7 +166,10 @@ class TopRightTop(tk.Frame):
         self.grid_propagate(False)
     
     def sendSearchData(self, event):
-        print(self.filter.get())
+        # print(self.filter.get())
+        self.master.focus()
+        self.master.master.show_frame_Search(data=self.filter.get())
+        
 
     def userButtonHighlight(self, event):
         self.userButton['bg'] = "#000000"
@@ -188,6 +191,7 @@ class TopRightTop(tk.Frame):
             pass
         self.master.master.master.master.destroy()
         import subprocess
+        print('restarting the application')
         _ = subprocess.call(["venv/Scripts/python.exe", "main.py"])
 
 

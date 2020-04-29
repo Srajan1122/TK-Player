@@ -1,21 +1,24 @@
 import tkinter as tk
-from Pages.MusicPage.Components.Content.Components.ContentLabel import ContentLabel
-from Pages.MusicPage.Components.Content.Components.LikeButton import LikeButton
-from Pages.MusicPage.Components.Content.Components.MenuFrame import MenuFrame
-from Pages.MusicPage.Components.Content.Components.PlayButton import PlayButton
+from Pages.SearchPage.Components.ContentLabel import ContentLabel
+from Pages.SearchPage.Components.LikeButton import LikeButton
+from Pages.SearchPage.Components.MenuFrame import MenuFrame
+from Pages.SearchPage.Components.PlayButton import PlayButton
 from PIL import Image, ImageTk
+from skimage import io
 from Music.track import Track
-
+from Database.Database import get_genre,get_artist
 
 class MusicFrame(tk.Frame):
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, controller, *args, **kwargs):
         self.title = kwargs.pop('title')
         self.album = kwargs.pop('album')
         self.url = kwargs.pop('url')
         self.artist = kwargs.pop('artist')
+        self.controller = controller
         tk.Frame.__init__(self, master, *args, **kwargs)
         self['background'] = '#181818'
         self['height'] = 40
+        self.image = None
 
         self.play_music = None
 
@@ -84,6 +87,7 @@ class MusicFrame(tk.Frame):
         self.bind('<Enter>', self.enter)
         self.bind('<Leave>', self.leave)
 
+
     @staticmethod
     def prepare_icon(filename, size):
         icon = Image.open('images/' + filename)
@@ -96,8 +100,8 @@ class MusicFrame(tk.Frame):
         # check_frame = '.!frame.!filterframe.!userentry'
         # if str(frame).find(check_frame) == -1:
         #     return
+        # frame.iconFrame.config(bg=bg)
         try:
-            frame.iconFrame.config(bg=bg)
             frame.titleLabel.config(bg=bg)
             frame.albumLabel.config(bg=bg)
             frame.artistLabel.config(bg=bg)
@@ -141,6 +145,7 @@ class MusicFrame(tk.Frame):
 
     def click(self, event):
         check_frame = '.!frame.!filterframe.!userentry'
+        # print(self.focus_get())
         if str(self.focus_get()) != '.' and str(self.focus_get()).find(check_frame) == -1:
             try:
                 self.bg_config(self.focus_get(), '#181818')
@@ -152,18 +157,25 @@ class MusicFrame(tk.Frame):
         self.bg_config(self, '#333333')
 
     def double_click(self, event):
+        album = get_genre(self.album)
+        artist = get_artist(self.artist)
+        # print(artist['image_url'])
+        try:
+                self.image = io.imread(artist['image_url'])
+                self.image = Image.fromarray(self.image)
+        except ValueError as ex:
+            print('---------------------------------------------------------------------')
+            print('This url(above url) need to be replaced as it is not readable by the imread function')
+            print('---------------------------------------------------------------------')
+
         from Base.listOfPage import current_playing
         if len(current_playing) != 0:
             frame = current_playing.pop()
             self.fg_config(frame, fg='#888888')
             frame.play_button.config(image=self.music_icon)
             frame.play_button.playing = False
-            try:
-                frame.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
-                frame.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
-            except Exception:
-                print('head vala error')
-                pass
+            # frame.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
+            # frame.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
             frame.play_music.Stop()
 
         if len(current_playing) == 0:
@@ -172,18 +184,19 @@ class MusicFrame(tk.Frame):
         self.fg_config(self, fg='#1DB954')
         self.play_button.config(image=self.volume_icon)
         self.play_button.playing = True
-        self.master.master.master.master.master.head.text_frame.play_button.isPlaying = True
-        self.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+        # self.master.master.master.master.master.head.text_frame.play_button.isPlaying = True
+        # self.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
 
         from Base.listOfPage import currentTrack
         if len(currentTrack) == 0:
             currentTrack.append({})
             currentTrack[0]['title'] = self.title
             currentTrack[0]['url'] = self.url
+            # print(self)
             self.play_music = Track(self, trackName=self.title,
                                     trackUrl=self.url,
                                     artist=self.artist,
-                                    image=self.master.master.master.master.master.image)
+                                    image=self.image)
 
             currentTrack[0]['instance'] = self.play_music
         else:
@@ -200,32 +213,32 @@ class MusicFrame(tk.Frame):
                                         trackName=self.title,
                                         trackUrl=self.url,
                                         artist=self.artist,
-                                        image=self.master.master.master.master.master.image)
+                                        image=self.image)
                 currentTrack[0]['instance'] = self.play_music
 
         self.play_music.Play()
 
     def title_size(self, event):
-        from ...TitleFrame import title_size
+        from .TitleFrame import title_size
         self.titleFrame.config(width=title_size)
         self.titleFrame.grid_propagate(False)
 
     def icon_size(self, event):
-        from ...TitleFrame import icon_size
+        from .TitleFrame import icon_size
         self.iconFrame.config(width=icon_size)
         self.iconFrame.grid_propagate(False)
 
     def album_size(self, event):
-        from ...TitleFrame import album_size
+        from .TitleFrame import album_size
         self.albumFrame.config(width=album_size)
         self.albumFrame.grid_propagate(False)
 
     def artist_size(self, event):
-        from ...TitleFrame import artist_size
+        from .TitleFrame import artist_size
         self.artistFrame.config(width=artist_size)
         self.artistFrame.grid_propagate(False)
 
     def menu_size(self, event):
-        from ...TitleFrame import menu_size
+        from .TitleFrame import menu_size
         self.menuFrame.config(width=menu_size)
         self.menuFrame.grid_propagate(False)
