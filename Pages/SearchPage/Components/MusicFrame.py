@@ -144,55 +144,55 @@ class MusicFrame(tk.Frame):
         self.menuFrame.menuButton.grid(row=0, column=0, sticky='nsew')
         self.bg_config(self, '#333333')
 
-    # def double_click(self, event):
-    #     from Base.listOfPage import current_playing
-    #     if len(current_playing) != 0:
-    #         frame = current_playing.pop()
-    #         self.fg_config(frame, fg='#888888')
-    #         frame.play_button.config(image=self.music_icon)
-    #         frame.play_button.playing = False
-    #         frame.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
-    #         frame.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
-    #         frame.play_music.Stop()
+    def double_click(self, event):
+        from Base.listOfPage import current_playing
+        if len(current_playing) != 0:
+            frame = current_playing.pop()
+            self.fg_config(frame, fg='#888888')
+            frame.play_button.config(image=self.music_icon)
+            frame.play_button.playing = False
+            frame.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
+            frame.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+            frame.play_music.Stop()
 
-    #     if len(current_playing) == 0:
-    #         current_playing.append(self)
+        if len(current_playing) == 0:
+            current_playing.append(self)
 
-    #     self.fg_config(self, fg='#1DB954')
-    #     self.play_button.config(image=self.volume_icon)
-    #     self.play_button.playing = True
-    #     self.master.master.master.master.master.head.text_frame.play_button.isPlaying = True
-    #     self.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
+        self.fg_config(self, fg='#1DB954')
+        self.play_button.config(image=self.volume_icon)
+        self.play_button.playing = True
+        self.master.master.master.master.master.head.text_frame.play_button.isPlaying = True
+        self.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
 
-    #     from Base.listOfPage import currentTrack
-    #     if len(currentTrack) == 0:
-    #         currentTrack.append({})
-    #         currentTrack[0]['title'] = self.title
-    #         currentTrack[0]['url'] = self.url
-    #         self.play_music = Track(self, trackName=self.title,
-    #                                 trackUrl=self.url,
-    #                                 artist=self.artist,
-    #                                 image=self.master.master.master.master.master.image)
+        from Base.listOfPage import currentTrack
+        if len(currentTrack) == 0:
+            currentTrack.append({})
+            currentTrack[0]['title'] = self.title
+            currentTrack[0]['url'] = self.url
+            self.play_music = Track(self, trackName=self.title,
+                                    trackUrl=self.url,
+                                    artist=self.artist,
+                                    image=self.master.master.master.master.master.image)
 
-    #         currentTrack[0]['instance'] = self.play_music
-    #     else:
-    #         # if currentTrack[0]['title'] == self.title:
-    #         #     self.play_music = currentTrack[0]['instance']
-    #         if currentTrack[0]['instance'] == self.play_music:
-    #             self.play_music = currentTrack[0]['instance']
-    #         else:
-    #             from Base.listOfPage import bottomPage
-    #             _ = bottomPage.pop()
-    #             currentTrack[0]['title'] = self.title
-    #             currentTrack[0]['url'] = self.url
-    #             self.play_music = Track(self,
-    #                                     trackName=self.title,
-    #                                     trackUrl=self.url,
-    #                                     artist=self.artist,
-    #                                     image=self.master.master.master.master.master.image)
-    #             currentTrack[0]['instance'] = self.play_music
+            currentTrack[0]['instance'] = self.play_music
+        else:
+            # if currentTrack[0]['title'] == self.title:
+            #     self.play_music = currentTrack[0]['instance']
+            if currentTrack[0]['instance'] == self.play_music:
+                self.play_music = currentTrack[0]['instance']
+            else:
+                from Base.listOfPage import bottomPage
+                _ = bottomPage.pop()
+                currentTrack[0]['title'] = self.title
+                currentTrack[0]['url'] = self.url
+                self.play_music = Track(self,
+                                        trackName=self.title,
+                                        trackUrl=self.url,
+                                        artist=self.artist,
+                                        image=self.master.master.master.master.master.image)
+                currentTrack[0]['instance'] = self.play_music
 
-    #     self.play_music.Play()
+        self.play_music.Play()
 
     def title_size(self, event):
         from .TitleFrame import title_size
