@@ -247,7 +247,16 @@ class Middle(tk.Frame):
     def play_next(self):
         from Base.listOfPage import current_playing
         list_of_music = self.find_list()
-        current_index = list_of_music.index(current_playing[0])
+        try:
+            current_index = list_of_music.index(current_playing[0])
+        except Exception:
+            self.sliderValue.set(0)
+            self.after_cancel(self.loopID)
+            music = current_playing[0]
+            music.play_button.click()
+            music = current_playing[0]
+            music.play_button.click()
+            return
 
         if Middle.single:
             next_index = current_index
@@ -277,7 +286,16 @@ class Middle(tk.Frame):
     def play_previous(self):
         from Base.listOfPage import current_playing
         list_of_music = self.find_list()
-        current_index = list_of_music.index(current_playing[0])
+        try:
+            current_index = list_of_music.index(current_playing[0])
+        except Exception:
+            self.sliderValue.set(0)
+            self.after_cancel(self.loopID)
+            music = current_playing[0]
+            music.play_button.click()
+            music = current_playing[0]
+            music.play_button.click()
+            return
         if Middle.single:
             next_index = current_index
             self.sliderValue.set(0)
