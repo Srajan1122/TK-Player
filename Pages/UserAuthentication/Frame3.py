@@ -101,6 +101,16 @@ class Frame3(tk.Frame):
 			size=14
 		)
 
+		self.appHighlightFont2 = font.Font(
+			family='lineto circular',
+			size=11,
+		)
+
+		self.appHighlightFont3 = font.Font(
+			family='lineto circular',
+			size=11, underline=1
+		)
+
 		#Back button
 		self.back = tk.Button(
 			self.container,
@@ -133,12 +143,12 @@ class Frame3(tk.Frame):
 		self.Forget_password = tk.Button(
 			self.container,
 			border=0,
-			text="Forget Password ?",
+			text="Forget password?",
 			background='#121212',
 			activebackground='#121212',
 			foreground='white',
 			activeforeground='white',
-			font=self.appHighlightFont,
+			font=self.appHighlightFont2,
 			command=forget_pass
 			)
 			
@@ -152,6 +162,9 @@ class Frame3(tk.Frame):
 			ipady=10
 			)
 		
+		self.Forget_password.bind("<Enter>", lambda e : self.enterfp(e))
+		self.Forget_password.bind("<Leave>", lambda e : self.leavefp(e))
+
 		#Email entry
 		self.email = UserEntry(
 			self.container,
@@ -219,6 +232,12 @@ class Frame3(tk.Frame):
 
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)
+
+	def leavefp(self,event):
+		self.Forget_password['font'] = self.appHighlightFont2
+
+	def enterfp(self,event):
+		self.Forget_password['font'] = self.appHighlightFont3
 
 	#Validation function for email
 	def emailCheck(self, s):
