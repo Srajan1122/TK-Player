@@ -121,10 +121,10 @@ class TextFrame(tk.Frame):
         self.like_button.tkraise()
 
     def enterMenu(self,event):
-        self.menu_button['image'] = self.music_menu_button
+        self.menu_button['image'] = self.music_menu_button_active
 
     def leaveMenu(self,event):
-        self.menu_button['image'] = self.music_menu_button_active
+        self.menu_button['image'] = self.music_menu_button
 
 
 class HeadIcon(tk.Button):

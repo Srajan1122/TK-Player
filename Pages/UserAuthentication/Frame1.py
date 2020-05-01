@@ -46,6 +46,12 @@ class Frame1(tk.Frame):
 			family='lineto circular',
 			size=14
 		)
+
+		self.appHighlightFont2 = font.Font(
+			family='lineto circular',
+			size=12
+		)
+
 		self.verify = tk.Label(
 			self.container,
 			border=0,
@@ -54,7 +60,7 @@ class Frame1(tk.Frame):
 			# activebackground='#121212',
 			foreground='white',
 			# activeforeground='white',
-			font=self.appHighlightFont,
+			font=self.appHighlightFont2,
 			
 		)
 		self.verify.grid(

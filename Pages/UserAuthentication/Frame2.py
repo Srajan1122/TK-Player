@@ -42,7 +42,7 @@ class NumberEntry(tk.Entry):
 		self['border'] = 0
 
 		def default_placeholder(self):
-			print("placeholder:", self.get())
+			# print("placeholder:", self.get())
 			# self.delete(0,100)
 			self.insert(0, placeholder)
 
@@ -62,12 +62,12 @@ class NumberEntry(tk.Entry):
 			self['textvariable'] = textvariable
 
 		def foc_out(event):
-			# print(self.get())
+		
 			lambda e: enter_details(e)
 			self['foreground'] = self.default_fg
 			if (id == 'phone'):
 				data["phone"] = self.get()
-			print(data)
+		
 
 			if not self.get():
 				default_placeholder(self)
@@ -77,8 +77,7 @@ class NumberEntry(tk.Entry):
 		def enter_details(event):
 			if (id == 'phone'):
 				data["phone"] = self.get()
-			print(data)
-
+		
 		self.bind("<FocusIn>", lambda e: foc_in(e))
 		self.bind("<FocusOut>", lambda e: foc_out(e))
 		self.bind("<Return>", lambda e: enter_details(e))
@@ -128,7 +127,7 @@ class UserEntry(tk.Entry):
 		#function called when not focusing
 		def foc_out(event):
 			self['foreground'] = self.default_fg
-			print(self.get())
+			
 			if not self.get():
 				if (show == 1):
 					self['show'] = ''
@@ -318,7 +317,7 @@ class Frame2(tk.Frame):
 		data["password"] = password
 		data["phone"] = phone
 		data["email"] = email
-		print(data)
+	
 
 		#placeholders
 		username_placeholder = "  Username"
@@ -386,61 +385,4 @@ class Frame2(tk.Frame):
 
 
 
-
-'''
-	def change():
-		return self.master.show_frame(Frame1)
-		def register():
-			# print(data)
-			username_check = data.get("username")
-			# print("user: ",username_check)
-			password_check = data.get("password")
-			# print("pass: ",password_check)
-			email_check = data.get("email")
-			# print()
-			phone_check = data.get("phone")
-
-			print("user: ", username_check)
-			print("pass: ", password_check)
-			print("email: ", email_check)
-			print("phone: ", phone_check)
-			if (username_check != "" and password_check != "" and email_check != "" and phone_check != ""):
-				print("first block")
-
-				def phoneCheck(s):
-					Pattern = re.compile("(0/91)?[7-9][0-9]{9}")
-					return Pattern.match(s)
-
-				def emailCheck(s):
-					Pattern = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
-					return Pattern.match(s)
-
-				def passwordCheck(s):
-					if (len(s) in range(8, 20)):
-						return True
-					else:
-						return False
-
-				if (passwordCheck(password_check)):
-					if (phoneCheck(phone_check)):
-						if (emailCheck(email_check)):
-							from Database.Database import register_user
-							register_user(username_check,email_check,phone_check,password_check)
-
-							change()
-							self.result['text'] = "Account was succesfully created"
-						else:
-							self.result['text'] = "Invalid Email ID"
-					else:
-						self.result['text'] = "Invalid Contact Number"
-				else:
-					self.result['text'] = "Password must be atleast 8 characters long"
-				# change()
-			# else:
-			# 	self.result['text'] = "Invalid Phone number"
-			else:
-				print("last block")
-				self.result['text'] = "Invalid Credentials"
-'''
-		
 

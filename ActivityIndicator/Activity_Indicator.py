@@ -38,11 +38,3 @@ class ImageLabel(tk.Label):
             self.loc %= len(self.frames)
             self.config(image=self.frames[self.loc])
             self.after(self.delay, self.next_frame)
-
-# root = tk.Tk()
-
-# root.after(3000 ,lambda:root.destroy())
-# root.mainloop()
-# print('hihihihihih')
-
-# root.destroy()

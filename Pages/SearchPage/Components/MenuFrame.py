@@ -8,12 +8,7 @@ class MenuFrame(tk.Frame):
 
         self.menu_image = tk.PhotoImage(file=r'images/menu_icon.png')
 
-        # self.menuButton = tk.Button(self,
-        #                             image=self.menu_image,
-        #                             relief=tk.FLAT,
-        #                             bd=0,
-        #                             background='#181818',
-        #                             activebackground='#333333')
+        #
 
         self.title = "Title: {}".format(title)
         self.artist = "Artist: {}".format(artist)

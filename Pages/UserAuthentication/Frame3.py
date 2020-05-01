@@ -5,12 +5,11 @@ from PIL import Image, ImageTk
 from itertools import count
 from tkinter import ttk
 
-# from ActivityIndicator import Activity
+from tkinter import messagebox
 from tkinter import font
 import re
 from Database.Database import check_verification
-# from .Frame2 import data3
-# check_verification('dkhoche70@gmail.com')
+
 # data2 for checking credentials and passing them
 global data2
 data2 = {
@@ -67,7 +66,7 @@ class UserEntry(tk.Entry):
 		def foc_out(event):
 			lambda e: enter_details(e)
 			self['foreground'] = self.default_fg
-			print(self.get())
+			# print(self.get())
 			if not self.get():
 				if (show == 1):
 					self['show'] = ''
@@ -101,6 +100,16 @@ class Frame3(tk.Frame):
 			size=14
 		)
 
+		self.appHighlightFont2 = font.Font(
+			family='lineto circular',
+			size=11,
+		)
+
+		self.appHighlightFont3 = font.Font(
+			family='lineto circular',
+			size=11, underline=1
+		)
+
 		#Back button
 		self.back = tk.Button(
 			self.container,
@@ -128,17 +137,17 @@ class Frame3(tk.Frame):
 				email = self.email.get()
 				Forget_password_email(email)
 			except ValueError :
-				print('entre email')
+				messagebox.showerror('Error','Please Enter email.')
 		from Database.Database import Forget_password_email
 		self.Forget_password = tk.Button(
 			self.container,
 			border=0,
-			text="Forget Password ?",
+			text="Forget password?",
 			background='#121212',
 			activebackground='#121212',
 			foreground='white',
 			activeforeground='white',
-			font=self.appHighlightFont,
+			font=self.appHighlightFont2,
 			command=forget_pass
 			)
 			
@@ -152,6 +161,9 @@ class Frame3(tk.Frame):
 			ipady=10
 			)
 		
+		self.Forget_password.bind("<Enter>", lambda e : self.enterfp(e))
+		self.Forget_password.bind("<Leave>", lambda e : self.leavefp(e))
+
 		#Email entry
 		self.email = UserEntry(
 			self.container,
@@ -220,6 +232,12 @@ class Frame3(tk.Frame):
 		self.grid_rowconfigure(0, weight=1)
 		self.grid_columnconfigure(0, weight=1)
 
+	def leavefp(self,event):
+		self.Forget_password['font'] = self.appHighlightFont2
+
+	def enterfp(self,event):
+		self.Forget_password['font'] = self.appHighlightFont3
+
 	#Validation function for email
 	def emailCheck(self, s):
 		pattern = re.compile('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
@@ -239,8 +257,7 @@ class Frame3(tk.Frame):
 		email = self.email.get()
 		data2['email'] = email
 		data2['password'] = password 
-		print(email)
-		print(password)
+	
 
 		#placeholders
 		email_placeholder = "  Email ID"
@@ -287,15 +304,13 @@ class Frame3(tk.Frame):
 
 
 		data3['email'] = email
-		print(data3['email'])
+	
 		if check_verification(data3['email']):
 			from Database.Database import sign_in_with_email_and_password
-			print('i am in there')
+			
 			user_object = sign_in_with_email_and_password(email,password)
 			if(user_object):
-				# global state
-				# print(user_object)
-				# state['user_object'] = user_object
+				
 				self.result['text'] = "Please have patience"
 				
 				
@@ -304,8 +319,9 @@ class Frame3(tk.Frame):
 			
 		else:
 			from Database.Database import send_email_verification_otp
+			self.master.openFrame4()
 			send_email_verification_otp(data3['email'])
-			self.verify['text'] = "You haven't verified your email.\nPlease Verify First."
+			# self.verify['text'] = "You haven't verified your email.\nPlease Verify First."
 			
 
  

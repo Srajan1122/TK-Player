@@ -67,19 +67,14 @@ class AuthFrame(tk.Frame):
 
     #Function for entering Homepage
     def login(self,user_object):
-
-        print('help')
+      
         """
             Check different condition for authentication
         """
         if False:
             return
 
-        # self.user = {
-        #     'name': 'srajan',
-        #     'age': 18
-        # }
-        # global state
+      
 
         self.master.destroy()
         main = Root(data=user_object)

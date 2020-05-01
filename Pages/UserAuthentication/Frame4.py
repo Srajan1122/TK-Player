@@ -62,7 +62,7 @@ class UserEntry(tk.Entry):
 		def foc_out(event):
 			lambda e: enter_details(e)
 			self['foreground'] = self.default_fg
-			print(self.get())
+			# print(self.get())
 			if not self.get():
 				if (show == 1):
 					self['show'] = ''
@@ -117,27 +117,7 @@ class Frame4(tk.Frame):
 			ipadx=20,
 			ipady=10
 		)
-		#Forget password button
-		# self.back = tk.Button(
-		# 	self.container,
-		# 	border=0,
-		# 	text='Verify',
-		# 	background='#121212',
-		# 	activebackground='#121212',
-		# 	foreground='white',
-		# 	activeforeground='white',
-		# 	font=self.appHighlightFont,
-		# 	#command=lambda: self.master.show_frame(Frame1)
-		# )
-		# self.back.grid(
-		# 	row=6,
-		# 	column=0,
-		# 	sticky='news',
-		# 	padx=2,
-		# 	pady=5,
-		# 	ipadx=20,
-		# 	ipady=10
-		# )
+		
 
 		
 
@@ -236,25 +216,21 @@ class Frame4(tk.Frame):
 		global data2
 		otp = self.otp.get()
 		
-		# data3['email'] = email
+	
 		data3['otp'] = otp 
-		print(data3)
+	
 
 		#placeholders
 		
 		otp_placeholder = "  OTP"
 
-		# if email == email_placeholder or otp == otp_placeholder:
-		# 	self.result['text'] = "Please enter all fields"
-		# 	return
+		
 
 		if otp.strip(' ') == '' :
 			self.result['text'] = "Invalid Credentials"
 			return
 
-		# if not self.emailCheck(email):
-		# 	self.result['text'] = "Invalid Email"
-		# 	return
+		
 
 		if not self.otpCheck(otp):
 			self.result['text'] = "otp must be atleast 6 characters long"
