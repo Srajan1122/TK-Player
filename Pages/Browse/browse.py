@@ -7,7 +7,7 @@ class Browse(tk.Frame):
 		tk.Frame.__init__(self, master, *args, **kwargs)
 		self['background'] = '#212121'
 
-		self.logo = self.prepare_image('about_head.png',150,450)
+		self.logo = self.prepare_image('about_us2.png',559,1200)
 		self.my_logo = tk.Label(self , image = self.logo, bg = '#212121', anchor=tk.W)
 		self.my_logo.grid(row = 0 , column  = 0, padx=30,pady=30)
 
