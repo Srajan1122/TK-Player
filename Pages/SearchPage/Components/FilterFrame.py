@@ -44,7 +44,7 @@ class UserEntry(tk.Entry):
         # function called when not focusing
         def foc_out(event):
             self['foreground'] = self.default_fg
-            # print(self.get())
+           
             if not self.get():
                 default_placeholder(self)
             else:
@@ -114,26 +114,21 @@ class FilterFrame(tk.Frame):
         matchingSongs.clear()
         self.songs = data
 
-        # print("searchFunc started")
-        # print(self.songs)
+       
         user_input = self.filter.get().upper()
-        # print(user_input)
+       
 
-        # if not user_input:
-        # 	return
-        # print("first check done")
-        # print(songs)
+        
         for i in range(len(self.songs)):
-            # print(self.songs[i]['title'])
+          
             input_matcher = re.search(
                 user_input,
                 self.songs[i]['title'].upper()
             )
-            # print(input_matcher)
+            
             if input_matcher:
                 matchingSongs.append(self.songs[i])
-        # print("result: ",matchingSongs)
-
+       
         if not matchingSongs:
             self.clear2()
             pass
@@ -170,16 +165,14 @@ class FilterFrame(tk.Frame):
         self.leaveHighlight(self)
 
     def clear(self):
-        # print("clear started")
-        # print("matchingDict: ", matchingSongs)
+        
         from .Content import Content
         self.content = Content(self.master.master, data=matchingSongs)
         self.content.grid(row=2, column=0, sticky='nsew')
         self.content.tkraise()
 
     def clear2(self):
-        # print("clear2 started")
-        # print("matchingDict: ",matchingSongs)
+        
         from .Content import Content
         self.content = Content(self.master.master, data=['not found'])
         self.content.grid(row=2, column=0, sticky='nsew')

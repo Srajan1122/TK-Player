@@ -39,10 +39,7 @@ class LikeButton(tk.Button):
             # if unliked
             self['image'] = self.empty_heart
             self.liked = True
-            # for index, song in enumerate(likedSong):
-            #     for key, value in song.items():
-            #         if key == 'title' and value == self.title:
-            #             likedSong.pop(index)
+           
             from Database.Database import delete_liked_song
             delete_liked_song(x , self.title)
                 

@@ -145,7 +145,7 @@ class MusicFrame(tk.Frame):
 
     def click(self, event):
         check_frame = '.!frame.!filterframe.!userentry'
-        # print(self.focus_get())
+      
         if str(self.focus_get()) != '.' and str(self.focus_get()).find(check_frame) == -1:
             try:
                 self.bg_config(self.focus_get(), '#181818')
@@ -159,7 +159,7 @@ class MusicFrame(tk.Frame):
     def double_click(self, event):
         album = get_genre(self.album)
         artist = get_artist(self.artist)
-        # print(artist['image_url'])
+      
         try:
                 self.image = io.imread(artist['image_url'])
                 self.image = Image.fromarray(self.image)
@@ -192,7 +192,7 @@ class MusicFrame(tk.Frame):
             currentTrack.append({})
             currentTrack[0]['title'] = self.title
             currentTrack[0]['url'] = self.url
-            # print(self)
+           
             self.play_music = Track(self, trackName=self.title,
                                     trackUrl=self.url,
                                     artist=self.artist,

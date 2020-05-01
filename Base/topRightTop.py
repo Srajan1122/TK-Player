@@ -45,7 +45,7 @@ class UserEntry(tk.Entry):
         # function called when not focusing
         def foc_out(event):
             self['foreground'] = self.default_fg
-            # print(self.get())
+         
             if not self.get():
                 default_placeholder(self)
             else:
@@ -109,8 +109,7 @@ class TopRightTop(tk.Frame):
         self.filter.bind("<Return>",lambda e: self.sendSearchData(e))
 
         # User_button
-        # self.name = self.user_data
-        # print(self.name)
+       
         self.appHighlightFont = font.Font(family='lineto circular', size=11, weight='bold')
         self.appHighlightFont2 = font.Font(family='lineto circular', underline=1, size=11, weight='bold')
         self.user_icon = tk.PhotoImage(file=r".\Images\user2.png", height=25, width=25)
@@ -191,7 +190,7 @@ class TopRightTop(tk.Frame):
             pass
         self.master.master.master.master.destroy()
         import subprocess
-        print('restarting the application')
+       
         _ = subprocess.call(["venv/Scripts/python.exe", "main.py"])
 
 

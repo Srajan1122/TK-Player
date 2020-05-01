@@ -11,7 +11,7 @@ class Content(tk.Frame):
         play = tkfont.Font(family="Play", size=15, weight="bold")
         self.scrollableFrame = ScrollableFrame(self)
         self.scrollableFrame.scrollable_frame.config(background='#181818')
-        # print("\nMai content",data,"\nMai content khatam\n")
+        
         if data==None:
             pass
         else:

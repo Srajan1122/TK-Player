@@ -162,7 +162,7 @@ class MusicFrame(tk.Frame):
                 frame.master.master.master.master.master.head.text_frame.play_button.isPlaying = False
                 frame.master.master.master.master.master.head.text_frame.play_button.ifPlaying()
             except Exception:
-                print('head vala error')
+                print('Head Error')
                 pass
             frame.play_music.Stop()
 

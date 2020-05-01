@@ -193,7 +193,7 @@ class TopLeft(tk.Frame):
         from Database.Database import sign_out
         from Pages.UserAuthentication.AuthBase import AuthBase
         sign_out()
-        print(os.getcwd())
+       
         self.master.master.master.destroy()
         login = AuthBase()
         login.mainloop()
@@ -203,8 +203,7 @@ class TopLeft(tk.Frame):
     
         x = f.readlines()[0]
         from Database.Database import get_all_liked_songs
-        print('----------------------------------')
-        print(get_all_liked_songs(x))
+       
         
         return get_all_liked_songs(x)
 

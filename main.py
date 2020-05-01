@@ -54,9 +54,7 @@ class Root(tk.Tk):
 
         def TK_player():
             self.withdraw()
-            # print('befire')
-
-            # print('aim teher')
+           
             self.title('Amplify')
             # self.title['bg']='black'
             app_icon = tk.PhotoImage(file=r"images\app_64.png")
@@ -76,7 +74,7 @@ class Root(tk.Tk):
                 splash.destroy()
                 self.deiconify()
 
-            splash.after(15000, myfun)
+            splash.after(25000, myfun)
             # time.sleep(15000)
 
         self.tk_player = Thread(target=TK_player)
@@ -84,7 +82,7 @@ class Root(tk.Tk):
         self.splash = Thread(target=Splash_Screen)
         self.splash.start()
 
-        # print(data)
+ 
 
     def toggle_fullscreen(self, event=None):
         self.counter = not self.counter  # Just toggling the boolean
