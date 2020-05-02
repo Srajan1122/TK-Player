@@ -18,6 +18,9 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 [![Contributors][contributors-shield]][contributors-url]
+[![Language][Language-shield]][Language-url]
+[![Activity][activity-shield]][activity-url]
+[![Version][version-shield]][version-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
@@ -239,14 +242,20 @@ Project Link: [https://github.com/Srajan1122/TK-Player](https://github.com/Sraja
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
+[contributors-shield]: https://img.shields.io/github/contributors/Srajan1122/TK-Player
 [contributors-url]: https://github.com/Srajan1122/TK-Player/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
+[activity-shield]: https://img.shields.io/github/commit-activity/m/Srajan1122/Tk-Player
+[activity-url]: https://github.com/Srajan1122/TK-Player/commits/master
+[version-shield]: https://img.shields.io/github/v/tag/Srajan1122/Tk-Player
+[version-url]: https://github.com/Srajan1122/TK-Player/releases
+[language-shield]: https://img.shields.io/github/languages/top/Srajan1122/TK-Player
+[language-url]: https://www.python.org/
+[forks-shield]: https://img.shields.io/github/forks/Srajan1122/TK-Player
 [forks-url]:https://github.com/Srajan1122/TK-Player/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
+[stars-shield]: 	https://img.shields.io/github/stars/Srajan1122/TK-Player
 [stars-url]: https://github.com/Srajan1122/TK-Player/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
+[issues-shield]: https://img.shields.io/github/issues/Srajan1122/TK-Player
 [issues-url]: hhttps://github.com/Srajan1122/TK-Player/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
+[license-shield]: https://img.shields.io/github/license/Srajan1122/TK-Player
 [license-url]: https://github.com/Srajan1122/TK-Player/blob/master/LICENSE
 
