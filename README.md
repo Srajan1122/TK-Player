@@ -36,8 +36,13 @@
 </p>
 
 
+<p align="center">
+  <img width="640" height="331" src="https://user-images.githubusercontent.com/49261633/80869362-ab5e1a00-8cbd-11ea-989a-f1df198f49c9.gif">
+</p>
 
 <!-- TABLE OF CONTENTS -->
+
+
 ## Table of Contents
 
 * [About the Project](#about-the-project)
@@ -55,7 +60,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
 ![image](https://user-images.githubusercontent.com/49261633/80867197-6e3f5b00-8cb0-11ea-8e62-b9ddb2ea6533.png)
 
 
@@ -146,7 +150,10 @@ Now run
 python main.py 
 ```
 and ka-boom!! :clap:
-
+<h2  align="center">Seems Godlike!</h2>
+<p align="center">
+  <img width="640" height="331" src="https://user-images.githubusercontent.com/49261633/80869513-89b16280-8cbe-11ea-9602-a318458058f1.gif">
+</p>
 
 ### Prerequisites
 
