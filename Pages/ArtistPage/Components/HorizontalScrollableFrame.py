@@ -70,8 +70,8 @@ class HorizontalScrollableFrame(tk.Frame):
                                   window=self.scrollable_frame,
                                   anchor="nw",
                                   )
-        if HorizontalScrollableFrame.count < num():
-            self.canvas.configure(height=hei()+250)
+        if HorizontalScrollableFrame.count < num()+1:
+            self.canvas.configure(height=hei()+200)
             HorizontalScrollableFrame.count += 1
 
 
