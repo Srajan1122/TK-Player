@@ -74,7 +74,7 @@ class Root(tk.Tk):
                 splash.destroy()
                 self.deiconify()
 
-            splash.after(25000, myfun)
+            splash.after(30000, myfun)
             # time.sleep(15000)
 
         self.tk_player = Thread(target=TK_player)
