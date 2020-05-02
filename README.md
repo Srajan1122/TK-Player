@@ -1,2 +1,2 @@
-# TK-Player
+# Amplify
 Music application using tkinter
