@@ -4,7 +4,93 @@ import tkinter as tk
 from tkinter import messagebox
 
 
+def Check_artist(artist):
+	"""
+	Returns boolean value if the artist exist or not in the database
+	"""
+	try:
+		doc_ref = db.collection(u'artist').document(artist)
+		if doc_ref.get().to_dict() is None:
+			return False
+		print('Artist got successfully')
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occurred which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
 
+def Check_genre(genre):
+	"""
+	Returns boolean value if the genre exist or not in the database
+	"""
+	try:
+		doc_ref = db.collection(u'genres').document(genre)
+		if doc_ref.get().to_dict() is None:
+		   return False
+		print('genre got successfully')
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occurred which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
+	
+def Check_language(language):
+	"""
+	Returns boolean value if the language exist or not in the database
+	"""
+	try:
+		doc_ref = db.collection(u'languages').document(language)
+		if doc_ref.get().to_dict() is None:
+		   return False
+		print('language got successfully')
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occurred which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
+
+def set_language(language):
+	'''
+
+
+	:param language:
+	This is the name of the language
+
+	:return:
+	Bool if success
+
+	'''
+	try:
+		if(Check_language(language)):
+			pass
+		else : 
+			doc_ref = db.collection(u'languages').document(language)
+			doc_ref.set({
+				'language_name' : language,
+				'language_image':'',
+
+			})
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occurred which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
 def get_tracks_by_language(**kwargs):
 	"""
 	Returns a list of songs with particular language
@@ -18,7 +104,7 @@ def get_tracks_by_language(**kwargs):
 			snapshots = list(doc_ref.where(u'Language', u'==', kwargs['language']).stream())
 			if len(snapshots):
 				object_list = list(map(lambda x: x.to_dict(), snapshots))
-				
+				# print(object_list)
 				return object_list
 		except Exception as ex:
 			messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -31,7 +117,7 @@ def get_tracks_by_language(**kwargs):
 		try:
 			doc_ref = db.collection(u'languages').stream()
 			object_list = list(map(lambda x: x.to_dict(), doc_ref))
-		
+			# print(object_list)
 			all_dicts = []
 			for i in range(len(object_list)):
 				my_dict = {
@@ -39,7 +125,7 @@ def get_tracks_by_language(**kwargs):
 					 'url': object_list[i]['language_image'],
 				}
 				all_dicts.append(my_dict)
-			
+			# print(all_dicts)
 			return all_dicts
 		except Exception as ex:
 			messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -49,6 +135,45 @@ def get_tracks_by_language(**kwargs):
 			if y == '1':
 				traceback.print_exc()
 			return False
+
+def set_artist(track_title, track_genre, track_location, track_artist,language):
+	"""
+	Function to set only artist details
+	Returns boolean True if set else False
+	gets invoked in the get song function
+	"""
+
+	try:
+		if(Check_artist(track_artist)):
+			pass
+		else:
+			collection = db.collection(u'artist').document(track_artist)
+			collection.set({
+				'name': track_artist,
+				'image_url': ''
+				
+			})
+		artistTracks = db.collection(u'artist/' + track_artist + '/tracks').document(track_title)
+		artistTracks.set({
+			'title': track_title,
+			'genre': track_genre,
+			'location': track_location,
+			'artist':track_artist,
+			'like_count': 0,
+			'Language': language
+
+		})
+		print('artist added')
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occurred which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
+
 
 
 
@@ -73,6 +198,38 @@ def get_artist_tracks(artist):
 			traceback.print_exc()
 		return False
 
+
+def set_track(track_title, track_genre, track_location, track_artist,language):
+	"""
+	Function to set only track details
+	Returns boolean depending if the value is successfully set then 'True' else 'False'
+
+	"""
+	if track_artist == '' or track_genre == '' or track_location == '' or track_title == '':
+		raise Exception('Cannot generate with empty Field')
+	try:
+		collection = db.collection(u'Tracks').document(track_title)
+		collection.set({
+			'artist': track_artist,
+			'genre': track_genre,
+			'location': track_location,
+			'title': track_title,
+			'like_count': 0,
+			'Language': language
+		})
+		print('Track added successfully')
+		set_artist(track_title, track_genre, track_location, track_artist,language)
+		set_genre(track_genre)
+		set_language(language)
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occurred which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
 
 
 def get_track(trackName):
@@ -124,7 +281,7 @@ def register_user(username, email, phone_number, password):
 			'display_name': username,
 			'email_verified':False
 		})
-		
+		print('Successfully created new user: {0}'.format(user.uid))
 		return user.uid
 	except firebase_admin._auth_utils.EmailAlreadyExistsError as ex:
 		from Pages.UserAuthentication.Exceptions import Email_already_exists
@@ -148,7 +305,85 @@ def register_user(username, email, phone_number, password):
 		return False
 
 
+def set_album(track_title, album_name, artist):
+	"""
+ Returns boolean value depending upon success
+ and atleast one track in needed for the album.
+	"""
+	try:
+		track_object = get_track(track_title)
+		doc_ref = db.collection(u'albums/' + album_name + '/tracks').document(track_object['title'])
+		doc_ref.set(track_object)
+		doc_ref = db.collection(u'albums').document(album_name)
+		doc_ref.set({
+			'album_title': album_name,
+			'artist': artist
+		})
+		print('Album Created Successfully')
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occured which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
 
+
+def get_album(**kwargs):
+	"""
+	parameters : album_name, artist_name
+	if want all the albums dont pass any argument else pass name of the album or artist of the album.
+	eg:- get_album(album_name = devdatta)
+	Kwargs : album_name
+	"""
+
+	if 'album_name' in kwargs:
+		try:
+			doc_ref = db.collection(u'albums/' + kwargs['album_name'] + '/tracks')
+			snapshots = list(doc_ref.stream())
+			if len(snapshots):
+				tracks = list(map(lambda x: x.to_dict(), snapshots))
+				return tracks
+		except Exception as ex:
+			messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+			
+			print('Exception Occured which is of type :', ex.__class__.__name__)
+			y = input('If you want to see Traceback press 1 : ')
+			if y == '1':
+				traceback.print_exc()
+			return False
+	elif 'artist' in kwargs:
+		try:
+			doc_ref = db.collection('albums')
+			snapshots = list(doc_ref.where(u'artist', u'==', kwargs['artist']).stream())
+
+			if len(snapshots):
+				object_list = list(map(lambda x: x.to_dict(), snapshots))
+				return object_list
+			else:
+				raise Exception('No data with the give artist found')
+		except Exception as ex:
+			messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+			
+			print('Exception Occurred which is of type :', ex.__class__.__name__)
+			y = input('If you want to see Traceback press 1 : ')
+			if y == '1':
+				traceback.print_exc()
+			return False
+	else:
+		try:
+			collection = db.collection(u'albums')
+			print(list(map(lambda x: x.to_dict(), collection.stream())))
+		except Exception as ex:
+			messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+			
+			print('Exception Occurred which is of type :', ex.__class__.__name__)
+			y = input('If you want to see Traceback press 1 : ')
+			if y == '1':
+				traceback.print_exc()
+			return False
 
 
 def get_all_tracks():
@@ -168,7 +403,36 @@ def get_all_tracks():
 			traceback.print_exc()
 		return False
 
+def set_genre(genre):
+	'''
 
+
+	:param genre:
+	This is the name of the genre
+
+	:return:
+	Bool if success
+
+	'''
+	try:
+		if(Check_genre(genre)):
+			pass
+		else : 
+			doc_ref = db.collection(u'genres').document(genre)
+			doc_ref.set({
+				'genre_name' : genre,
+				'genre_image':'',
+
+			})
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occurred which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
 def get_tracks_by_genre(**kwargs):
 	"""
 	Returns a list of songs with particular genre
@@ -182,7 +446,7 @@ def get_tracks_by_genre(**kwargs):
 			snapshots = list(doc_ref.where(u'genre', u'==', kwargs['genre']).stream())
 			if len(snapshots):
 				object_list = list(map(lambda x: x.to_dict(), snapshots))
-				
+				# print(object_list)
 				return object_list
 		except Exception as ex:
 			messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -195,7 +459,7 @@ def get_tracks_by_genre(**kwargs):
 		try:
 			doc_ref = db.collection(u'genres').stream()
 			object_list = list(map(lambda x: x.to_dict(), doc_ref))
-		
+			# print(object_list)
 			all_dicts = []
 			for i in range(len(object_list)):
 				my_dict = {
@@ -203,7 +467,7 @@ def get_tracks_by_genre(**kwargs):
 					 'url': object_list[i]['genre_image'],
 				}
 				all_dicts.append(my_dict)
-		
+			# print(all_dicts)
 			return all_dicts
 		except Exception as ex:
 			messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -225,7 +489,7 @@ def get_user(uid):
 	from firebase_admin import auth
 	try:
 		user = auth.get_user(uid)
-		
+		print('Successfully fetched user data: {0}'.format(user.uid))
 		doc = db.collection(u'users').document(user.uid)
 		doc = doc.get().to_dict()
 		return doc
@@ -304,7 +568,8 @@ def get_user_by_phone_number(phone):
 		# [END get_user_by_phone]
 
 
-
+def sign_in_with_phone():
+	pass
 
 
 def sign_in_with_email_and_password(email, password):
@@ -383,7 +648,7 @@ def generate_otp(uid):
 		doc_ref.update({
 			'verification_code'  : generate_pass
 		})
-	
+		print(generate_pass)
 		return generate_pass
 	except firebase_admin._auth_utils.UserNotFoundError as ex:
 		from Pages.UserAuthentication.Exceptions import User_not_Found
@@ -425,7 +690,7 @@ def send_email_verification_otp(email):
 		subject = 'Email Verification'
 		username = 'amplifyteam1234@gmail.com'
 		password = '15412342'
-	
+		print('i ma in the funtion')
 		message = 'Subject: {}\n\n{}'.format(subject, Text)
 		message = message.encode()
 		server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -433,7 +698,6 @@ def send_email_verification_otp(email):
 		server.starttls()
 		server.login(username, password)
 		server.sendmail(fromaddr, toaddrs, message)
-		messagebox.showinfo('Info','Please enter the OTP \nsent to your email.')
 		server.quit()
 	except firebase_admin._auth_utils.UserNotFoundError as ex:
 		from Pages.UserAuthentication.Exceptions import User_not_Found
@@ -477,7 +741,6 @@ def Forget_password_email(email):
 		from firebase_admin import auth
 		
 		import smtplib
-		
 		user = auth.get_user_by_email(email)
 		password = generate_password(user.uid)
 		fromaddr = 'amplifyteam1234@gmail.com.'
@@ -486,7 +749,7 @@ def Forget_password_email(email):
 		subject = 'New Password Request'
 		username = 'amplifyteam1234@gmail.com'
 		password = '15412342'
-		
+		# print('i ma in the funtion')
 		message = 'Subject: {}\n\n{}'.format(subject, Text)
 		message = message.encode()
 		server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -494,14 +757,11 @@ def Forget_password_email(email):
 		server.starttls()
 		server.login(username, password)
 		server.sendmail(fromaddr, toaddrs, message)
-		messagebox.showinfo('Info','Please enter the new password \nsent to your email.')
 		server.quit()
-	except ValueError :
-				messagebox.showerror('Error','Please Enter email.')
-	except firebase_admin._auth_utils.UserNotFoundError as ex:
-	    from Pages.UserAuthentication.Exceptions import User_not_Found
-	    User_not_Found()
-	    return False
+	# except firebase_admin._auth_utils.UserNotFoundError as ex:
+	#     from Pages.UserAuthentication.Exceptions import User_not_Found
+	#     User_not_Found()
+	#     return False
 	except Exception as ex:
 		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
 		
@@ -531,8 +791,112 @@ def verify_email_database(email,entered_otp):
 		return False
 
 # send_email_verification_otp('dkhoche2000@gmail.com')
+def user_create_playlist(uid,playlist_name):
+	'''
 
 
+	:param uid: Unique Identification of the user which is saved in the user file in the root directory
+	:param playlist_name: Name of the playlist to be created
+	:return: Bool;
+	'''
+	try:
+		collection = db.collection(u'users/'+uid+'/playlists').document(playlist_name)
+		collection.set({
+			'name':playlist_name
+		})
+		print('playlist created successfully')
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occured which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
+
+# user_create_playlist('1DXAOpIfWdYLylWaGe1Hmm1O6vh2','myplalist')
+def add_song_to_playlist(uid,playlist_name,track_name):
+	'''
+
+	:param uid: unique identification of the user
+	:param playlist_name: name of the particular playlist
+	:param track_name: track_title which is to be added
+	:return: bool
+	'''
+	try:
+		collection = db.collection(u'users/' + uid + '/playlists/'+playlist_name+'/Tracks').document(track_name)
+		track_object = get_track(track_name)
+		collection.set(track_object)
+		return True
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occured which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
+
+def get_playlists(uid,**kwargs):
+	'''
+
+	:param uid: unique identification of the user
+	:param kwargs: playlist = 'required Playlist'
+	:return: if mentioned playlist as kwarg then return a list of the all tracks of the particular playlist.
+			elseif left no kwarg is passed gives the names aof all the playlist
+			else returns false
+			If there are no songs then returns a empty list
+
+	'''
+	try:
+		if 'playlist' in kwargs :
+			doc_ref = db.collection(u'users/'+uid+'/playlists/'+kwargs['playlist']+'/Tracks')
+			snapshots = list(doc_ref.stream())
+			if len(snapshots):
+				tracks = list(map(lambda x: x.to_dict(), snapshots))
+				return tracks
+			return []
+		else:
+			doc_ref = db.collection(u'users/'+uid+'/playlists').stream()
+			object_list = list(map(lambda x: x.to_dict(), doc_ref))
+			return object_list
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occured which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
+
+def Following_artist(artist_name,uid):
+	'''
+
+	params : artist_name : The name of the artisit which is to be followed
+		   : uid : unique Identification No. of the user
+	return artist name
+
+	'''
+	try:
+		collection = db.collection(u'users/'+uid+'/Following_Artist').document(artist_name)
+		collection.set({
+			'name' : artist_name
+		})
+		return artist_name
+	except Exception as ex:
+		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
+		
+		print('Exception Occured which is of type :', ex.__class__.__name__)
+		y = input('If you want to see Traceback press 1 : ')
+		if y == '1':
+			traceback.print_exc()
+		return False
+
+def get_user_artists(uid):
+	doc_ref = db.collection(u'users/'+uid+'/Following_Artist').stream()
+	object_list = list(map(lambda x: x.to_dict(), doc_ref))
+	return object_list
 
 def add_liked_songs(track_object,uid):
 	'''
@@ -546,7 +910,7 @@ def add_liked_songs(track_object,uid):
 		collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_object['title'])
 		collection.set(track_object)
 		add_like_count(track_object['title'])
-		
+		print('Added Liked song')
 		return True
 	except Exception as ex:
 		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -569,7 +933,7 @@ def delete_liked_song(uid,track_title):
 		collection = db.collection(u'users/'+uid+'/Liked_songs').document(track_title)
 		collection.delete()
 		decrease_like_count(track_title)
-	
+		print('deleted Liked song')
 		return True
 	except Exception as ex:
 		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -583,7 +947,7 @@ def delete_liked_song(uid,track_title):
 def get_all_liked_songs(uid): 
 	try:
 		collection = db.collection(u'users/'+uid+'/Liked_songs')
-	
+		# print(list(map(lambda x: x.to_dict(), collection.stream())))
 		return list(map(lambda x: x.to_dict(), collection.stream()))
 		
 	except Exception as ex:
@@ -597,6 +961,25 @@ def get_all_liked_songs(uid):
 
 
 	
+def add_language_and_Like_count():
+	'''
+
+	Never use this function once used.
+	Used only when all songs are of same language
+
+	'''
+	my_objects = get_all_tracks()
+	for i in my_objects:
+		doc_ref = db.collection(u'Tracks').document(i['title'])
+		doc_ref.update({
+			'like_count': 0,
+			'Language': 'English'
+		})
+		doc_ref_artist = db.collection(u'artist/'+i['artist']+'/tracks').document(i['title'])
+		doc_ref_artist.update({
+			'like_count': 0,
+			'Language': 'English'
+		})
 
 def order_simple_trending_song():
 	'''
@@ -674,7 +1057,7 @@ def get_genre(genre_name):
 	try:
 		doc_ref = db.collection(u'genres').document(genre_name)
 		data=doc_ref.get().to_dict()
-	
+		# print(data)
 		return data
 	except Exception as ex:
 		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
@@ -693,7 +1076,7 @@ def get_artist(artist_name):
 	try:
 		doc_ref = db.collection(u'artist').document(artist_name)
 		data=doc_ref.get().to_dict()
-		
+		# print(data)
 		return data
 	except Exception as ex:
 		messagebox.showerror('Error','Oops!! Something went wrong!!\nTry again later.')
