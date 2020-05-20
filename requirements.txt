@@ -15,7 +15,7 @@ google-cloud-storage==1.27.0
 google-resumable-media==0.5.0
 googleapis-common-protos==1.51.0
 grpcio==1.28.1
-httplib2==0.17.2
+httplib2==0.18.0
 idna==2.9
 imageio==2.8.0
 kiwisolver==1.2.0
