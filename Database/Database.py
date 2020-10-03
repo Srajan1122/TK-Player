@@ -689,7 +689,7 @@ def send_email_verification_otp(email):
 		Text = 'Hello '+ user.display_name  + ',\nEnter the following OTP to verify your email address. \nYour verification code is '+otp+'\nIf you didn’t ask to verify this address, you can ignore this email.\nThanks,\nYour AmplifyTeam'
 		subject = 'Email Verification'
 		username = 'amplifyteam1234@gmail.com'
-		password = '15412342'
+		password = 'vesit$1234'
 		print('i ma in the funtion')
 		message = 'Subject: {}\n\n{}'.format(subject, Text)
 		message = message.encode()
